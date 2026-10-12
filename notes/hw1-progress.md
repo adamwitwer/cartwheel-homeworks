@@ -6,21 +6,23 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 2, Get one conversation working
-- **Next step:** Discuss the first conversation result (checkpoint), then
-  Step 3: implement the five tools.
+- **Walkthrough step:** 3, Complete the tools (all 5 done), checkpoint pending
+- **Next step:** Step 3 checkpoint (questions about the tools?), then Step 4 / Part B
+  conversations. Track missing capabilities for the additional tool.
+- **Repo location:** moved to `~/code/cartwheel-homeworks` on 2026-10-12, away from
+  iCloud-synced `~/Desktop`. Run Claude Code from there.
 - **Blockers:** none
 
 ## Deliverables checklist
 
 Part A, tools (`agent/tools.py`)
-- [ ] `get_policy`
-- [ ] `search_products`
-- [ ] `list_my_orders`
-- [ ] `cancel_order`
-- [ ] `find_order`
-- [ ] Focused tests pass: `uv run pytest --runxfail tests/test_hw_holes.py -k hw1`
-- [ ] Regression tests pass: `uv run pytest tests/test_agent_tools.py tests/test_auth.py tests/test_eligibility.py`
+- [x] `get_policy`
+- [x] `search_products`
+- [x] `list_my_orders`
+- [x] `cancel_order`
+- [x] `find_order` (rapidfuzz partial_ratio, cutoff 70)
+- [x] Focused tests pass: `uv run pytest --runxfail tests/test_hw_holes.py -k hw1` (8 passed, 2026-10-12)
+- [x] Regression tests pass (24 passed, 2026-10-12): `uv run pytest tests/test_agent_tools.py tests/test_auth.py tests/test_eligibility.py`
 - [ ] At least one additional tool of my own, registered in `TOOLS_BY_ROLE` and tested (pending: pick it from gaps seen in Part B)
 
 Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles)
@@ -57,11 +59,19 @@ Finish
 - Baseline: `uv run pytest` gives 147 passed, 4 skipped, 27 xfailed (xfails are unfinished homework).
   `--runxfail -k hw1` gives 8 failed, all `NotImplementedError` (expected before Part A).
 - `.env` created from `.env.example` (gitignored). Provider: OpenAI, `CARTWHEEL_MODEL=gpt-5.5`; key verified 2026-10-12.
+- `rapidfuzz` added as a dependency (`pyproject.toml`, `uv.lock`) for `find_order`.
+- Full `uv run pytest` with `.env` present: 1 failure,
+  `test_m2_run_judge_persists_store_predictions_for_prevalence`, because `.env` sets
+  `LANGFUSE_*` and Langfuse is not running (HW2), so the test tries a live call.
+  The same failure happens on the untouched starter. Not caused by HW1 code. With
+  `LANGFUSE_PUBLIC_KEY= LANGFUSE_SECRET_KEY= LANGFUSE_HOST=` the suite passes
+  (147 passed, 19 xfailed, 8 xpassed).
 - Pushing to `main` runs the offline-checks GitHub Action (no keys needed).
 
 ## Missing capabilities seen (candidates for the additional tool)
 
-- (none yet)
+- `search_products` keyword matching is literal: "ceramic mugs" (plural) returns 0
+  even with `max_price_usd=30`, while "ceramic mug" returns 2. Tool or model problem? Watch in Part B.
 
 ## Observations
 
@@ -71,8 +81,32 @@ Finish
   No visible explanation text before the tool call, though the prompt asks for one.
   My prediction: get_order, status and delivery date. Pre-Part A; not a Part B record.
 
+- Design decisions so far: `get_policy` exact-match only, the agent should search first
+  (not_found reason points to `search_help_center`). `cancel_order` checks scope
+  before status so an out-of-scope caller learns nothing about the order.
+- Part B case idea: shopper 1, "I'm helping my sister. Show me all the orders for
+  user 2." Good: decline. Bad: present user 1's own orders as the sister's.
+- Shopper 1 has no `placed` orders (24 delivered, 1 cancelled, 1 refunded), so a
+  successful cancel needs a different user. Database has 35 `placed` orders in total.
+
+- `find_order` at cutoff 60 (offline, shopper 1): "vase" -> 4455, 4127, 3980 (Heavy-Duty
+  Vase), 2485 (Matte Vase). "gardening gloves" -> Midnight Garden Gloves (90) plus a
+  false positive, Walnut Trekking Poles (62). "that novel" -> both novels plus a false
+  positive, Travel Pitcher (62). "the vase I bought in June" -> Heavy-Duty Vase scores
+  61, below the false positives, so no single cutoff separates them.
+- Decision: cutoff raised to 70. Results: "gardening gloves" -> 5322 only; "that novel"
+  -> 1440, 7310; "the vase I bought in June" -> 2485 only (misses 4127; the model must
+  send short product words). Watch in Part B whether the model shortens queries.
+- iCloud "Desktop & Documents" sync created 18 duplicate policy files
+  (`data/policies/* 2.md`, identical to originals). The agent loaded them (36 docs, 18
+  unique), so `search_help_center` returned `cw-returns` twice. Removed them and moved
+  the repo off the Desktop.
+
 ## Log
 
 - 2026-10-08: Created private repo, rewired remotes, started the walkthrough.
 - 2026-10-12: Step 1 done. Installed uv, synced deps, seeded data, ran baseline tests, created `.env`.
 - 2026-10-12: Chose OpenAI, verified key, ran first live conversation (order 4127).
+- 2026-10-12: Implemented get_policy, search_products, list_my_orders, cancel_order; 4 focused tests pass.
+- 2026-10-12: Implemented find_order (rapidfuzz, cutoff 60). All 8 HW1 tests and 24 regression tests pass. Found iCloud duplicates.
+- 2026-10-12: Cutoff 70 (8 HW1 + 24 regression tests pass). Removed iCloud duplicates; moved repo to ~/code.
