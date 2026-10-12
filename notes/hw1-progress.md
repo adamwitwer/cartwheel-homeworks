@@ -67,6 +67,14 @@ Finish
   `LANGFUSE_PUBLIC_KEY= LANGFUSE_SECRET_KEY= LANGFUSE_HOST=` the suite passes
   (147 passed, 19 xfailed, 8 xpassed).
 - Pushing to `main` runs the offline-checks GitHub Action (no keys needed).
+  Every run failed at checkout until 2026-10-12: the workflow checks out Git LFS files
+  (three `*-reference.patch` handouts), but `git-lfs` was not installed locally, so the
+  first push sent only LFS pointers. Fix: `brew install git-lfs`, `git lfs install
+  --local`, `git lfs fetch upstream --all`, `git lfs push origin --all`. Rerun of
+  run 38323618979 passed. The Node.js 20 and ubuntu-latest annotations are warnings only.
+- Course update on upstream (2026-10-10, PR #65): the agent should run on a small model
+  (default now `gpt-4o-mini`), because frontier models like `gpt-5.5` rarely fail in
+  this synthetic world, and Part C depends on failures. Not merged yet.
 
 ## Missing capabilities seen (candidates for the additional tool)
 
@@ -110,3 +118,4 @@ Finish
 - 2026-10-12: Implemented get_policy, search_products, list_my_orders, cancel_order; 4 focused tests pass.
 - 2026-10-12: Implemented find_order (rapidfuzz, cutoff 60). All 8 HW1 tests and 24 regression tests pass. Found iCloud duplicates.
 - 2026-10-12: Cutoff 70 (8 HW1 + 24 regression tests pass). Removed iCloud duplicates; moved repo to ~/code.
+- 2026-10-12: Fixed CI (Git LFS objects missing on private repo). Found upstream small-model update.
