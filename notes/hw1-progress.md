@@ -6,10 +6,9 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 1, Get oriented (checkpoint pending)
-- **Next step:** Confirm the repo/spec/agent relationship is clear, then Step 2:
-  install `uv`, run `uv sync`, generate data, create `.env`, run the first
-  conversation (shopper 1, order 4127).
+- **Walkthrough step:** 2, Get one conversation working
+- **Next step:** Discuss the first conversation result (checkpoint), then
+  Step 3: implement the five tools.
 - **Blockers:** none
 
 ## Deliverables checklist
@@ -53,14 +52,27 @@ Finish
 - Repo remotes: `origin` = my private repo `adamwitwer/cartwheel-homeworks`;
   `upstream` = course repo `ai-evals-course/cartwheel-homeworks`. Pull new
   assignments with `git pull upstream main`. Never push to upstream.
-- Python 3.12 is available from Homebrew. `uv` is not installed yet.
-- `.env` does not exist yet. The model provider is not chosen yet.
+- Python 3.12 from Homebrew; `uv` 0.13.0 installed with Homebrew; `uv sync` done.
+- `data/cartwheel.db` generated (dev scale, as of 2026-07-01; demo orders 4127, 3980, 4455 owned by user 1, store 1).
+- Baseline: `uv run pytest` gives 147 passed, 4 skipped, 27 xfailed (xfails are unfinished homework).
+  `--runxfail -k hw1` gives 8 failed, all `NotImplementedError` (expected before Part A).
+- `.env` created from `.env.example` (gitignored). Provider: OpenAI, `CARTWHEEL_MODEL=gpt-5.5`; key verified 2026-10-12.
 - Pushing to `main` runs the offline-checks GitHub Action (no keys needed).
 
 ## Missing capabilities seen (candidates for the additional tool)
 
 - (none yet)
 
+## Observations
+
+- 2026-10-12, live (gpt-5.5), shopper 1, "What's the status of my order 4127?":
+  one call `get_order(4127)` -> delivered 2026-06-19, $84.00, Blue Heron Ceramics,
+  refund_eligible true. Response listed status, dates, total, refund eligibility.
+  No visible explanation text before the tool call, though the prompt asks for one.
+  My prediction: get_order, status and delivery date. Pre-Part A; not a Part B record.
+
 ## Log
 
 - 2026-10-08: Created private repo, rewired remotes, started the walkthrough.
+- 2026-10-12: Step 1 done. Installed uv, synced deps, seeded data, ran baseline tests, created `.env`.
+- 2026-10-12: Chose OpenAI, verified key, ran first live conversation (order 4127).
