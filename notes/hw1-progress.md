@@ -58,7 +58,7 @@ Finish
 - `data/cartwheel.db` generated (dev scale, as of 2026-07-01; demo orders 4127, 3980, 4455 owned by user 1, store 1).
 - Baseline: `uv run pytest` gives 147 passed, 4 skipped, 27 xfailed (xfails are unfinished homework).
   `--runxfail -k hw1` gives 8 failed, all `NotImplementedError` (expected before Part A).
-- `.env` created from `.env.example` (gitignored). Provider: OpenAI, `CARTWHEEL_MODEL=gpt-5.5`; key verified 2026-10-12.
+- `.env` created from `.env.example` (gitignored). Provider: OpenAI, `CARTWHEEL_MODEL=gpt-4o-mini` (was gpt-5.5); key verified 2026-10-12.
 - `rapidfuzz` added as a dependency (`pyproject.toml`, `uv.lock`) for `find_order`.
 - Full `uv run pytest` with `.env` present: 1 failure,
   `test_m2_run_judge_persists_store_predictions_for_prevalence`, because `.env` sets
@@ -74,7 +74,9 @@ Finish
   run 38323618979 passed. The Node.js 20 and ubuntu-latest annotations are warnings only.
 - Course update on upstream (2026-10-10, PR #65): the agent should run on a small model
   (default now `gpt-4o-mini`), because frontier models like `gpt-5.5` rarely fail in
-  this synthetic world, and Part C depends on failures. Not merged yet.
+  this synthetic world, and Part C depends on failures. Merged 2026-10-12; `.env` now
+  has `CARTWHEEL_MODEL=gpt-4o-mini` (verified available). The first 4127 conversation
+  above ran on gpt-5.5; Part B records use gpt-4o-mini.
 
 ## Missing capabilities seen (candidates for the additional tool)
 
@@ -119,3 +121,4 @@ Finish
 - 2026-10-12: Implemented find_order (rapidfuzz, cutoff 60). All 8 HW1 tests and 24 regression tests pass. Found iCloud duplicates.
 - 2026-10-12: Cutoff 70 (8 HW1 + 24 regression tests pass). Removed iCloud duplicates; moved repo to ~/code.
 - 2026-10-12: Fixed CI (Git LFS objects missing on private repo). Found upstream small-model update.
+- 2026-10-12: Merged upstream small-model update; switched to gpt-4o-mini. Tests still pass.
