@@ -7,9 +7,9 @@ then pick up at **Next step**.
 ## Current status
 
 - **Walkthrough step:** 5, Part C (prompt investigation)
-- **Next step:** Choose the Part C requirement: escalation (ESC-2, evidence records 3,
-  6, 7) or refund-decline citation (RESP-1, evidence records 2, 11, 12). Predict, make
-  the smallest prompt edit, rerun the same conversation fresh with the same data.
+- **Next step:** My assessment of the "after" runs; decide which to add to
+  `hw1-session.jsonl` (after-1 single turn; after-yes-1 two turns). Then the final
+  deliverables check, commits, and the video checklist.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -50,9 +50,9 @@ Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles
 - [x] Missing capabilities reviewed before leaving Part B (chose return-eligibility check)
 
 Part C, prompt investigation
-- [ ] Requirement identified that is missing or vague in `SYSTEM_PROMPT_TEMPLATE`
-- [ ] Test conversation run
-- [ ] Either: before/after responses saved with the smallest prompt edit, or a written explanation of the omissions tested and why no edit was justified
+- [x] Requirement identified that is missing or vague in `SYSTEM_PROMPT_TEMPLATE` (ESC-2: account changes always go to a human; absent from the prompt)
+- [x] Test conversation run (record 7 + 3 repeats before; 4 single-turn + 1 two-turn after, in `notes/part-c/`)
+- [ ] Either: before/after responses saved with the smallest prompt edit, or a written explanation of the omissions tested and why no edit was justified (edit made and before/after saved in notes/part-c; after record(s) for hw1-session.jsonl pending my assessment)
 
 Finish
 - [ ] All deliverables checked against `homework/module-1/hw1.md`
@@ -186,6 +186,23 @@ Finish
   candidate: the prompt's refund rule names get_order and never says to explain the
   window or cite the policy when declining.
 
+- Part C (ESC-2), 2026-10-13. Edit: one sentence added to the Escalation section of
+  `SYSTEM_PROMPT_TEMPLATE`: "Account changes of any kind (for example the account email)
+  always go to a human: call escalate_to_human even though you cannot make the change
+  yourself." prompt_version d108f6949e5e -> 482b8f0da5c2.
+  - Before (record 7 + before-sample-1..3): 0/4 offered a human, 0/4 called the tool.
+    The model called the email "account credentials", matching the prompt's refusal of
+    "credential changes".
+  - After (after-1..4, single turn): 4/4 offered a human ("Would you like me to do
+    that?"), 0/4 called the tool without asking.
+  - After, two turns (after-yes-1, "Yes, please."): escalate_to_human called, ticket 151,
+    sla_hours 24, user told "You should hear back within 24 hours." Database reset after.
+  - My prediction: it would call the tool and inform the user. Half right: it informs
+    and offers, but asks for confirmation first.
+  - Checks after the edit: 8 HW1, 36 regression and new-tool tests, full suite 159 passed.
+  - Not addressed (scope): ESC-3 disputes (record 6); RESP-1 refund-decline citation
+    (records 2, 11, 12).
+
 ## Log
 
 - 2026-10-08: Created private repo, rewired remotes, started the walkthrough.
@@ -209,3 +226,4 @@ Finish
 - 2026-10-13: Recorded conversation 11 (3980 with new tool available; RESP-1 not met, prompt).
 - 2026-10-13: Tweaked check_return_eligibility description; 0/4 live runs used the tool. Kept transcripts 11b, 12, 12-sample-1..3.
 - 2026-10-13: Recorded conversation 12 (RESP-1 not met, prompt). Kept the description tweak. Moving to Part C.
+- 2026-10-13: Part C edit (ESC-2) and before/after runs. Reset database.

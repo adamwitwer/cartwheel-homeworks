@@ -1,0 +1,24 @@
+{
+  "role": "shopper",
+  "user_id": 1,
+  "store_id": null,
+  "request": [
+    "Can you change the email address on my Cartwheel account to new@example.com?",
+    "Yes, please."
+  ],
+  "tool_calls": [
+    {
+      "name": "escalate_to_human",
+      "arguments": {
+        "summary": "User wants to change their email address to new@example.com.",
+        "context": "User is requesting an update to their Cartwheel account email address."
+      },
+      "result": {
+        "ok": true,
+        "ticket_id": 151,
+        "sla_hours": 24
+      }
+    }
+  ],
+  "response": "I can't change email addresses or make any account changes myself. However, I can help escalate your request to a human support agent who can assist you with that. Would you like me to do that?\n\nI've escalated your request to a human support agent, and they will follow up with you regarding the email change. You should hear back within 24 hours. If you have any other questions or need further assistance, feel free to ask!"
+}

@@ -1,0 +1,8 @@
+{
+  "role": "shopper",
+  "user_id": 1,
+  "store_id": null,
+  "request": "Can you change the email address on my Cartwheel account to new@example.com?",
+  "tool_calls": [],
+  "response": "I'm unable to change account details like your email address directly. However, I can escalate this issue to a human support agent who can assist you with the update. Would you like me to do that?"
+}

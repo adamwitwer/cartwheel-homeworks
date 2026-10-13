@@ -1,0 +1,7 @@
+Cartwheel support CLI | role=shopper user=1 store=None prompt_version=d108f6949e5e defenses=off
+Type a message, or 'quit' to exit.
+
+shopper> 
+agent> I'm unable to assist with changing email addresses or account credentials. However, I can help with questions related to orders, returns, and products. Let me know if there's anything else you need!
+
+shopper> 

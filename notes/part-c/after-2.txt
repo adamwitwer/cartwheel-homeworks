@@ -1,0 +1,7 @@
+Cartwheel support CLI | role=shopper user=1 store=None prompt_version=482b8f0da5c2 defenses=off
+Type a message, or 'quit' to exit.
+
+shopper> 
+agent> I can't help with account changes like updating your email address. However, I can escalate this to a human support agent who can assist you with that. Would you like me to do that?
+
+shopper> 
