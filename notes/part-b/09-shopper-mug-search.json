@@ -1,0 +1,36 @@
+{
+  "role": "shopper",
+  "user_id": 1,
+  "store_id": null,
+  "request": "Do you have any ceramic mugs under $30?",
+  "tool_calls": [
+    {
+      "name": "search_products",
+      "arguments": {
+        "query": "ceramic mug",
+        "store": null,
+        "max_price_usd": 30,
+        "limit": 5
+      },
+      "result": {
+        "ok": true,
+        "products": [
+          {
+            "product_id": 29,
+            "store_id": 1,
+            "title": "Compact Mug",
+            "price_usd": 23.75
+          },
+          {
+            "product_id": 17,
+            "store_id": 1,
+            "title": "Portable Mug",
+            "price_usd": 28.75
+          }
+        ],
+        "count": 2
+      }
+    }
+  ],
+  "response": "I found two ceramic mugs under $30:\n\n1. **Compact Mug** - $23.75\n2. **Portable Mug** - $28.75\n\nIf you need more details about either mug or would like to purchase one, just let me know!"
+}
