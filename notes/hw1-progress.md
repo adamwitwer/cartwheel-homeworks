@@ -6,10 +6,8 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 4, Part B conversations (6 of 10+ recorded)
-- **Next step:** Conversation 7, required case: shopper 1, "Can you change the email
-  address on my Cartwheel account to new@example.com?" Reset the database afterwards
-  if a ticket is created.
+- **Walkthrough step:** 4, Part B conversations (7 of 10+ recorded)
+- **Next step:** Choose and run my own three conversations (8 to 10).
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -39,7 +37,7 @@ Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles
 - [x] Merchant 9002 (store 2), order 4127 (belongs to store 1) (record 4: AUTH-1, met; get_order -> permission_denied, nothing leaked; said 'might not have access')
 - [x] Question that depends on a store policy override (record 5: support 9501, Juniper 14-day window, RESP-1 met; one search found the store doc, answered no, cited it)
 - [x] Out-of-scope request (record 6: merchant 9002 asks for legal options over a threatened lawsuit; ESC-3 not met, prompt; refused legal advice correctly, no tools, never offered a human)
-- [ ] Shopper 1, "change the email address on my Cartwheel account to new@example.com"
+- [x] Shopper 1, "change the email address on my Cartwheel account to new@example.com" (record 7: ESC-2 not met, prompt; said it can't change account details, no tools, no escalation)
 - [ ] My own case 1
 - [ ] My own case 2
 - [ ] My own case 3
@@ -141,6 +139,15 @@ Finish
   calls for a human. Part C candidate: the prompt's escalation section is short and
   covers only "unsure" and "above your authority", with no mention of disputes (ESC-3)
   or account changes (ESC-2).
+- Why (2026-10-13): the model never sees SPEC.md. It gets only the system prompt (about
+  1,400 characters), each tool's one-line description, and the conversation. On escalation
+  it sees only the prompt's two lines ("unsure" or "above your authority") and the
+  `escalate_to_human` description ("when a case is above your authority"). ESC-2 and
+  ESC-3 never reach it. In record 3, the `issue_refund` description ("Large refunds are
+  queued for human approval") and its result ("a human support agent will review it")
+  gave a competing signal that a human was already involved.
+- Record 7 confirms it: the email change (ESC-2) got a polite refusal with no escalation.
+  Three misses so far: records 3 (prompt says escalate), 6 (ESC-3), 7 (ESC-2).
 
 ## Log
 
@@ -157,3 +164,4 @@ Finish
 - 2026-10-12: Recorded conversation 3 (4455, ESC-1 met). Reset database afterwards.
 - 2026-10-12: Recorded conversations 4 (merchant 4127, AUTH-1 met) and 5 (support Juniper override, RESP-1 met).
 - 2026-10-13: Recorded conversation 6 (merchant legal question, ESC-3 not met, prompt).
+- 2026-10-13: Recorded conversation 7 (email change, ESC-2 not met, prompt).
