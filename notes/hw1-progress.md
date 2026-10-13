@@ -7,8 +7,8 @@ then pick up at **Next step**.
 ## Current status
 
 - **Walkthrough step:** 4, additional tool built and tested offline.
-- **Next step:** Decide whether to tweak the `check_return_eligibility` description so the
-  model chooses it (it ignored the tool in record 11), then Step 5 / Part C.
+- **Next step:** Assess conversation 12 (3980 after the description tweak), decide
+  whether to keep the tweak, then Step 5 / Part C.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -175,6 +175,15 @@ Finish
   not met, prompt. Likely cause: the prompt says "Never promise or issue a refund before
   calling get_order and checking the order's refund eligibility", so get_order's flag
   satisfied the model. Records 2 and 11 form a before/after pair.
+- Description tweak (2026-10-13): `check_return_eligibility` description now says "Call
+  this before telling a customer a return or refund is or isn't possible...". Live on
+  the 3980 request: 0 of 4 runs called the tool (run 12 plus samples 12-sample-1..3);
+  all called only get_order and none cited cw-returns. With the old description: 0 of 2
+  (record 11 and 11b, a repeat whose run accidentally used the old description; 11b
+  offered escalation, the only time so far). Conclusion: a tool description does not
+  outweigh the system prompt's explicit "call get_order" instruction. Second Part C
+  candidate: the prompt's refund rule names get_order and never says to explain the
+  window or cite the policy when declining.
 
 ## Log
 
@@ -197,3 +206,4 @@ Finish
 - 2026-10-13: Recorded conversation 10 (support cancel, RESP-2 met). Part B minimum of 10 reached. Reset database.
 - 2026-10-13: Built check_return_eligibility; 12 new tests, 8 HW1, 24 regression pass; full suite passes with Langfuse settings blanked.
 - 2026-10-13: Recorded conversation 11 (3980 with new tool available; RESP-1 not met, prompt).
+- 2026-10-13: Tweaked check_return_eligibility description; 0/4 live runs used the tool. Kept transcripts 11b, 12, 12-sample-1..3.

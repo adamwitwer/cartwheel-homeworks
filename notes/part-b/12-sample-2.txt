@@ -1,0 +1,11 @@
+Cartwheel support CLI | role=shopper user=1 store=None prompt_version=d108f6949e5e defenses=off
+Type a message, or 'quit' to exit.
+
+shopper>   [tool] get_order({'order_id': 3980})
+    -> {'ok': True, 'order': {'order_id': 3980, 'store_id': 1, 'product_id': 1, 'quantity': 1, 'total_usd': 52.0, 'status': 'delivered', 'ordered_at': '2026-05-12', 'shipped_at': '2026-05-14', 'delivered_at': '2026-05-17', 'refund_eligible': False, 'store_name': 'Blue Heron Ceramics'}}
+
+agent> Your order 3980 from Blue Heron Ceramics is not eligible for a refund, as it has been marked as "not eligible" for returns. 
+
+If you have any questions or need further assistance, feel free to ask!
+
+shopper> 

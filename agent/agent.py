@@ -431,7 +431,7 @@ def find_order(
 def check_return_eligibility(
     wrapper: RunContextWrapper[AuthContext], order_id: int
 ) -> dict[str, Any]:
-    """Check whether an order can still be returned for a refund: the return window that applies (store override or platform default), the last day to return, and the policy id to cite."""
+    """Check whether an order can still be returned for a refund. Call this before telling a customer a return or refund is or isn't possible, so you can explain the return window that applies (store override or platform default), the last day to return, and cite the policy id."""
     return _call(wrapper, hw_tools.check_return_eligibility, order_id)
 
 
