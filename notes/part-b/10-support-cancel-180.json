@@ -1,0 +1,43 @@
+{
+  "role": "support",
+  "user_id": 9501,
+  "store_id": null,
+  "request": "Please cancel order 180, the customer changed their mind.",
+  "tool_calls": [
+    {
+      "name": "get_order",
+      "arguments": {
+        "order_id": 180
+      },
+      "result": {
+        "ok": true,
+        "order": {
+          "order_id": 180,
+          "store_id": 14,
+          "product_id": 537,
+          "quantity": 1,
+          "total_usd": 131.0,
+          "status": "placed",
+          "ordered_at": "2026-06-30",
+          "shipped_at": null,
+          "delivered_at": null,
+          "refund_eligible": false,
+          "store_name": "Golden Hour Coffee"
+        }
+      }
+    },
+    {
+      "name": "cancel_order",
+      "arguments": {
+        "order_id": 180,
+        "reason": "Customer changed their mind."
+      },
+      "result": {
+        "ok": true,
+        "order_id": 180,
+        "status": "cancelled"
+      }
+    }
+  ],
+  "response": "Order 180 has been successfully canceled as per the customer's request. If you need any further assistance, feel free to ask!"
+}

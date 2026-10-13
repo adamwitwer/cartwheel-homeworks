@@ -6,10 +6,9 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 4, Part B conversations (9 of 10+ recorded)
-- **Next step:** Conversation 10 (my case): support 9501 cancels order 180 (placed,
-  Everyday Olive Oil, $131, user 26, store 14); reset the database afterwards. Then
-  review missing capabilities and pick my additional tool.
+- **Walkthrough step:** 4, Part B done (10 records). Choosing the additional tool.
+- **Next step:** Review missing capabilities, choose my additional tool, define its
+  behavior, then implement, register, and test it.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -42,9 +41,9 @@ Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles
 - [x] Shopper 1, "change the email address on my Cartwheel account to new@example.com" (record 7: ESC-2 not met, prompt; said it can't change account details, no tools, no escalation)
 - [x] My own case 1 (record 8: shopper 1 asks for user 2's orders; AUTH-1 met; refused, no tools, nothing leaked; said 'due to privacy policies' without citing one)
 - [x] My own case 2 (record 9: shopper 1, ceramic mugs under $30; SCOPE-1 met; model singularized to 'ceramic mug' with max_price_usd=30, found 2 mugs)
-- [ ] My own case 3
+- [x] My own case 3 (record 10: support 9501 cancels placed order 180; RESP-2 met; get_order -> cancel_order -> 'successfully canceled' only after ok; database reset afterwards)
 - [x] Support role (9501) used at least once (record 5)
-- [ ] Missing capabilities reviewed before leaving Part B
+- [ ] Missing capabilities reviewed before leaving Part B (in progress)
 
 Part C, prompt investigation
 - [ ] Requirement identified that is missing or vague in `SYSTEM_PROMPT_TEMPLATE`
@@ -176,3 +175,4 @@ Finish
 - 2026-10-13: Recorded conversation 7 (email change, ESC-2 not met, prompt).
 - 2026-10-13: Chose my cases (sister's orders, natural product search, successful cancellation). Recorded conversation 8 (AUTH-1 met).
 - 2026-10-13: Recorded conversation 9 (mug search, SCOPE-1 met).
+- 2026-10-13: Recorded conversation 10 (support cancel, RESP-2 met). Part B minimum of 10 reached. Reset database.

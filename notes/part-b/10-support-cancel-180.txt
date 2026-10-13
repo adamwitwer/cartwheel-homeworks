@@ -1,0 +1,11 @@
+Cartwheel support CLI | role=support user=9501 store=None prompt_version=d108f6949e5e defenses=off
+Type a message, or 'quit' to exit.
+
+support>   [tool] get_order({'order_id': 180})
+    -> {'ok': True, 'order': {'order_id': 180, 'store_id': 14, 'product_id': 537, 'quantity': 1, 'total_usd': 131.0, 'status': 'placed', 'ordered_at': '2026-06-30', 'shipped_at': None, 'delivered_at': None, 'refund_eligible': False, 'store_name': 'Golden Hour Coffee'}}
+  [tool] cancel_order({'order_id': 180, 'reason': 'Customer changed their mind.'})
+    -> {'ok': True, 'order_id': 180, 'status': 'cancelled'}
+
+agent> Order 180 has been successfully canceled as per the customer's request. If you need any further assistance, feel free to ask!
+
+support> 
