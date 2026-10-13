@@ -1,0 +1,12 @@
+Cartwheel support CLI | role=shopper user=1 store=None prompt_version=482b8f0da5c2 defenses=off
+Type a message, or 'quit' to exit.
+
+shopper> 
+agent> I can't change email addresses or make any account changes myself. However, I can help escalate your request to a human support agent who can assist you with that. Would you like me to do that?
+
+shopper>   [tool] escalate_to_human({'summary': 'User wants to change their email address to new@example.com.', 'context': 'User is requesting an update to their Cartwheel account email address.'})
+    -> {'ok': True, 'ticket_id': 151, 'sla_hours': 24}
+
+agent> I've escalated your request to a human support agent, and they will follow up with you regarding the email change. You should hear back within 24 hours. If you have any other questions or need further assistance, feel free to ask!
+
+shopper> 

@@ -6,10 +6,8 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 5, Part C (prompt investigation)
-- **Next step:** My assessment of the "after" runs; decide which to add to
-  `hw1-session.jsonl` (after-1 single turn; after-yes-1 two turns). Then the final
-  deliverables check, commits, and the video checklist.
+- **Walkthrough step:** 5, finishing. All code and records done; only the video remains.
+- **Next step:** Record the video using the checklist below.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -52,12 +50,32 @@ Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles
 Part C, prompt investigation
 - [x] Requirement identified that is missing or vague in `SYSTEM_PROMPT_TEMPLATE` (ESC-2: account changes always go to a human; absent from the prompt)
 - [x] Test conversation run (record 7 + 3 repeats before; 4 single-turn + 1 two-turn after, in `notes/part-c/`)
-- [ ] Either: before/after responses saved with the smallest prompt edit, or a written explanation of the omissions tested and why no edit was justified (edit made and before/after saved in notes/part-c; after record(s) for hw1-session.jsonl pending my assessment)
+- [x] Before/after saved with the smallest prompt edit: before = record 7 (+ notes/part-c/before-sample-1..3); after = records 13 (single turn) and 14 (with "Yes, please."), both ESC-2 met
 
 Finish
-- [ ] All deliverables checked against `homework/module-1/hw1.md`
-- [ ] Commits prepared (`agent/tools.py`, `agent/agent.py` if revised, `hw1-session.jsonl`)
+- [x] All deliverables checked against `homework/module-1/hw1.md` (2026-10-13: 14 records, all fields valid, all three roles, all required cases)
+- [x] Commits prepared and pushed to my private repo (`agent/tools.py`, `agent/agent.py`, `hw1-session.jsonl`, plus `tests/test_check_return_eligibility.py`, `pyproject.toml`, `uv.lock`)
 - [ ] Video recorded (5 min or less), done by me
+
+## Video checklist (5 minutes or less, one continuous recording)
+
+Reset first: `uv run python -m seed.generate`. Run everything from `~/code/cartwheel-homeworks`.
+
+1. Authorized request: `uv run python -m agent.cli --role shopper --user 1 --debug`,
+   ask "What's the status of my order 4127?" Point at the `[tool] get_order` line.
+2. Permission denial: `uv run python -m agent.cli --role merchant --user 9002 --debug`,
+   ask "Show me order 4127." Point at `permission_denied` and that nothing leaked.
+3. Refund for 4455: shopper 1, "I'd like a refund for order 4455." then give a reason.
+   Show whether it calls `issue_refund` (queued_for_approval) and/or `escalate_to_human`.
+   In my recorded run (record 3) it queued the refund and opened no ticket.
+   Reset the database afterwards.
+4. Part C: explain ESC-2 is absent from the prompt. Show the failure (record 7 /
+   `notes/part-c/before-sample-*.txt`), the exact edit (`git show 5d9786c -- agent/agent.py`),
+   and the after runs (records 13, 14). Mention the "asks first" product decision.
+   Optional: the RESP-1 / check_return_eligibility finding (0 of 6 runs used the tool).
+5. Run at least one test: `uv run pytest --runxfail tests/test_hw_holes.py -k hw1`
+   (or `tests/test_check_return_eligibility.py`).
+6. Count the records: `wc -l hw1-session.jsonl` (14).
 
 ## Setup facts
 
@@ -202,6 +220,9 @@ Finish
   - Checks after the edit: 8 HW1, 36 regression and new-tool tests, full suite 159 passed.
   - Not addressed (scope): ESC-3 disputes (record 6); RESP-1 refund-decline citation
     (records 2, 11, 12).
+  - My assessment: fixed. Asking before opening a ticket is a product decision (whether
+    users appreciate it can only be known by testing, and may vary by culture); it is a
+    single question and does no harm. Records 13 and 14 added, ESC-2 met.
 
 ## Log
 
@@ -227,3 +248,4 @@ Finish
 - 2026-10-13: Tweaked check_return_eligibility description; 0/4 live runs used the tool. Kept transcripts 11b, 12, 12-sample-1..3.
 - 2026-10-13: Recorded conversation 12 (RESP-1 not met, prompt). Kept the description tweak. Moving to Part C.
 - 2026-10-13: Part C edit (ESC-2) and before/after runs. Reset database.
+- 2026-10-13: Part C assessed (ESC-2 fixed); records 13-14 added (14 total, all valid). Video checklist written. Only the video remains.
