@@ -6,9 +6,10 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 4, Part B conversations (1 of 10+ recorded)
-- **Next step:** Conversation 2, required case: shopper 1, order 3980 (outside the
-  refund window). Ask for my prediction first.
+- **Walkthrough step:** 4, Part B conversations (2 of 10+ recorded)
+- **Next step:** Conversation 3, required case: shopper 1, refund for order 4455
+  ($240, above the $100 threshold). It will create a refund record, so reset the
+  database after it.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -33,7 +34,7 @@ Part A, tools (`agent/tools.py`)
 
 Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles)
 - [x] Shopper 1, authorized request about order 4127 (record 1: TOOL-4, met; gpt-4o-mini called get_order once)
-- [ ] Shopper 1, order 3980 (outside refund window)
+- [x] Shopper 1, order 3980 (outside refund window) (record 2: RESP-1, not met, prompt; declined correctly but cited no policy and did not explain the 30-day window)
 - [ ] Shopper 1, refund for order 4455 (above auto-approval threshold)
 - [ ] Merchant 9002 (store 2), order 4127 (belongs to store 1)
 - [ ] Question that depends on a store policy override
@@ -118,6 +119,11 @@ Finish
   unique), so `search_help_center` returned `cw-returns` twice. Removed them and moved
   the repo off the Desktop.
 
+- Part C candidate: record 2. The prompt already says "Cite the policy id ... for every
+  policy claim", but gpt-4o-mini declined a refund "as per our policy" without looking up
+  or citing `cw-returns`. Is the instruction too vague about looking up the policy before
+  declining on policy grounds?
+
 ## Log
 
 - 2026-10-08: Created private repo, rewired remotes, started the walkthrough.
@@ -129,3 +135,4 @@ Finish
 - 2026-10-12: Fixed CI (Git LFS objects missing on private repo). Found upstream small-model update.
 - 2026-10-12: Merged upstream small-model update; switched to gpt-4o-mini. Tests still pass.
 - 2026-10-12: Step 3 checkpoint done. Built capture/record helpers. Recorded conversation 1 (4127, met).
+- 2026-10-12: Recorded conversation 2 (3980, RESP-1 not met, prompt).
