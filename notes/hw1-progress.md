@@ -6,9 +6,10 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 4, additional tool built and tested offline.
-- **Next step:** Assess conversation 12 (3980 after the description tweak), decide
-  whether to keep the tweak, then Step 5 / Part C.
+- **Walkthrough step:** 5, Part C (prompt investigation)
+- **Next step:** Choose the Part C requirement: escalation (ESC-2, evidence records 3,
+  6, 7) or refund-decline citation (RESP-1, evidence records 2, 11, 12). Predict, make
+  the smallest prompt edit, rerun the same conversation fresh with the same data.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -207,3 +208,4 @@ Finish
 - 2026-10-13: Built check_return_eligibility; 12 new tests, 8 HW1, 24 regression pass; full suite passes with Langfuse settings blanked.
 - 2026-10-13: Recorded conversation 11 (3980 with new tool available; RESP-1 not met, prompt).
 - 2026-10-13: Tweaked check_return_eligibility description; 0/4 live runs used the tool. Kept transcripts 11b, 12, 12-sample-1..3.
+- 2026-10-13: Recorded conversation 12 (RESP-1 not met, prompt). Kept the description tweak. Moving to Part C.
