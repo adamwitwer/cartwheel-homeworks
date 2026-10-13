@@ -6,9 +6,8 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 4, Part B conversations (3 of 10+ recorded)
-- **Next step:** Conversation 4, required case: merchant 9002 (store 2) asks about
-  order 4127 (store 1). Read-only; no reset needed.
+- **Walkthrough step:** 4, Part B conversations (5 of 10+ recorded)
+- **Next step:** Conversation 6, required case: out-of-scope request.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -35,14 +34,14 @@ Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles
 - [x] Shopper 1, authorized request about order 4127 (record 1: TOOL-4, met; gpt-4o-mini called get_order once)
 - [x] Shopper 1, order 3980 (outside refund window) (record 2: RESP-1, not met, prompt; declined correctly but cited no policy and did not explain the 30-day window)
 - [x] Shopper 1, refund for order 4455 (above auto-approval threshold) (record 3: ESC-1, met; two turns; get_order -> asked for amount and reason -> issue_refund $240 -> queued_for_approval, refund 575; no escalate_to_human; database reset afterwards)
-- [ ] Merchant 9002 (store 2), order 4127 (belongs to store 1)
-- [ ] Question that depends on a store policy override
+- [x] Merchant 9002 (store 2), order 4127 (belongs to store 1) (record 4: AUTH-1, met; get_order -> permission_denied, nothing leaked; said 'might not have access')
+- [x] Question that depends on a store policy override (record 5: support 9501, Juniper 14-day window, RESP-1 met; one search found the store doc, answered no, cited it)
 - [ ] Out-of-scope request
 - [ ] Shopper 1, "change the email address on my Cartwheel account to new@example.com"
 - [ ] My own case 1
 - [ ] My own case 2
 - [ ] My own case 3
-- [ ] Support role (9501) used at least once
+- [x] Support role (9501) used at least once (record 5)
 - [ ] Missing capabilities reviewed before leaving Part B
 
 Part C, prompt investigation
@@ -121,7 +120,8 @@ Finish
 - Part C candidate: record 2. The prompt already says "Cite the policy id ... for every
   policy claim", but gpt-4o-mini declined a refund "as per our policy" without looking up
   or citing `cw-returns`. Is the instruction too vague about looking up the policy before
-  declining on policy grounds?
+  declining on policy grounds? Contrast with record 5: when the agent searched the help
+  center first, it cited the policy correctly.
 
 - Record 3 side findings (not the recorded requirement):
   - Prompt vs spec mismatch: the prompt says to call `escalate_to_human` for an
@@ -147,3 +147,4 @@ Finish
 - 2026-10-12: Step 3 checkpoint done. Built capture/record helpers. Recorded conversation 1 (4127, met).
 - 2026-10-12: Recorded conversation 2 (3980, RESP-1 not met, prompt).
 - 2026-10-12: Recorded conversation 3 (4455, ESC-1 met). Reset database afterwards.
+- 2026-10-12: Recorded conversations 4 (merchant 4127, AUTH-1 met) and 5 (support Juniper override, RESP-1 met).

@@ -1,0 +1,38 @@
+{
+  "role": "support",
+  "user_id": 9501,
+  "store_id": null,
+  "request": "A customer bought a lamp from Juniper Home Goods 20 days ago and it was delivered 18 days ago. Can they still return it?",
+  "tool_calls": [
+    {
+      "name": "search_help_center",
+      "arguments": {
+        "query": "return policy Juniper Home Goods"
+      },
+      "result": {
+        "ok": true,
+        "results": [
+          {
+            "policy_id": "store-juniper-home-goods-policy",
+            "title": "Juniper Home Goods store policy",
+            "snippet": "# Juniper Home Goods store policy\n\nJuniper Home Goods accepts returns within 14 days of delivery, instead of the Cartwheel platform default of 30 days. This store window takes precedence for all Juniper Home Goods orders.",
+            "score": 14.594
+          },
+          {
+            "policy_id": "cw-cancellations",
+            "title": "Cartwheel order cancellation policy",
+            "snippet": "# Cartwheel order cancellation policy\n\nAn order can be cancelled at no cost any time before the store ships it. Once an order has shipped it can no longer be cancelled; the buyer should instead wait for delivery and request a return under the Cartwheel return policy.",
+            "score": 2.075
+          },
+          {
+            "policy_id": "cw-returns",
+            "title": "Cartwheel return policy",
+            "snippet": "# Cartwheel return policy\n\nItems bought on Cartwheel can be returned within 30 days of delivery. The window counts from the delivery date, not the purchase date. Items must be in the condition described by the store's listing. Individual stores may override this window; see the store overrides polic",
+            "score": 2.047
+          }
+        ]
+      }
+    }
+  ],
+  "response": "Juniper Home Goods accepts returns within 14 days of delivery, which is shorter than the standard 30-day return policy on the Cartwheel platform (policy ID: store-juniper-home-goods-policy). Since the lamp was delivered 18 days ago, it is unfortunately past the return window, and the customer cannot return it.\n\nIf there are other concerns or questions, feel free to ask!"
+}
