@@ -1,0 +1,31 @@
+{
+  "role": "shopper",
+  "user_id": 1,
+  "store_id": null,
+  "request": "What's the status of my order 4127?",
+  "tool_calls": [
+    {
+      "name": "get_order",
+      "arguments": {
+        "order_id": 4127
+      },
+      "result": {
+        "ok": true,
+        "order": {
+          "order_id": 4127,
+          "store_id": 1,
+          "product_id": 1,
+          "quantity": 1,
+          "total_usd": 84.0,
+          "status": "delivered",
+          "ordered_at": "2026-06-14",
+          "shipped_at": "2026-06-16",
+          "delivered_at": "2026-06-19",
+          "refund_eligible": true,
+          "store_name": "Blue Heron Ceramics"
+        }
+      }
+    }
+  ],
+  "response": "Your order 4127 from Blue Heron Ceramics has been delivered. Here are the details:\n\n- **Order Status:** Delivered\n- **Ordered At:** June 14, 2026\n- **Shipped At:** June 16, 2026\n- **Delivered At:** June 19, 2026\n\nAdditionally, your order is eligible for a refund, should you need it. Let me know if you need any more assistance!"
+}

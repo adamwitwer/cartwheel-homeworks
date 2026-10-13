@@ -6,9 +6,15 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 3, Complete the tools (all 5 done), checkpoint pending
-- **Next step:** Step 3 checkpoint (questions about the tools?), then Step 4 / Part B
-  conversations. Track missing capabilities for the additional tool.
+- **Walkthrough step:** 4, Part B conversations (1 of 10+ recorded)
+- **Next step:** Conversation 2, required case: shopper 1, order 3980 (outside the
+  refund window). Ask for my prediction first.
+- **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
+  runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
+  assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
+  --met true|false --source null|prompt|tool|specification` appends to `hw1-session.jsonl`.
+  Reset the database (`uv run python -m seed.generate`) before any conversation that
+  could refund or cancel, never mid-conversation.
 - **Repo location:** moved to `~/code/cartwheel-homeworks` on 2026-10-12, away from
   iCloud-synced `~/Desktop`. Run Claude Code from there.
 - **Blockers:** none
@@ -26,7 +32,7 @@ Part A, tools (`agent/tools.py`)
 - [ ] At least one additional tool of my own, registered in `TOOLS_BY_ROLE` and tested (pending: pick it from gaps seen in Part B)
 
 Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles)
-- [ ] Shopper 1, authorized request about order 4127
+- [x] Shopper 1, authorized request about order 4127 (record 1: TOOL-4, met; gpt-4o-mini called get_order once)
 - [ ] Shopper 1, order 3980 (outside refund window)
 - [ ] Shopper 1, refund for order 4455 (above auto-approval threshold)
 - [ ] Merchant 9002 (store 2), order 4127 (belongs to store 1)
@@ -122,3 +128,4 @@ Finish
 - 2026-10-12: Cutoff 70 (8 HW1 + 24 regression tests pass). Removed iCloud duplicates; moved repo to ~/code.
 - 2026-10-12: Fixed CI (Git LFS objects missing on private repo). Found upstream small-model update.
 - 2026-10-12: Merged upstream small-model update; switched to gpt-4o-mini. Tests still pass.
+- 2026-10-12: Step 3 checkpoint done. Built capture/record helpers. Recorded conversation 1 (4127, met).
