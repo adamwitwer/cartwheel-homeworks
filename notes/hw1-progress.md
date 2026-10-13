@@ -6,9 +6,9 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 4, Part B done (10 records). Choosing the additional tool.
-- **Next step:** Review missing capabilities, choose my additional tool, define its
-  behavior, then implement, register, and test it.
+- **Walkthrough step:** 4, additional tool built and tested offline.
+- **Next step:** Live test of `check_return_eligibility` (rerun the 3980 refund request
+  as shopper 1; record it as conversation 11), tweak if needed, then Step 5 / Part C.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -29,7 +29,10 @@ Part A, tools (`agent/tools.py`)
 - [x] `find_order` (rapidfuzz partial_ratio, cutoff 70)
 - [x] Focused tests pass: `uv run pytest --runxfail tests/test_hw_holes.py -k hw1` (8 passed, 2026-10-12)
 - [x] Regression tests pass (24 passed, 2026-10-12): `uv run pytest tests/test_agent_tools.py tests/test_auth.py tests/test_eligibility.py`
-- [ ] At least one additional tool of my own, registered in `TOOLS_BY_ROLE` and tested (pending: pick it from gaps seen in Part B)
+- [x] Additional tool: `check_return_eligibility(order_id)`. Logic in `agent/tools.py`,
+  wrapper in `agent/agent.py`, registered for all roles via `_COMMON_TOOLS` in
+  `TOOLS_BY_ROLE`. Tests: `tests/test_check_return_eligibility.py` (12 passed). Offline
+  only so far; live model test pending.
 
 Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles)
 - [x] Shopper 1, authorized request about order 4127 (record 1: TOOL-4, met; gpt-4o-mini called get_order once)
@@ -43,7 +46,7 @@ Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles
 - [x] My own case 2 (record 9: shopper 1, ceramic mugs under $30; SCOPE-1 met; model singularized to 'ceramic mug' with max_price_usd=30, found 2 mugs)
 - [x] My own case 3 (record 10: support 9501 cancels placed order 180; RESP-2 met; get_order -> cancel_order -> 'successfully canceled' only after ok; database reset afterwards)
 - [x] Support role (9501) used at least once (record 5)
-- [ ] Missing capabilities reviewed before leaving Part B (in progress)
+- [x] Missing capabilities reviewed before leaving Part B (chose return-eligibility check)
 
 Part C, prompt investigation
 - [ ] Requirement identified that is missing or vague in `SYSTEM_PROMPT_TEMPLATE`
@@ -157,6 +160,15 @@ Finish
   model sent "ceramic mug" and found 2. The plural problem is real offline but did not
   occur in this run.
 
+- Additional tool design (agreed 2026-10-13): same scope as get_order (checked first);
+  returns eligible, return_window_days, window_source (store_override/platform_default),
+  policy_id to cite, delivered_at, last_day_to_return, days_since_delivery, as_of
+  (2026-07-01, the seed's WORLD_ASOF), and a reason. Placed/shipped/cancelled/refunded
+  are not eligible with a reason. Seeded broken records (8001 shipped after delivery,
+  8002 delivered with no date) return `inconsistent_record` and no eligibility answer.
+  Uses `seed/eligibility.py`; a test checks it agrees with the stamped
+  `refund_eligible` for every order. Motivated by record 2.
+
 ## Log
 
 - 2026-10-08: Created private repo, rewired remotes, started the walkthrough.
@@ -176,3 +188,4 @@ Finish
 - 2026-10-13: Chose my cases (sister's orders, natural product search, successful cancellation). Recorded conversation 8 (AUTH-1 met).
 - 2026-10-13: Recorded conversation 9 (mug search, SCOPE-1 met).
 - 2026-10-13: Recorded conversation 10 (support cancel, RESP-2 met). Part B minimum of 10 reached. Reset database.
+- 2026-10-13: Built check_return_eligibility; 12 new tests, 8 HW1, 24 regression pass; full suite passes with Langfuse settings blanked.

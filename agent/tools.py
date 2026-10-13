@@ -18,14 +18,18 @@ They are marked xfail and flip to passing as you implement each function.
 
 from __future__ import annotations
 
+from datetime import timedelta
 from typing import Any
 
 from rapidfuzz import fuzz
 
 from agent import db
-from agent.auth import AuthContext, can_cancel_order, permission_denied
+from agent.auth import AuthContext, can_cancel_order, can_view_order, permission_denied
+from agent.config import load_facts
 from agent.helpcenter import load_policy_docs
 from agent.killswitch import kill_switch
+from seed.eligibility import effective_return_window_days, is_refund_eligible
+from seed.generate import WORLD_ASOF
 
 MAX_SEARCH_LIMIT = 25
 DEFAULT_ORDER_LIMIT = 20
@@ -319,3 +323,117 @@ def find_order(ctx: AuthContext, query: str) -> dict[str, Any]:
             if len(matches) == FIND_ORDER_LIMIT:
                 break
     return {"ok": True, "orders": matches}
+
+
+# ---------------------------------------------------------------------------
+# Additional tool (HW1 Part A): return eligibility with the reason behind it.
+# ---------------------------------------------------------------------------
+
+
+def check_return_eligibility(ctx: AuthContext, order_id: int) -> dict[str, Any]:
+    """Explain whether an order can still be returned for a refund. Risk tier: read.
+
+    get_order reports only a yes/no refund_eligible flag, so the agent could
+    decline a refund without knowing which window applied or which policy to
+    cite (HW1 conversation 2). This tool returns the window, its source, the
+    deadline, and the policy id, computed with the same oracle the seed uses
+    to stamp refund_eligible, so the two never disagree.
+
+    Scope matches get_order (agent.auth.can_view_order) and is checked before
+    anything about the order is revealed.
+
+    Returns:
+        If no order has this id: {"ok": False, "error": "not_found", ...}.
+        Out of scope: agent.auth.permission_denied(...).
+        If the record cannot support a deadline (delivered without a delivery
+        date, delivered before it shipped, or delivered after the as-of date):
+        {"ok": False, "error": "inconsistent_record", "reason": ...}; no
+        eligibility answer is given.
+        Otherwise: {"ok": True, "order_id", "eligible", "status",
+        "store_name", "return_window_days", "window_source"
+        ("store_override" | "platform_default"), "policy_id",
+        "delivered_at", "last_day_to_return", "days_since_delivery",
+        "as_of", "reason"}. Dates are ISO strings; delivery fields are None
+        for orders that were never delivered.
+    """
+    with db.connection() as conn:
+        order = db.get_order(conn, order_id)
+        if order is None:
+            return {"ok": False, "error": "not_found", "reason": f"no order #{order_id}"}
+        if not can_view_order(ctx, order.user_id, order.store_id):
+            return permission_denied(
+                f"role '{ctx.role}' (user {ctx.user_id}) may not view order #{order_id}"
+            )
+        store = db.get_store(conn, order.store_id)
+
+    delivered = order.delivered_at
+    problem = None
+    if order.status == "delivered" and delivered is None:
+        problem = "the order is marked delivered but has no delivery date"
+    elif delivered is not None and order.shipped_at is not None and order.shipped_at > delivered:
+        problem = (
+            f"the recorded shipment date ({order.shipped_at.isoformat()}) is after "
+            f"the delivery date ({delivered.isoformat()})"
+        )
+    elif delivered is not None and delivered > WORLD_ASOF:
+        problem = f"the delivery date ({delivered.isoformat()}) is in the future"
+    if problem is not None:
+        return {
+            "ok": False,
+            "error": "inconsistent_record",
+            "reason": (
+                f"order #{order_id}: {problem}, so no return deadline can be computed. "
+                "Do not guess; escalate to a human."
+            ),
+        }
+
+    override = store.return_window_days_override if store else None
+    window = effective_return_window_days(load_facts()["return_window_days"], override)
+    if override is not None:
+        window_source = "store_override"
+        store_policy = f"store-{store.slug}-policy"
+        known = {doc.policy_id for doc in load_policy_docs()}
+        policy_id = store_policy if store_policy in known else "cw-store-overrides"
+    else:
+        window_source = "platform_default"
+        policy_id = "cw-returns"
+
+    eligible = is_refund_eligible(
+        status=order.status, delivered_at=delivered, as_of=WORLD_ASOF, return_window_days=window
+    )
+    last_day = delivered + timedelta(days=window) if delivered else None
+    days_since = (WORLD_ASOF - delivered).days if delivered else None
+    window_text = f"the {window}-day return window ({policy_id})"
+    if order.status in ("placed", "shipped"):
+        reason = (
+            f"Order is {order.status} and not yet delivered; {window_text} "
+            "starts on the delivery date."
+        )
+    elif order.status in ("cancelled", "refunded"):
+        reason = f"Order is already {order.status}, so it cannot be returned for a refund."
+    elif eligible:
+        reason = (
+            f"Delivered {delivered.isoformat()} ({days_since} days ago); {window_text} "
+            f"is open through {last_day.isoformat()}."
+        )
+    else:
+        reason = (
+            f"Delivered {delivered.isoformat()} ({days_since} days ago); {window_text} "
+            f"closed on {last_day.isoformat()}."
+        )
+
+    return {
+        "ok": True,
+        "order_id": order.id,
+        "eligible": eligible,
+        "status": order.status,
+        "store_name": store.name if store else None,
+        "return_window_days": window,
+        "window_source": window_source,
+        "policy_id": policy_id,
+        "delivered_at": delivered.isoformat() if delivered else None,
+        "last_day_to_return": last_day.isoformat() if last_day else None,
+        "days_since_delivery": days_since,
+        "as_of": WORLD_ASOF.isoformat(),
+        "reason": reason,
+    }
