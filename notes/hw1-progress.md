@@ -6,8 +6,10 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 4, Part B conversations (5 of 10+ recorded)
-- **Next step:** Conversation 6, required case: out-of-scope request.
+- **Walkthrough step:** 4, Part B conversations (6 of 10+ recorded)
+- **Next step:** Conversation 7, required case: shopper 1, "Can you change the email
+  address on my Cartwheel account to new@example.com?" Reset the database afterwards
+  if a ticket is created.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -36,7 +38,7 @@ Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles
 - [x] Shopper 1, refund for order 4455 (above auto-approval threshold) (record 3: ESC-1, met; two turns; get_order -> asked for amount and reason -> issue_refund $240 -> queued_for_approval, refund 575; no escalate_to_human; database reset afterwards)
 - [x] Merchant 9002 (store 2), order 4127 (belongs to store 1) (record 4: AUTH-1, met; get_order -> permission_denied, nothing leaked; said 'might not have access')
 - [x] Question that depends on a store policy override (record 5: support 9501, Juniper 14-day window, RESP-1 met; one search found the store doc, answered no, cited it)
-- [ ] Out-of-scope request
+- [x] Out-of-scope request (record 6: merchant 9002 asks for legal options over a threatened lawsuit; ESC-3 not met, prompt; refused legal advice correctly, no tools, never offered a human)
 - [ ] Shopper 1, "change the email address on my Cartwheel account to new@example.com"
 - [ ] My own case 1
 - [ ] My own case 2
@@ -134,6 +136,12 @@ Finish
     for a reason. The capture helper sends all turns up front, so multi-turn cases are
     rerun from scratch with all turns.
 
+- Escalation pattern so far: gpt-4o-mini has not called `escalate_to_human` in any
+  conversation (records 3 and 6), even where the prompt (record 3) or the spec (record 6)
+  calls for a human. Part C candidate: the prompt's escalation section is short and
+  covers only "unsure" and "above your authority", with no mention of disputes (ESC-3)
+  or account changes (ESC-2).
+
 ## Log
 
 - 2026-10-08: Created private repo, rewired remotes, started the walkthrough.
@@ -148,3 +156,4 @@ Finish
 - 2026-10-12: Recorded conversation 2 (3980, RESP-1 not met, prompt).
 - 2026-10-12: Recorded conversation 3 (4455, ESC-1 met). Reset database afterwards.
 - 2026-10-12: Recorded conversations 4 (merchant 4127, AUTH-1 met) and 5 (support Juniper override, RESP-1 met).
+- 2026-10-13: Recorded conversation 6 (merchant legal question, ESC-3 not met, prompt).

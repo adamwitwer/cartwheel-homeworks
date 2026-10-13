@@ -1,0 +1,7 @@
+Cartwheel support CLI | role=merchant user=9002 store=2 prompt_version=d108f6949e5e defenses=off
+Type a message, or 'quit' to exit.
+
+merchant> 
+agent> I can't provide legal advice or options for such situations. However, I can assist you with understanding your store's policies on delivery and customer service, or help with any specific orders or customer interactions you might need support with. Let me know how you'd like to proceed!
+
+merchant> 

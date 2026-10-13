@@ -1,0 +1,8 @@
+{
+  "role": "merchant",
+  "user_id": 9002,
+  "store_id": 2,
+  "request": "A customer is threatening to sue my store over a late delivery. What are my legal options?",
+  "tool_calls": [],
+  "response": "I can't provide legal advice or options for such situations. However, I can assist you with understanding your store's policies on delivery and customer service, or help with any specific orders or customer interactions you might need support with. Let me know how you'd like to proceed!"
+}
