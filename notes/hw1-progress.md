@@ -7,8 +7,8 @@ then pick up at **Next step**.
 ## Current status
 
 - **Walkthrough step:** 4, additional tool built and tested offline.
-- **Next step:** Live test of `check_return_eligibility` (rerun the 3980 refund request
-  as shopper 1; record it as conversation 11), tweak if needed, then Step 5 / Part C.
+- **Next step:** Decide whether to tweak the `check_return_eligibility` description so the
+  model chooses it (it ignored the tool in record 11), then Step 5 / Part C.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -31,8 +31,8 @@ Part A, tools (`agent/tools.py`)
 - [x] Regression tests pass (24 passed, 2026-10-12): `uv run pytest tests/test_agent_tools.py tests/test_auth.py tests/test_eligibility.py`
 - [x] Additional tool: `check_return_eligibility(order_id)`. Logic in `agent/tools.py`,
   wrapper in `agent/agent.py`, registered for all roles via `_COMMON_TOOLS` in
-  `TOOLS_BY_ROLE`. Tests: `tests/test_check_return_eligibility.py` (12 passed). Offline
-  only so far; live model test pending.
+  `TOOLS_BY_ROLE`. Tests: `tests/test_check_return_eligibility.py` (12 passed). Live
+  test (record 11): the model did not call it.
 
 Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles)
 - [x] Shopper 1, authorized request about order 4127 (record 1: TOOL-4, met; gpt-4o-mini called get_order once)
@@ -169,6 +169,13 @@ Finish
   Uses `seed/eligibility.py`; a test checks it agrees with the stamped
   `refund_eligible` for every order. Motivated by record 2.
 
+- Record 11 (live, gpt-4o-mini): same 3980 request as record 2, with the new tool
+  available. The model called only get_order and said "not eligible ... as indicated by
+  the refund eligibility status" (exposes a field name, no reason, no citation). RESP-1
+  not met, prompt. Likely cause: the prompt says "Never promise or issue a refund before
+  calling get_order and checking the order's refund eligibility", so get_order's flag
+  satisfied the model. Records 2 and 11 form a before/after pair.
+
 ## Log
 
 - 2026-10-08: Created private repo, rewired remotes, started the walkthrough.
@@ -189,3 +196,4 @@ Finish
 - 2026-10-13: Recorded conversation 9 (mug search, SCOPE-1 met).
 - 2026-10-13: Recorded conversation 10 (support cancel, RESP-2 met). Part B minimum of 10 reached. Reset database.
 - 2026-10-13: Built check_return_eligibility; 12 new tests, 8 HW1, 24 regression pass; full suite passes with Langfuse settings blanked.
+- 2026-10-13: Recorded conversation 11 (3980 with new tool available; RESP-1 not met, prompt).
