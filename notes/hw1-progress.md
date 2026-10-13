@@ -6,10 +6,9 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 4, Part B conversations (2 of 10+ recorded)
-- **Next step:** Conversation 3, required case: shopper 1, refund for order 4455
-  ($240, above the $100 threshold). It will create a refund record, so reset the
-  database after it.
+- **Walkthrough step:** 4, Part B conversations (3 of 10+ recorded)
+- **Next step:** Conversation 4, required case: merchant 9002 (store 2) asks about
+  order 4127 (store 1). Read-only; no reset needed.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -35,7 +34,7 @@ Part A, tools (`agent/tools.py`)
 Part B, conversations (`hw1-session.jsonl`, at least 10 records, all three roles)
 - [x] Shopper 1, authorized request about order 4127 (record 1: TOOL-4, met; gpt-4o-mini called get_order once)
 - [x] Shopper 1, order 3980 (outside refund window) (record 2: RESP-1, not met, prompt; declined correctly but cited no policy and did not explain the 30-day window)
-- [ ] Shopper 1, refund for order 4455 (above auto-approval threshold)
+- [x] Shopper 1, refund for order 4455 (above auto-approval threshold) (record 3: ESC-1, met; two turns; get_order -> asked for amount and reason -> issue_refund $240 -> queued_for_approval, refund 575; no escalate_to_human; database reset afterwards)
 - [ ] Merchant 9002 (store 2), order 4127 (belongs to store 1)
 - [ ] Question that depends on a store policy override
 - [ ] Out-of-scope request
@@ -124,6 +123,17 @@ Finish
   or citing `cw-returns`. Is the instruction too vague about looking up the policy before
   declining on policy grounds?
 
+- Record 3 side findings (not the recorded requirement):
+  - Prompt vs spec mismatch: the prompt says to call `escalate_to_human` for an
+    above-threshold refund; SPEC ESC-1 only says the tool queues it and the agent explains.
+    gpt-4o-mini queued the refund but opened no ticket, so the user got no `ticket_id`
+    or `sla_hours`. My expectation was a ticket. Possible spec gap and Part C candidate.
+  - RESP-3: the agent asked for the amount, I gave only a reason, and it assumed the full
+    $240 without confirming.
+  - First single-turn attempt (not recorded): the agent stopped after get_order to ask
+    for a reason. The capture helper sends all turns up front, so multi-turn cases are
+    rerun from scratch with all turns.
+
 ## Log
 
 - 2026-10-08: Created private repo, rewired remotes, started the walkthrough.
@@ -136,3 +146,4 @@ Finish
 - 2026-10-12: Merged upstream small-model update; switched to gpt-4o-mini. Tests still pass.
 - 2026-10-12: Step 3 checkpoint done. Built capture/record helpers. Recorded conversation 1 (4127, met).
 - 2026-10-12: Recorded conversation 2 (3980, RESP-1 not met, prompt).
+- 2026-10-12: Recorded conversation 3 (4455, ESC-1 met). Reset database afterwards.

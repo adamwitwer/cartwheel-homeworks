@@ -1,0 +1,50 @@
+{
+  "role": "shopper",
+  "user_id": 1,
+  "store_id": null,
+  "request": [
+    "I'd like a refund for order 4455.",
+    "I ordered a different color"
+  ],
+  "tool_calls": [
+    {
+      "name": "get_order",
+      "arguments": {
+        "order_id": 4455
+      },
+      "result": {
+        "ok": true,
+        "order": {
+          "order_id": 4455,
+          "store_id": 1,
+          "product_id": 1,
+          "quantity": 1,
+          "total_usd": 240.0,
+          "status": "delivered",
+          "ordered_at": "2026-06-21",
+          "shipped_at": "2026-06-23",
+          "delivered_at": "2026-06-26",
+          "refund_eligible": true,
+          "store_name": "Blue Heron Ceramics"
+        }
+      }
+    },
+    {
+      "name": "issue_refund",
+      "arguments": {
+        "order_id": 4455,
+        "amount_usd": 240,
+        "reason": "Ordered a different color."
+      },
+      "result": {
+        "ok": true,
+        "status": "queued_for_approval",
+        "refund_id": 575,
+        "order_id": 4455,
+        "amount_usd": 240.0,
+        "note": "amount is above the $100 auto-approval threshold; a human support agent will review it"
+      }
+    }
+  ],
+  "response": "Your order 4455 from Blue Heron Ceramics is eligible for a refund. It has been delivered, and you ordered it on June 21, 2026.\n\nPlease let me know the amount you'd like refunded and the reason for the refund so I can process it.\n\nI've initiated the refund for your order 4455 due to receiving the wrong color. The amount of $240 is currently queued for approval, as it exceeds the auto-approval threshold.\n\nA human support agent will review it, and you'll be updated once it's processed. If you have any other questions or need further assistance, feel free to ask!"
+}

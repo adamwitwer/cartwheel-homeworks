@@ -1,0 +1,18 @@
+Cartwheel support CLI | role=shopper user=1 store=None prompt_version=d108f6949e5e defenses=off
+Type a message, or 'quit' to exit.
+
+shopper>   [tool] get_order({'order_id': 4455})
+    -> {'ok': True, 'order': {'order_id': 4455, 'store_id': 1, 'product_id': 1, 'quantity': 1, 'total_usd': 240.0, 'status': 'delivered', 'ordered_at': '2026-06-21', 'shipped_at': '2026-06-23', 'delivered_at': '2026-06-26', 'refund_eligible': True, 'store_name': 'Blue Heron Ceramics'}}
+
+agent> Your order 4455 from Blue Heron Ceramics is eligible for a refund. It has been delivered, and you ordered it on June 21, 2026.
+
+Please let me know the amount you'd like refunded and the reason for the refund so I can process it.
+
+shopper>   [tool] issue_refund({'order_id': 4455, 'amount_usd': 240, 'reason': 'Ordered a different color.'})
+    -> {'ok': True, 'status': 'queued_for_approval', 'refund_id': 575, 'order_id': 4455, 'amount_usd': 240.0, 'note': 'amount is above the $100 auto-approval threshold; a human support agent will review it'}
+
+agent> I've initiated the refund for your order 4455 due to receiving the wrong color. The amount of $240 is currently queued for approval, as it exceeds the auto-approval threshold.
+
+A human support agent will review it, and you'll be updated once it's processed. If you have any other questions or need further assistance, feel free to ask!
+
+shopper> 
