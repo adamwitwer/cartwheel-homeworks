@@ -6,8 +6,8 @@ then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 5, finishing. All code and records done; only the video remains.
-- **Next step:** Record the video using the checklist below.
+- **Walkthrough step:** done. HW1 complete; video recorded 2026-10-15 (https://www.loom.com/share/a63c28fd9314491c9a5fd4585b0b9e43).
+- **Next step:** Post the video and repo links in the course Discord submissions channel. Repo made public 2026-10-15.
 - **How to record:** `uv run python notes/part-b/capture.py NAME --role R --user U "turn" ...`
   runs the CLI live with --debug and saves `notes/part-b/NAME.txt` + `.json`. After my
   assessment, `uv run python notes/part-b/record.py NAME --expected ... --requirement ...
@@ -55,7 +55,7 @@ Part C, prompt investigation
 Finish
 - [x] All deliverables checked against `homework/module-1/hw1.md` (2026-10-13: 14 records, all fields valid, all three roles, all required cases)
 - [x] Commits prepared and pushed to my private repo (`agent/tools.py`, `agent/agent.py`, `hw1-session.jsonl`, plus `tests/test_check_return_eligibility.py`, `pyproject.toml`, `uv.lock`)
-- [ ] Video recorded (5 min or less), done by me
+- [x] Video recorded (5 min or less), done by me (2026-10-15, Loom)
 
 ## Video checklist (5 minutes or less, one continuous recording)
 
