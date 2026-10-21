@@ -108,8 +108,16 @@ Same order and wording as the handout's Video section.
      agent will review it"; `permission_denied = false`.
      Turn 1 (trace 5a, `6a2f7d50…`) already called `get_order`; the session remembered it.
 5. **Show the two prompt version hashes produced by the controlled comparison.**
-   Part F traces `1ec21e69…` (482b8f0da5c2, current prompt) and `4cd02e32…`
-   (d108f6949e5e, HW1 original), or `cat` the Part F table in this note.
+   Show them in Langfuse: open each Part F trace (tabs ready before recording), click the
+   root span `cartwheel.session_message`, point at `cartwheel.prompt_version`.
+   - Run A, current prompt, `482b8f0da5c2`:
+     http://localhost:3000/project/cartwheel-dev/traces/1ec21e6974fd759fad313933ecaa87ce
+   - Run B, HW1 original prompt, `d108f6949e5e`:
+     http://localhost:3000/project/cartwheel-dev/traces/4cd02e32efec280ba850837cf1e69077
+   "Controlled": same request, user, model, new session, reset database; only the prompt
+   changed. Optional one line: A offers a human, B does not (the ESC-2 edit).
+   Terminal backup (prints both hashes from Langfuse):
+   `for id in 1ec21e6974fd759fad313933ecaa87ce 4cd02e32efec280ba850837cf1e69077; do curl -s -u pk-lf-cartwheel-dev:sk-lf-cartwheel-dev http://localhost:3000/api/public/traces/$id | jq -r '"\(.id)  \(.metadata.attributes["cartwheel.prompt_version"])"'; done`
 6. **Regenerate the span count for one selected trace.**
    `curl -s -u pk-lf-cartwheel-dev:sk-lf-cartwheel-dev http://localhost:3000/api/public/traces/b2a95bffeb4f90f52c1a55169a0f7626 | jq '.observations | length'` -> 6.
 
