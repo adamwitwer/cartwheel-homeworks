@@ -78,19 +78,39 @@ Before recording: Docker Desktop running; `docker compose -f observability/docke
 sign in at http://localhost:3000; server in a second terminal:
 `uv run uvicorn server.app:app --port 8010`. Do NOT run `docker compose ... down -v`.
 
-1. Run one authentication test: `uv run pytest tests/test_observability.py -v`.
-2. Explain how the endpoint established identity: `create_session` in `server/app.py`
-   (database lookup, 400/404/403, AuthContext stored server-side, signed token;
-   `_authorize` checks the token on each message). Optional live demo:
+Same order and wording as the handout's Video section.
+
+1. **Run one authentication test.**
+   `uv run pytest tests/test_observability.py -v` (2 passed).
+2. **Read both selected traces from the root span to the final response.**
+   Open each permalink in `hw2-traces.json`. Shape of both (6 spans):
+   `cartwheel.session_message` (root: role, user_id, session_id, prompt_version, input
+   message) -> Agent Workflow -> `cartwheel-support.agent` -> model call -> tool -> model
+   call -> final reply (root output).
+   - Trace 1, run 2, merchant 9002, "Show me order 4127." (`b2a95bff…`)
+   - Trace 2, run 5b, shopper 1, "I ordered a different color" (`b99456c5…`)
+3. **Explain how the endpoint established the authenticated identity.**
+   `create_session` in `server/app.py`: looks the user up in the database (400 unknown
+   role, 404 unknown user, 403 role mismatch), stores the AuthContext on the server in
+   `_SESSIONS`, returns a signed token. On each message `_authorize` checks the token's
+   signature and session before the agent runs; tools get the stored context, never
+   anything typed in the chat. Point at the root span's `cartwheel.user_role` /
+   `cartwheel.user_id` in the traces as the result. Optional live demo:
    `curl -s -X POST http://localhost:8010/sessions -H 'Content-Type: application/json' -d '{"user_id":1,"role":"support"}'` -> 403.
-3. Read trace 1 (run 2, merchant denial) from the permalink in `hw2-traces.json`: root span
-   attributes -> Agent Workflow -> model call -> `get_order` (permission_denied true, reason,
-   store_id 2) -> model call -> final reply in root output.
-4. Read trace 2 (run 5b, refund turn 2) the same way: `issue_refund` $240 ->
-   queued_for_approval; turn 1 (trace 5a) had already called get_order, the session kept it.
-5. Show the two prompt versions from Part F: traces `1ec21e69…` (482b8f0da5c2) and
-   `4cd02e32…` (d108f6949e5e), or `cat` the table in this note.
-6. Regenerate the span count for one selected trace:
+4. **Explain the tool calls and their results in the selected traces.**
+   - Trace 1: `get_order(4127)` -> `permission_denied`, reason "role 'merchant' (user 9002)
+     may not view order #4127"; tool span has `cartwheel.permission_denied = true`, the
+     reason, and `store_id = 2`. No order data returned, so none could leak; the reply
+     says the merchant lacks permission.
+   - Trace 2: `issue_refund(order_id 4455, amount_usd 240, reason "Ordered a different
+     color")` (the model reworded the user's reason) -> `status: queued_for_approval`,
+     refund 575, note "amount is above the $100 auto-approval threshold; a human support
+     agent will review it"; `permission_denied = false`.
+     Turn 1 (trace 5a, `6a2f7d50…`) already called `get_order`; the session remembered it.
+5. **Show the two prompt version hashes produced by the controlled comparison.**
+   Part F traces `1ec21e69…` (482b8f0da5c2, current prompt) and `4cd02e32…`
+   (d108f6949e5e, HW1 original), or `cat` the Part F table in this note.
+6. **Regenerate the span count for one selected trace.**
    `curl -s -u pk-lf-cartwheel-dev:sk-lf-cartwheel-dev http://localhost:3000/api/public/traces/b2a95bffeb4f90f52c1a55169a0f7626 | jq '.observations | length'` -> 6.
 
 ## Setup facts (this machine)
