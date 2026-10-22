@@ -6,8 +6,9 @@ session should read this first, then pick up at **Next step**.
 
 ## Current status
 
-- **Walkthrough step:** 8, all code and records done; only the video and submission remain.
-- **Next step:** record the video using the checklist below, then post to Discord.
+- **Walkthrough step:** done. HW2 complete; video recorded 2026-10-21
+  (https://www.loom.com/share/fc8f18250378475eafb142546b64f58d).
+- **Next step:** post the video and repo links in the course Discord submissions channel.
 - **Start/stop Langfuse:** `docker compose -f observability/docker-compose.yml up -d` / `down`
   (Docker Desktop must be running). UI at http://localhost:3000,
   `student@example.com` / `cartwheel-dev-pass`. Traces persist across restarts.
@@ -69,7 +70,7 @@ Trace record and submission
   `user_id` as a string, matching the trace)
 - [x] Files committed: `observability/instrument.py`, `server/app.py`,
   `tests/test_observability.py`, `hw2-traces.json`
-- [ ] Video recorded (5 min or less), done by me
+- [x] Video recorded (5 min or less), done by me (2026-10-21, Loom)
 - [ ] Posted to the course Discord submissions channel, done by me
 
 ## Video checklist (5 minutes or less, one continuous recording)
