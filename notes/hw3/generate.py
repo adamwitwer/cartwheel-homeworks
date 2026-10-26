@@ -41,6 +41,11 @@ STYLES = {
     "requests_short_plain_answer": "explicitly asks for a short, plain answer",
 }
 
+# Final review, support-0182: shoppers copied the staff example ("cx wants...") and wrote
+# about "the customer" instead of themselves.
+SHOPPER_SHORTHAND = ("clipped shorthand, like a ticket note (\"#123 status?\", \"want refund\"), "
+                     "but about their own order, in the first person")
+
 ROLES = {
     "shopper": "a shopper who buys from stores on Cartwheel, an online marketplace",
     "merchant": "a merchant who runs a store on Cartwheel, an online marketplace",
@@ -103,7 +108,8 @@ def _context(gen: dict) -> dict:
         "goal": gen["goal"],
         "facts": "\n".join(f"- {fact}" for fact in gen["user_visible_facts"]),
         "style": gen["style"],
-        "style_desc": STYLES[gen["style"]],
+        "style_desc": SHOPPER_SHORTHAND if (gen["role"], gen["style"]) == ("shopper", "operational_shorthand")
+        else STYLES[gen["style"]],
         "turns": 1 + len(plan),
         "n_followups": len(plan),
         "followup_clause": f", then {len(plan)} followup(s)" if plan else ", no followups",

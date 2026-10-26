@@ -23,8 +23,55 @@ Rules from `AGENTS.md` and `scenarios/skill/SKILL.md` that apply throughout:
   Pilot review done (2026-10-26): I reviewed all 30; `scenarios/pilot_review.jsonl`
   written from my notes in the review aid. 30 valid, 12 confirmed failures (002, 008,
   011, 013, 015, 018, 019, 021, 022, 026, 027, 028), no scenario changes.
-- **Next step:** Part C, the final 250 scenarios (175 coverage + 75 challenge, 5 per
-  damaged record, new IDs), built with `notes/hw3/build_plan.py` and `generate.py`.
+- **Part C step 1 done (2026-10-26):** data reset; `notes/hw3/build_final_plan.py` wrote
+  `notes/hw3/final_plan.jsonl` (250 rows, `support-0001`-`0175` coverage, `0176`-`0250`
+  challenge). Composition approved by me 2026-10-26 (see the plan script's docstring).
+  Shared lookups moved to `notes/hw3/plan_lib.py`; the pilot plan rebuilds unchanged.
+  Day-30 refund uses an order over $100 (the only day-30 order at or under $100 was
+  pilot-021's). Multi-turn share is 36% (2-3 turns), a bit under the 40% proposed.
+- **Part C step 2 done (2026-10-26):** `scenarios/support_scenarios.jsonl` generated (gpt-4.1
+  writer + critic); `validate --final` passes. Claude's pre-review check found 16 conversations
+  that didn't fit their keys, all from plan wording (shoppers claiming a delivered order never
+  came; support staff answering the customer instead of asking; vague item corrections; a
+  followup that presumed a question). Reworded those templates (generation blocks only; tuples
+  and keys unchanged) and regenerated 0001-0006, 0119-0125, 0227-0229, 0246.
+- **Final review done (2026-10-26):** I reviewed the 15 in `notes/hw3/final_review_aid.md`:
+  8 accept, 6 revise (0004, 0050, 0079, 0182, 0228, 0249), 1 reject (0164).
+  `scenarios/support_review.jsonl` written from my notes, with an `applied` field saying
+  what was done. Each fix was made where the problem came from (plan or generator), so it
+  covers every row with the same cause:
+  - Ages: `plan_lib.ago` stops at "about six weeks"; `build_final_plan.when` now words longer
+    ages (22 rows) and today/yesterday (11 rows). Pilot plan untouched.
+  - 0249: purchase date taken from `ordered_at`, not the delivery date.
+  - 0228: refund reasons fit the product category (12 rows). 0079 had the same problem; I
+    changed it from accept to revise after Claude flagged it.
+  - 0050: merchants state the condition; no "perfect condition" followup (3 turns to 2).
+  - 0182: shoppers in shorthand style write in the first person (`generate.py`); 0081 too.
+  - 0164 rejected, and 0165 (same template), replaced by shopper rows support-0251 and
+    support-0252 (plan field `replaces`). Coverage account_change is now shopper 7,
+    support 0; roles 144 / 60 / 46.
+  Plan diff checked: no other tuple or key changed. 48 conversations regenerated and read;
+  `validate --final` passes (250 records).
+- **Monitoring set done (2026-10-26):** `notes/hw3/select_monitoring.py` (fixed seed) wrote
+  `scenarios/monitoring_scenarios.jsonl`: 35 coverage (each intent's share, every role in
+  each intent with 3+ slots) and 15 challenge (one per damaged record, then 2/2/2/2/1 across
+  boundary, authorization, correction, ambiguous, missing information). Roles 25 / 15 / 10;
+  all nine intents; 17 multi-turn. Validator passes.
+- **Final run done (2026-10-26):** data reset (plan rebuilt byte-identical on the fresh
+  data), server on 8010, 250/250 `completed` on gpt-4o-mini, no errors, no empty replies.
+  - Coverage: 175 scenarios, 247 turns (59 multi-turn), median 3.9 s, 11.6 min total.
+  - Challenge: 75 scenarios, 109 turns (32 multi-turn), median 4.3 s, 6.4 min total.
+  - Run changed the data: 19 new refunds, 10 new escalations, 4 orders cancelled (reset
+    before any rerun of a refund or cancel scenario).
+- **Part E done by Claude (2026-10-26):** `reports/smoke-output.txt` written (it covers all
+  Langfuse traces, so the 41 pilot traces are included: 397 = 356 final + 41 pilot).
+  `traces/support_traces.json`: 356 traces, 250/250 scenarios, none missing. Server stopped
+  after the export. Claude checked three traces in the export (each turn is its own trace):
+  - support-0182 (challenge, damaged record 8002): eb9d05be76ceec6eb4f9176a33b61ae9
+  - support-0228 (challenge, 2 turns): a58e096bb996c089806156b4b054528e, 2f79c973875fcf51ff93253e1f2559a5
+  - support-0050 (coverage, merchant, 2 turns): 4d00b7cbe38519f7784a4ca2f6ac0212, 31f2953930de1b5b409631c2a399d297
+  I opened and reviewed all three in Langfuse (2026-10-26).
+- **Next step:** video (5 min or less) and the Discord post, both by me.
 - **Review standard I used (apply the same in the final review):** policy questions
   (008, 013, 018) fail without a policy lookup and citation (RESP-1); where the key is
   about a decision (003, 017, 020, 023), a correct decision passes even without a
@@ -52,22 +99,22 @@ Part B, pilot
 - [x] At least 5 confirmed failures (12; no extra scenarios or model change needed)
 
 Part C, final scenarios
-- [ ] `scenarios/support_scenarios.jsonl`: 175 coverage + 75 challenge (5 per damaged
+- [x] `scenarios/support_scenarios.jsonl`: 175 coverage + 75 challenge (5 per damaged
   record = 30 of the 75); new IDs distinct from the pilot
-- [ ] 15 reviewed by me (both groups, all three roles, every intent):
+- [x] 15 reviewed by me (both groups, all three roles, every intent):
   `scenarios/support_review.jsonl` with `scenario_id`, `decision`, `reason`, `change`;
   every revision applied, every rejection replaced
-- [ ] `scenarios/monitoring_scenarios.jsonl`: 50 final scenarios, both groups, all roles
-- [ ] `uv run python -m scenarios.validate scenarios/support_scenarios.jsonl --final` passes
+- [x] `scenarios/monitoring_scenarios.jsonl`: 50 final scenarios, both groups, all roles
+- [x] `uv run python -m scenarios.validate scenarios/support_scenarios.jsonl --final` passes (re-run after any change)
 
 Part D, final run
-- [ ] Data reset, then `scenarios/final-results.jsonl` with all 250 `completed`
-- [ ] Coverage and challenge summarized separately
+- [x] Data reset, then `scenarios/final-results.jsonl` with all 250 `completed`
+- [x] Coverage and challenge summarized separately
 
 Part E, report and export
-- [ ] `reports/smoke-output.txt` from `reports/smoke.sql`
-- [ ] `traces/support_traces.json` with all 250 scenario IDs
-- [ ] 3 exported traces checked (one challenge, one multi-turn): conversation, model,
+- [x] `reports/smoke-output.txt` from `reports/smoke.sql`
+- [x] `traces/support_traces.json` with all 250 scenario IDs
+- [x] 3 exported traces checked (one challenge, one multi-turn): conversation, model,
   tools, `cartwheel_scenario_id`
 
 Submission
