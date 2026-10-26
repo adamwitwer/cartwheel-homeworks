@@ -15,8 +15,20 @@ Rules from `AGENTS.md` and `scenarios/skill/SKILL.md` that apply throughout:
 
 ## Current status
 
-- **Walkthrough step:** 2, Part A done (dimensions approved 2026-10-22).
-- **Next step:** Part B, build the 30-row pilot plan grounded in the database.
+- **Walkthrough step:** 5, pilot run done (2026-10-23): data reset, 30/30 completed on
+  gpt-4o-mini, 41 turn traces in Langfuse (all 30 scenario ids). Review aid with every
+  conversation, tool call, answer key, and trace link: `notes/hw3/pilot_review_aid.md`.
+  Run changed: refunds 575-578, escalations 151-154, order 4385 cancelled, 5339 and 7941
+  refunded (reset before the final run).
+  Pilot review done (2026-10-26): I reviewed all 30; `scenarios/pilot_review.jsonl`
+  written from my notes in the review aid. 30 valid, 12 confirmed failures (002, 008,
+  011, 013, 015, 018, 019, 021, 022, 026, 027, 028), no scenario changes.
+- **Next step:** Part C, the final 250 scenarios (175 coverage + 75 challenge, 5 per
+  damaged record, new IDs), built with `notes/hw3/build_plan.py` and `generate.py`.
+- **Review standard I used (apply the same in the final review):** policy questions
+  (008, 013, 018) fail without a policy lookup and citation (RESP-1); where the key is
+  about a decision (003, 017, 020, 023), a correct decision passes even without a
+  citation; 019 failed because its key requires citing the store override.
 - **Model for every run:** `gpt-4o-mini` (`CARTWHEEL_MODEL` in `.env`), unless the pilot
   shows fewer than five failures and I choose a smaller model.
 - **Blockers:** none. Docker Desktop must be running before the pilot (Part B).
@@ -30,14 +42,14 @@ Part A, plan
   (+ user style, which the validator requires)
 
 Part B, pilot
-- [ ] `scenarios/pilot_scenarios.jsonl`: 30 scenarios, broad role and intent coverage
-- [ ] Conversation sample reviewed by me before the run
-- [ ] `uv run python -m scenarios.validate scenarios/pilot_scenarios.jsonl` passes
-- [ ] Data reset, then pilot run: `scenarios/pilot-results.jsonl`
-- [ ] At least 10 results reviewed in Langfuse by me
-- [ ] `scenarios/pilot_review.jsonl`: `scenario_id`, `scenario_valid`, `confirmed_failure`,
+- [x] `scenarios/pilot_scenarios.jsonl`: 30 scenarios, broad role and intent coverage
+- [x] Conversation sample reviewed by me before the run (019 rewritten at my request)
+- [x] `uv run python -m scenarios.validate scenarios/pilot_scenarios.jsonl` passes
+- [x] Data reset, then pilot run: `scenarios/pilot-results.jsonl` (30/30 completed)
+- [x] At least 10 results reviewed in Langfuse by me (all 30)
+- [x] `scenarios/pilot_review.jsonl`: `scenario_id`, `scenario_valid`, `confirmed_failure`,
   `evidence`, `scenario_change`
-- [ ] At least 5 confirmed failures (else 20 more challenge scenarios, or a smaller model)
+- [x] At least 5 confirmed failures (12; no extra scenarios or model change needed)
 
 Part C, final scenarios
 - [ ] `scenarios/support_scenarios.jsonl`: 175 coverage + 75 challenge (5 per damaged
@@ -111,5 +123,16 @@ Key facts behind the plan:
 
 ## Observations
 
+- Store 1 (Blue Heron Ceramics) has four products titled "Heavy-Duty Vase" (ids 1, 2, 16,
+  19), not only the two named by `dq-product-duplicate-title`. Pilot-028's answer key
+  lists all four.
+- Several shoppers have more than one order for similar products (e.g. shopper 277 has two
+  rain shells). `build_plan.py` checks with the find_order matcher that each "no order
+  number" scenario points at exactly one order.
+
+- Pilot-022: `issue_refund` accepts any amount up to the order total and auto-approves
+  at or below $100 (SPEC.md:89, cw-refunds), with no check of the reason or the amount.
+  So any shopper can get up to $100 back on any eligible order without a human. Out of
+  scope for HW3; worth raising in a later homework.
 - HW2 run 3 (support, Juniper lamp, trace 2ae2344d…) is a store-override failure of the
   kind HW3 targets. Do not copy it; let the "store override" dimension produce such cases.
