@@ -71,7 +71,11 @@ Rules from `AGENTS.md` and `scenarios/skill/SKILL.md` that apply throughout:
   - support-0228 (challenge, 2 turns): a58e096bb996c089806156b4b054528e, 2f79c973875fcf51ff93253e1f2559a5
   - support-0050 (coverage, merchant, 2 turns): 4d00b7cbe38519f7784a4ca2f6ac0212, 31f2953930de1b5b409631c2a399d297
   I opened and reviewed all three in Langfuse (2026-10-26).
-- **Next step:** video (5 min or less) and the Discord post, both by me.
+- **HW3 submitted (2026-11-01):** video recorded (Loom,
+  https://www.loom.com/share/a0c78f332f94400c9b3a6222e275d48b) and posted with the repo link
+  in the course Discord submissions channel.
+- **Next step:** none for HW3. Later idea: look at tau-bench (the instructor uses it), once
+  the handouts reach that material (`tests/eval/passk.py`; Module 3 sandbox).
 - **Review standard I used (apply the same in the final review):** policy questions
   (008, 013, 018) fail without a policy lookup and citation (RESP-1); where the key is
   about a decision (003, 017, 020, 023), a correct decision passes even without a
@@ -119,8 +123,8 @@ Part E, report and export
 
 Submission
 - [x] All 9 files committed and pushed (90d2f2f, 2026-10-26)
-- [ ] Video recorded (5 min or less), done by me
-- [ ] Posted to the course Discord submissions channel, done by me
+- [x] Video recorded (5 min or less), done by me (Loom)
+- [x] Posted to the course Discord submissions channel, done by me (2026-11-01)
 
 ## Approved dimension plan (2026-10-22)
 
