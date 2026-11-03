@@ -1,0 +1,2 @@
+# Raw traces cached from Langfuse; reload with --refresh.
+.cache/

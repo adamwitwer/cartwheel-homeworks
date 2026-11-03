@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cartwheel Trace Review</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">Cartwheel Review<small>Ocean Drive edition</small></div>
+  <nav class="tabs" id="tabs">
+    <button data-view="review" class="active">Review</button>
+    <button data-view="taxonomy">Taxonomy</button>
+    <button data-view="labels">Labels</button>
+    <button data-view="progress">Progress<span class="count" id="sugg-count" hidden></span></button>
+  </nav>
+  <div class="spacer"></div>
+  <span class="pill" id="source-pill">loading…</span>
+  <span class="pill" id="write-pill"></span>
+  <button class="iconbtn" id="theme-btn" title="Day / night">☀︎ / ☾</button>
+</header>
+<p class="banner" id="banner" hidden></p>
+
+<section class="view active" id="view-review">
+  <div class="review">
+    <aside class="rail">
+      <div class="rail-head">
+        <div class="seg" id="rail-seg">
+          <button data-scope="sample" class="active">Sample</button>
+          <button data-scope="all">All 250</button>
+        </div>
+        <input type="search" id="rail-search" placeholder="Search id, text, tool…">
+      </div>
+      <div id="rail-list"></div>
+    </aside>
+    <main class="main" id="main"></main>
+  </div>
+</section>
+
+<section class="view" id="view-taxonomy"><div class="page" id="taxonomy"></div></section>
+<section class="view" id="view-labels"><div class="page" id="labels"></div></section>
+<section class="view" id="view-progress"><div class="page" id="progress"></div></section>
+
+<aside class="drawer" id="drawer">
+  <div class="drawer-tabs" id="drawer-tabs">
+    <button data-tab="key">Answer key</button>
+    <button data-tab="policies">Policies</button>
+    <button data-tab="prompt">Prompt</button>
+    <button data-tab="tools">Tools</button>
+    <button data-tab="spec">SPEC</button>
+    <button class="close" id="drawer-close" title="Close (Esc)">×</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
+
+<div id="popover">
+  <textarea id="note-input" placeholder="What did you notice? (Enter to save, Shift+Enter for a new line, Esc to cancel)"></textarea>
+  <div class="hint">Open code: describe the first failure and its evidence. No mode names yet.</div>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
