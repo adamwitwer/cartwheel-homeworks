@@ -21,8 +21,8 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
   counts toward more than one batch.
 - Don't open `homework/module-2/hw4-reference.patch` (likely a reference solution; it
   would bias my taxonomy).
-- Langfuse data moves to the MacBook Air (2026-11-03, see **Langfuse migration** below).
-  Do all Langfuse work on whichever Mac the migration note names as current.
+- Langfuse data lives on the MacBook Air since 2026-11-03 (see **Langfuse migration**
+  below). Do all Langfuse work and labeling there; the Mac mini's copy is frozen.
 
 ## Current status
 
@@ -179,6 +179,15 @@ Redis and the ClickHouse logs are not copied.
 4. Verify on the Air: 397 traces, 0 scores, review app loads 250 conversations.
 
 The Mini's Langfuse copy stays untouched as a fallback until the Air checks pass.
+
+**Done 2026-11-03 (Claude over SSH from the Mini, `adam@192.168.50.18`).** Checksums
+matched after copy. Air before: 8 traces, 46 observations, 0 scores; those were backed up
+to `~/langfuse-migration/air-backup/` on the Air. Air after: 397 traces, 2253
+observations, 0 scores, the same as the Mini. The review app on the Air loads 356 traces
+and 250 conversations live from Langfuse. **The Air is now the Langfuse machine for HW4**;
+the Mini's copy is frozen as of the migration and should not receive scores. The git-lfs
+warning on `git pull` over SSH is only a PATH issue (`/opt/homebrew/bin/git-lfs`
+exists); LFS tracks only the reference patches.
 
 ## Setup facts
 
