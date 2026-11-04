@@ -1,0 +1,188 @@
+{
+  "batches": [
+    {
+      "id": "b1-uniform",
+      "method": "uniform random over traces",
+      "part": "B",
+      "batch": 1,
+      "seed": 20261103,
+      "pool": "final-run traces (support- scenarios), one trace per turn",
+      "created": "2026-11-04T01:27:04+00:00",
+      "traces": [
+        {
+          "trace_id": "207f3c708edc826469f68abc9e0fd092",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "37fb0812ca7f4e2675a9be812d1ce452",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "3e836dd73d0ed96a817d77ea9f4e7462",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "4d00b7cbe38519f7784a4ca2f6ac0212",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "e94b42dedc85dea4fd27f4ac3560babd",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "e8d3b9542d8ab0f263202381466675ff",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "350a5842f701655a3672bfce281aa7e0",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "17ea8c45e6a430b65b8c93249fcfd6dd",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "c6a52d6b93b2f30d6c0fee9d09ed4015",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "5f601ad6f69771cac1e01df523bed462",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "c764176d04cb833354a04d91651d6af8",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "fc33e97b9c1ca69d872b573c497b4ecb",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "c208d9bc7467b859cb56ff68118dd6b4",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "29a5a1c5f41c2eccf9079a79d35c629e",
+          "reason": "uniform random pick"
+        },
+        {
+          "trace_id": "43c50cfec59bea06c63f44a635b130e4",
+          "reason": "uniform random pick"
+        }
+      ]
+    },
+    {
+      "id": "b1-cluster",
+      "method": "k-means (k=15) over standardized behavior features, best of 10 seeded starts by inertia; representative = member nearest the centroid, excluding b1-uniform",
+      "features": [
+        "called:cancel_order",
+        "called:check_return_eligibility",
+        "called:escalate_to_human",
+        "called:find_order",
+        "called:get_order",
+        "called:issue_refund",
+        "called:list_my_orders",
+        "called:search_help_center",
+        "called:search_products",
+        "tool_call_count",
+        "is_followup_turn",
+        "log_reply_chars"
+      ],
+      "kmeans_fit": {
+        "start_seeds": [
+          20261103,
+          20261104,
+          20261105,
+          20261106,
+          20261107,
+          20261108,
+          20261109,
+          20261110,
+          20261111,
+          20261112
+        ],
+        "inertias": [
+          690.0,
+          832.9,
+          588.3,
+          892.1,
+          540.9,
+          861.4,
+          830.6,
+          597.2,
+          588.2,
+          938.1
+        ],
+        "chosen_seed": 20261107,
+        "chosen_inertia": 540.9
+      },
+      "part": "B",
+      "batch": 1,
+      "seed": 20261103,
+      "pool": "final-run traces (support- scenarios), one trace per turn",
+      "created": "2026-11-04T01:27:04+00:00",
+      "traces": [
+        {
+          "trace_id": "ad1bfdd228e6b30cc1c18bb6fcf922b2",
+          "reason": "cluster 0 representative (n=4; mostly cancel_order + get_order (3/4); calls median 2; 0 follow-up turns)"
+        },
+        {
+          "trace_id": "f9ba38c0b4507862d9023b2ff25eac8f",
+          "reason": "cluster 1 representative (n=9; mostly search_products (9/9); calls median 1; 2 follow-up turns)"
+        },
+        {
+          "trace_id": "614c8afaa25d68e0636046c2782ea211",
+          "reason": "cluster 2 representative (n=23; mostly no tools (23/23); calls median 0; 23 follow-up turns)"
+        },
+        {
+          "trace_id": "9694536a168980fe6574e8ca26ee3e4e",
+          "reason": "cluster 3 representative (n=18; mostly list_my_orders (15/18); calls median 1; 1 follow-up turns)"
+        },
+        {
+          "trace_id": "e3f63bf72d5bd4a9deb35a8817614eaa",
+          "reason": "cluster 4 representative (n=61; mostly get_order (61/61); calls median 1; 5 follow-up turns)"
+        },
+        {
+          "trace_id": "d29bdc613123c672c431806a41859ace",
+          "reason": "cluster 5 representative (n=13; mostly search_help_center (13/13); calls median 1; 3 follow-up turns)"
+        },
+        {
+          "trace_id": "ce813ba8bbacd6352534ed1b7e5b7ca2",
+          "reason": "cluster 6 representative (n=11; mostly check_return_eligibility + find_order (11/11); calls median 2; 0 follow-up turns)"
+        },
+        {
+          "trace_id": "e0344bd08646abc2d9c43b9040323e2f",
+          "reason": "cluster 7 representative (n=10; mostly escalate_to_human (6/10); calls median 1; 4 follow-up turns)"
+        },
+        {
+          "trace_id": "0f0607e4991c226c18add4c6b19ebbc9",
+          "reason": "cluster 8 representative (n=31; mostly search_products (31/31); calls median 1; 0 follow-up turns)"
+        },
+        {
+          "trace_id": "9f9ecaae60be6f9ba9c7d176cf3aaafe",
+          "reason": "cluster 9 representative (n=39; mostly no tools (39/39); calls median 0; 0 follow-up turns)"
+        },
+        {
+          "trace_id": "290704231851c9840cacceff0efde093",
+          "reason": "cluster 10 representative (n=18; mostly check_return_eligibility + issue_refund (7/18); calls median 2; 2 follow-up turns)"
+        },
+        {
+          "trace_id": "22c7e8d1301bc7aaedb3dc58a0a3f636",
+          "reason": "cluster 11 representative (n=26; mostly check_return_eligibility (19/26); calls median 1; 1 follow-up turns)"
+        },
+        {
+          "trace_id": "949d22c513a5af84f9c0c798047f78b5",
+          "reason": "cluster 12 representative (n=4; mostly no tools (3/4); calls median 0; 3 follow-up turns)"
+        },
+        {
+          "trace_id": "d09d0bd449434200f3a1291ef99f4fcb",
+          "reason": "cluster 13 representative (n=55; mostly no tools (55/55); calls median 0; 55 follow-up turns)"
+        },
+        {
+          "trace_id": "1ebe6703c7a3e6c3894e7e201764a83f",
+          "reason": "cluster 14 representative (n=34; mostly find_order (33/34); calls median 1; 7 follow-up turns)"
+        }
+      ]
+    }
+  ]
+}
