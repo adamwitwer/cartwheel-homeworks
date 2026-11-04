@@ -21,7 +21,8 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
   counts toward more than one batch.
 - Don't open `homework/module-2/hw4-reference.patch` (likely a reference solution; it
   would bias my taxonomy).
-- Langfuse data lives only on the larger-screen Mac. Do all Langfuse work there.
+- Langfuse data moves to the MacBook Air (2026-11-03, see **Langfuse migration** below).
+  Do all Langfuse work on whichever Mac the migration note names as current.
 
 ## Current status
 
@@ -159,6 +160,25 @@ Submission
 - [ ] All files committed and pushed
 - [ ] Video (5 min or less), done by me
 - [ ] Posted to the course Discord submissions channel, done by me
+
+## Langfuse migration (Mac mini → MacBook Air, 2026-11-03)
+
+Both Macs run `observability/docker-compose.yml`, which fixes the project id, API keys,
+salt, and encryption key, so copied data works unchanged with the same `.env`.
+Volumes (compose project `observability`): `langfuse_postgres_data` (projects, scores),
+`langfuse_clickhouse_data` (traces, observations), `langfuse_minio_data` (raw events).
+Redis and the ClickHouse logs are not copied.
+
+1. Mini: `docker compose -f observability/docker-compose.yml stop` (never `down -v`);
+   archive each volume with
+   `docker run --rm -v observability_<vol>:/data -v <dir>:/backup alpine tar czf /backup/<vol>.tgz -C /data .`;
+   start the stack again; confirm 397 traces.
+2. Copy the archives to the Air over SSH.
+3. Air: `git pull`; stop the stack; archive its own three volumes as a backup; clear each
+   volume and untar the Mini's archive into it; start the stack.
+4. Verify on the Air: 397 traces, 0 scores, review app loads 250 conversations.
+
+The Mini's Langfuse copy stays untouched as a fallback until the Air checks pass.
 
 ## Setup facts
 
