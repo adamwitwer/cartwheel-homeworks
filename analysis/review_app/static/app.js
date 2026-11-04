@@ -111,7 +111,9 @@ function buildSampleIndex() {
   });
 }
 const modes = () => (S.patterns.modes || []).filter(m => m.name);
-const finalModes = () => { const f = modes().filter(m => m.status === 'final'); return f.length ? f : modes(); };
+// The course report treats 'confirmed' and 'frozen' as final; 'final' is accepted too.
+const isFinal = m => ['final', 'confirmed', 'frozen'].includes(m.status);
+const finalModes = () => { const f = modes().filter(isFinal); return f.length ? f : modes(); };
 function annsFor(tid) { return S.ann.annotations.filter(a => a.trace_id === tid); }
 function turnStatus(tid) {
   if (annsFor(tid).length) return 'annotated';
@@ -297,7 +299,25 @@ function renderBlock(c, b) {
 }
 
 const DEC = () => new Set(S.ctx.decision_keys || []);
-function valHtml(v) {
+// Reviewer lookups: names for store_id / product_id from data/cartwheel.db.
+// Drawn by CSS (::after), so they are not text in the trace: they cannot shift
+// annotation offsets or end up in a quoted selection.
+const LOOKUP_TIP = 'Reviewer lookup from data/cartwheel.db. Not part of the tool result the agent saw.';
+function lookupName(k, v) {
+  const N = S.ctx.names || {};
+  if (v === null || v === undefined) return '';
+  if (k === 'store_id') return (N.stores || {})[String(v)] || '';
+  if (k === 'product_id') {
+    const p = (N.products || {})[String(v)];
+    if (!p) return '';
+    const st = (N.stores || {})[String(p.store_id)];
+    return `${p.title}${st ? ` · ${st} (store ${p.store_id})` : ''}`;
+  }
+  return '';
+}
+function valHtml(v, k) {
+  const nm = k ? lookupName(k, v) : '';
+  if (nm) return `<span class="lk" data-lk="${esc(nm)}" title="${esc(LOOKUP_TIP)}">${esc(v)}</span>`;
   if (v === null || v === undefined) return '<span class="val-null">null</span>';
   if (v === true) return '<span class="val-true">true</span>';
   if (v === false) return '<span class="val-false">false</span>';
@@ -316,12 +336,12 @@ function kvTable(obj, dec) {
       const sub = cols.length > 5
         ? v.map((x, n) => `${v.length > 1 ? `<div class="small" style="margin-top:6px">#${n + 1}</div>` : ''}${kvTable(x, dec)}`).join('')
         : `<div class="scrollx"><table class="kv"><tr>${cols.map(col => `<th class="${dec.has(col) ? 'dec' : ''}">${esc(col)}</th>`).join('')}</tr>` +
-          v.map(x => `<tr>${cols.map(col => `<td class="${dec.has(col) ? 'dec' : ''}">${valHtml(x[col])}</td>`).join('')}</tr>`).join('') + '</table></div>';
+          v.map(x => `<tr>${cols.map(col => `<td class="${dec.has(col) ? 'dec' : ''}">${valHtml(x[col], col)}</td>`).join('')}</tr>`).join('') + '</table></div>';
       rows.push(`<tr><td class="k${d}">${esc(k)} (${v.length})</td><td>${sub}</td></tr>`);
     } else if (v && typeof v === 'object' && !Array.isArray(v)) {
       rows.push(`<tr><td class="k${d}">${esc(k)}</td><td>${kvTable(v, dec)}</td></tr>`);
     } else {
-      rows.push(`<tr><td class="k${d}">${esc(k)}</td><td class="${d.trim()}">${valHtml(v)}</td></tr>`);
+      rows.push(`<tr><td class="k${d}">${esc(k)}</td><td class="${d.trim()}">${valHtml(v, k)}</td></tr>`);
     }
   }
   return `<table class="kv">${rows.join('')}</table>`;
@@ -611,15 +631,18 @@ function renderTaxonomy() {
     const ref = IDX.byTrace.get(a.trace_id); const sid = ref ? ref.conv.scenario_id : a.scenario_id;
     return `<li><a data-goto="${esc(sid)}|${a.trace_id}|${a.id}"><span class="mono small">${esc(sid)} T${ref ? ref.turn.number : '?'}</span> ${esc(clip(a.note, 160))}</a></li>`;
   };
+  const goto = tid => { const ref = IDX.byTrace.get(tid); return ref ? `<a data-goto="${esc(ref.conv.scenario_id)}|${tid}|"><span class="mono small">${esc(ref.conv.scenario_id)} T${ref.turn.number}</span></a>` : esc(tid); };
   const cards = ms.map(m => {
     const lab = Object.values(S.labels[m.name] || {});
     const pos = lab.filter(r => r.label === 1).length, neg = lab.filter(r => r.label === 0).length;
     const anns = (m.annotation_ids || []).map(id => byId.get(id)).filter(Boolean);
     const sg = pendingSugg().filter(s => s.mode === m.name).length;
-    return `<div class="mode"><div class="name">${esc(m.name)} <span class="chip ${m.status === 'final' ? 'ok' : 'meta'}">${esc(m.status || 'candidate')}</span></div>
+    return `<div class="mode"><div class="name">${esc(m.name)} <span class="chip ${isFinal(m) ? 'ok' : 'meta'}">${esc(m.status || 'candidate')}</span></div>
       <div class="def">${esc(m.definition || '')}</div>
-      <div class="facts">${m.requirement_source ? `requirement: <b>${esc(m.requirement_source)}</b> · ` : ''}${m.evaluator ? `evaluator: ${esc(m.evaluator)} · ` : ''}${anns.length} supporting note${anns.length === 1 ? '' : 's'} · labels ${pos} present / ${neg} absent${sg ? ` · ${sg} AI suggestion${sg > 1 ? 's' : ''} pending` : ''}</div>
+      <div class="facts">${m.requirement_source ? `requirement: <b>${esc(m.requirement_source)}</b> · ` : ''}${(m.evaluator_type || m.evaluator) ? `evaluator: ${esc(m.evaluator_type || m.evaluator)} · ` : ''}${anns.length} supporting note${anns.length === 1 ? '' : 's'} · labels ${pos} present / ${neg} absent${sg ? ` · ${sg} AI suggestion${sg > 1 ? 's' : ''} pending` : ''}</div>
       ${m.boundary ? `<div class="facts" style="margin-top:4px">boundary: ${esc(m.boundary)}</div>` : ''}
+      ${(m.close_negative_trace_ids || []).length ? `<div class="facts" style="margin-top:4px">close negatives: ${m.close_negative_trace_ids.map(goto).join(', ')}</div>` : ''}
+      ${(m.open_questions || []).length ? `<div class="facts" style="margin-top:4px">open: ${m.open_questions.map(esc).join(' · ')}</div>` : ''}
       <div class="bar" style="margin:8px 0"><span style="width:${(pos / Math.max(1, pos + neg)) * 100}%;background:var(--flamingo)"></span><span style="width:${(neg / Math.max(1, pos + neg)) * 100}%;background:var(--palm)"></span></div>
       <ul>${anns.map(annLi).join('') || '<li class="small">No supporting annotations linked yet.</li>'}</ul></div>`;
   }).join('');
@@ -661,7 +684,7 @@ function renderLabels() {
   const f = k => `<button class="ctxbtn${S.labFilter === k ? ' key' : ''}" data-labfilter="${k}">${{ sample: 'Sampled traces', reviewed: 'Reviewed only', incomplete: 'Incomplete only', all: 'All 356' }[k]}</button>`;
   el.innerHTML = `<h1>Labels</h1><p class="lede">One decision per trace and mode: <b>P</b> = failure present, <b>A</b> = absent. Click an active choice again to clear it. Each change is written to Langfuse as a score, then to <span class="mono">analysis/state/labels/&lt;mode&gt;.jsonl</span>. Dashed outline = AI suggestion awaiting your decision.</p>
     <div class="stats">${counts}</div><div class="toolbar">${['sample', 'reviewed', 'incomplete', 'all'].map(f).join('')}<span class="small">${rows.length} traces</span></div>
-    <table class="lab"><tr><th>trace</th><th>review</th>${ms.map(m => `<th>${esc(m.name)}${m.status === 'final' ? ' ★' : ''}</th>`).join('')}</tr>${html.join('') || `<tr><td colspan="${ms.length + 2}" class="small">No traces in this filter.</td></tr>`}</table>`;
+    <table class="lab"><tr><th>trace</th><th>review</th>${ms.map(m => `<th>${esc(m.name)}${isFinal(m) ? ' ★' : ''}</th>`).join('')}</tr>${html.join('') || `<tr><td colspan="${ms.length + 2}" class="small">No traces in this filter.</td></tr>`}</table>`;
 }
 
 /* ------------------------------------------------------------ progress */

@@ -3,7 +3,9 @@
 Files (paths follow the HW4 handout; the root honors
 ``CARTWHEEL_ANALYSIS_STATE`` through ``analysis.helpers._state``):
 
-- ``annotations.json``: ``{"annotations": [...], "reviewed": {trace_id: {...}}}``.
+- ``annotations.json``: ``{"annotations": [...], "reviewed": {trace_id: {...}},
+  "withdrawn": [...]}``. Edits keep earlier text in each note's ``history``;
+  deletes move the whole note to ``withdrawn``.
   Free-form open codes written by the reviewer, plus which traces have been
   read and whether the reviewer recorded "no failure observed".
 - ``suggestions.json``: ``{"suggestions": [...]}``. AI suggestions. They are
@@ -54,7 +56,7 @@ def new_id(prefix: str) -> str:
 # ---------------------------------------------------------------------------
 
 DEFAULTS: dict[str, Any] = {
-    "annotations.json": {"annotations": [], "reviewed": {}},
+    "annotations.json": {"annotations": [], "reviewed": {}, "withdrawn": []},
     "suggestions.json": {"suggestions": []},
     "patterns.json": {"modes": []},
     "sample_manifest.json": {"batches": []},
@@ -127,6 +129,12 @@ def annotation_op(payload: dict[str, Any]) -> dict[str, Any]:
             ann["note"] = str(payload.get("note") or "").strip() or ann["note"]
             ann["updated_at"] = now()
         elif op == "delete":
+            # A deleted note is withdrawn, not erased: the full record moves to
+            # ``withdrawn`` so the original open code stays in the history.
+            gone = [a for a in anns if a.get("id") == payload.get("id")]
+            withdrawn = doc.setdefault("withdrawn", [])
+            for a in gone:
+                withdrawn.append({**a, "withdrawn_at": now()})
             doc["annotations"] = [a for a in anns if a.get("id") != payload.get("id")]
             tid = payload.get("trace_id")
             if tid and not any(a["trace_id"] == tid for a in doc["annotations"]):

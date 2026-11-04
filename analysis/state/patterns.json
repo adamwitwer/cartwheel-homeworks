@@ -1,1 +1,160 @@
-{"modes": []}
+{
+  "modes": [
+    {
+      "name": "policy_claim_without_citation",
+      "status": "candidate",
+      "definition": "Fail if the reply states a fact or rule that comes from a policy document but does not name that policy's identifier. Pass if every policy-derived statement in the reply carries its policy id, or the reply makes no policy claim.",
+      "boundary": "Nearest: policy_answer_wrong_or_incomplete. This mode is about a missing citation on a claim that may be correct; a wrong or incomplete policy answer belongs there, even when it is also uncited. Also distinct from the course demo mode unsupported_policy_claim (a claim the retrieved policy does not support).",
+      "requirement_source": "RESP-1",
+      "evaluator_type": "judge",
+      "annotation_ids": [
+        "ann-10c50c5ef318",
+        "ann-7eb07799da94",
+        "ann-ba63fd5385a4"
+      ],
+      "created_from": [
+        "43c50cfec59bea06c63f44a635b130e4",
+        "9f9ecaae60be6f9ba9c7d176cf3aaafe",
+        "e0344bd08646abc2d9c43b9040323e2f"
+      ],
+      "example_trace_ids": [
+        "43c50cfec59bea06c63f44a635b130e4",
+        "9f9ecaae60be6f9ba9c7d176cf3aaafe",
+        "e0344bd08646abc2d9c43b9040323e2f"
+      ],
+      "close_negative_trace_ids": [],
+      "open_questions": [
+        "Does RESP-1 apply to a refusal grounded in scope (SCOPE-2), as in 0125?",
+        "Citation presence is code-checkable; deciding which sentences are policy-derived needs a judge."
+      ],
+      "history": [
+        {
+          "at": "2026-11-04",
+          "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        }
+      ]
+    },
+    {
+      "name": "policy_answer_wrong_or_incomplete",
+      "status": "candidate",
+      "definition": "Fail if the reply answers a policy question with content that contradicts, understates, or omits a material term of the applicable platform or store policy (for example a delivery time or a store's restocking fee). Pass if the stated terms match the applicable policy.",
+      "boundary": "Nearest: policy_claim_without_citation (correct content, missing id). Both 0020 and 0050 answered without consulting the applicable policy text (0020 retrieved nothing; 0050 used cw-returns but not the store policy).",
+      "requirement_source": "SCOPE-1 (policy questions answered from the help center); PURPOSE-1",
+      "evaluator_type": "judge",
+      "annotation_ids": [
+        "ann-164b12fe0bed",
+        "ann-54710937c281"
+      ],
+      "created_from": [
+        "e8d3b9542d8ab0f263202381466675ff",
+        "4d00b7cbe38519f7784a4ca2f6ac0212"
+      ],
+      "example_trace_ids": [
+        "e8d3b9542d8ab0f263202381466675ff",
+        "4d00b7cbe38519f7784a4ca2f6ac0212"
+      ],
+      "close_negative_trace_ids": [],
+      "open_questions": [
+        "Only 2 positives so far; batch 3 should search for more.",
+        "Is the requirement source specific enough, or does this need its own SPEC requirement?"
+      ],
+      "history": [
+        {
+          "at": "2026-11-04",
+          "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        }
+      ]
+    },
+    {
+      "name": "reply_contradicts_tool_result",
+      "status": "candidate",
+      "definition": "Fail if the reply asserts something about an order or record (for example that the user never bought an item) that the tool results in the same turn contradict or cannot support. Pass if every factual statement about records is supported by a tool result or framed as uncertain with a follow-up question.",
+      "boundary": "Nearest: inconsistent_record_not_escalated, where the record itself is damaged; here the record is fine and the agent misreads it. In 0013 and 0046 list_my_orders returned only ids, and the matching order was present.",
+      "requirement_source": "RESP-3",
+      "evaluator_type": "judge",
+      "annotation_ids": [
+        "ann-8206b0e4a9a9",
+        "ann-1c8a89a0bea4"
+      ],
+      "created_from": [
+        "9694536a168980fe6574e8ca26ee3e4e",
+        "fc33e97b9c1ca69d872b573c497b4ecb"
+      ],
+      "example_trace_ids": [
+        "9694536a168980fe6574e8ca26ee3e4e",
+        "fc33e97b9c1ca69d872b573c497b4ecb"
+      ],
+      "close_negative_trace_ids": [],
+      "open_questions": [
+        "Only 2 positives so far; batch 3 should search for more."
+      ],
+      "history": [
+        {
+          "at": "2026-11-04",
+          "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        }
+      ]
+    },
+    {
+      "name": "inconsistent_record_not_escalated",
+      "status": "candidate",
+      "definition": "Fail if a tool result shows an inconsistent or damaged record (for example an order whose product belongs to another store) and the reply neither states the inconsistency nor escalates. Pass if the reply states the inconsistency and escalates or tells the caller how it will be handled.",
+      "boundary": "Nearest: reply_contradicts_tool_result. Close negative 0185: the delivery date was missing, the agent said so to a support-staff caller, and the reviewer judged no failure.",
+      "requirement_source": "ESC-4; RESP-3",
+      "evaluator_type": "judge",
+      "annotation_ids": [
+        "ann-ef2b43675b79"
+      ],
+      "created_from": [
+        "e3f63bf72d5bd4a9deb35a8817614eaa"
+      ],
+      "example_trace_ids": [
+        "e3f63bf72d5bd4a9deb35a8817614eaa"
+      ],
+      "close_negative_trace_ids": [
+        "17ea8c45e6a430b65b8c93249fcfd6dd"
+      ],
+      "open_questions": [
+        "Only 1 positive so far; batch 3 should search the data-quality scenarios.",
+        "0186: the mismatch is visible only by looking up product 553; no tool fetches a product by id. Is it fair to expect the agent to detect it?"
+      ],
+      "history": [
+        {
+          "at": "2026-11-04",
+          "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        }
+      ]
+    },
+    {
+      "name": "same_title_listing_not_distinguished",
+      "status": "candidate",
+      "definition": "Fail if the product search returns the same title from more than one store and the reply gives a price without naming the store for each listing or asking which store the user means, including presenting one listing's price as the price. Pass if each listing is identified by store or the agent asks which one.",
+      "boundary": "Motivating annotation for the RESP-6 revision: 0239 (gave one store's $10.75 as the price; the same title is $218.50 elsewhere). 0238 listed both prices without store names, which search_products could not supply before the TOOL-3 contract revision.",
+      "requirement_source": "RESP-6 (SPEC revision 2026-11-04; TOOL-3 contract now includes store name)",
+      "evaluator_type": "judge",
+      "annotation_ids": [
+        "ann-d736a2888de9",
+        "ann-1bdd7071de81"
+      ],
+      "created_from": [
+        "f9ba38c0b4507862d9023b2ff25eac8f",
+        "614c8afaa25d68e0636046c2782ea211"
+      ],
+      "example_trace_ids": [
+        "f9ba38c0b4507862d9023b2ff25eac8f",
+        "614c8afaa25d68e0636046c2782ea211"
+      ],
+      "close_negative_trace_ids": [],
+      "open_questions": [
+        "Trigger (duplicate titles across stores in the search result) is code-checkable; the reply check needs a judge.",
+        "Is 0238 a positive while the running tool still returns only store ids?"
+      ],
+      "history": [
+        {
+          "at": "2026-11-04",
+          "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        }
+      ]
+    }
+  ]
+}

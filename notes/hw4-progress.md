@@ -57,9 +57,65 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
   `check_return_eligibility` has no SPEC.md tool contract; 5 conversations cite a policy
   never retrieved in them; two cited ids aren't in the corpus (`cw-orders`,
   `cw-cancellation`).
-- **Next step:** Part B batch 1. Claude proposes the 15 uniform + 15
-  cluster-representative selection (features, clustering, seed) and waits for my go
-  before writing `analysis/state/sample_manifest.json`. Run the app with
+- **Batch 1 drawn (2026-11-03, on the Air):** `analysis/review_app/sampling.py` wrote
+  `b1-uniform` (15, `random.Random(20261103)` over the 356 sorted trace ids) and
+  `b1-cluster` (15) to `analysis/state/sample_manifest.json`. Clustering: k-means, k=15,
+  over standardized behavior features only (one yes/no per tool called, tool-call count,
+  follow-up turn, log reply length); no role, scenario group, answer key, or citation
+  flags. Best of 10 seeded starts by inertia (seed 20261107, 540.9; the single-start run
+  at 690.0 merged `find_order` turns into a no-tools cluster). Representative = member
+  nearest the centroid, excluding uniform picks. Part A traces stay in the pool (0192 T1
+  is a cluster rep). Uniform picks: 0020 T2, 0042, 0046, 0048, 0050, 0054, 0079, 0088,
+  0089 T3, 0129, 0132, 0156, 0185, 0202, 0215 (T1 unless noted). Cluster reps: 0186,
+  0098 T3, 0125, 0229, 0192, 0190, 0239 T2, 0013, 0073, 0107, 0047, 0252, 0238, 0082,
+  0126 T2.
+- **Batch 2 dimension: user role** (chosen 2026-11-03, before reading any batch 1 trace).
+- **Batch 1 open coding done (2026-11-04):** 30/30 reviewed; 10 notes, 20 "no failure
+  observed". After Claude's check against SPEC.md, tool results, answer keys, and
+  `data/cartwheel.db`, I revised: 0079 (pre-tool narration, final reply correctly says
+  queued) → no failure; 0215 (denial was correct: 46 days vs Northwind's 45) → no failure;
+  0185 (caller is support staff; agent reported the missing date) → no failure; 0126 T2
+  reviewed (I had marked T1 by mistake).
+- **App bug found and fixed (2026-11-04):** deleting a note erased it (and reset the trace
+  to unreviewed), losing the original open code. Deletes now move the note to
+  `withdrawn` in `annotations.json`. The three deleted notes (0079, 0185, 0215) were rebuilt
+  from Claude's earlier printout into `withdrawn`, marked `restored`, without the original
+  ids or character offsets.
+- **SPEC.md revision (2026-11-04):** new **RESP-6** (name the store for each matching
+  result or ask which one; never present one result as the only answer) and the TOOL-3
+  `search_products` success contract now includes store name. Motivating annotation:
+  0239 (gave one store's $10.75 as the price; the same title is $218.50 at another
+  store). Note: `search_products` itself still returns only `store_id` until its code changes.
+- **Reviewer name lookups added to the app (2026-11-04):** store and product names from
+  `data/cartwheel.db` appear beside `store_id` / `product_id` in tool results, drawn by
+  CSS and marked as a lookup the agent did not see. Interface-comparison candidate
+  ("changed after inspecting traces": I couldn't map store ids to names on 0013/0046/0186).
+- **Axial coding, batch 1 (2026-11-04):** groups accepted; recorded as `candidate` modes in
+  `patterns.json` with definitions, boundaries, requirement ids, and open questions:
+  `policy_claim_without_citation` (0048, 0125, 0252; RESP-1),
+  `policy_answer_wrong_or_incomplete` (0020, 0050), `reply_contradicts_tool_result`
+  (0013, 0046; RESP-3), `inconsistent_record_not_escalated` (0186; close negative 0185;
+  ESC-4, RESP-3), `same_title_listing_not_distinguished` (0238, 0239; RESP-6). Dropped:
+  the RESP-2 overclaim group (its only note, 0079, was withdrawn). Status stays
+  `candidate`, so the course failure report and its schema test ignore them for now.
+- **Next step:** Part B batch 2, 30 traces across user role, excluding batch 1. Claude
+  presents this teed-up proposal (prepared 2026-11-04, nothing drawn yet) and waits for
+  my go before the manifest changes:
+  - Pool by role (traces): shopper 214, merchant 83, support 59. Batch 1 used 18 / 6 / 6,
+    leaving 196 / 77 / 53.
+  - Allocation: **10 per role** (stratified, equal), not proportional (which would give
+    about 18 / 7 / 5). The point of a dimension batch is to see each value well;
+    proportional would leave support with 5 traces, and batch 1 already followed the
+    collection's shopper-heavy mix.
+  - Draw: uniform random within each role over sorted trace ids, seed 20261104, recorded
+    in the manifest as `b2-role` with the per-role counts; reason per trace
+    "user role: <role>". Selection reads only the role, never outcomes or modes.
+  - Implementation: add a `--batch 2` path to `analysis/review_app/sampling.py` (dry run
+    first, then `--write`), keeping batch 1's entries untouched.
+  - While reading batch 2: open code as before (first failure or "no failure observed").
+    Notes that fit a candidate mode still start as free-form notes; Claude maps them in
+    the next axial pass.
+- Restart the app after pulling code changes:
   `uv run python -m analysis.review_app.server` (port 8030).
 - **Still to write later:** `analysis/report/interface_comparison.md` (candidates: kept
   the reference's margin notes and tool call/result grouping; changed to session grouping

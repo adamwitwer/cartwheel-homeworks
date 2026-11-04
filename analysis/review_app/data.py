@@ -37,6 +37,31 @@ EXPORT = REPO / "traces" / "support_traces.json"
 SCENARIOS = REPO / "scenarios" / "support_scenarios.jsonl"
 POLICY_DIR = REPO / "data" / "policies"
 SPEC = REPO / "SPEC.md"
+WORLD_DB = REPO / "data" / "cartwheel.db"
+
+
+def load_names() -> dict[str, Any]:
+    """Store and product names from the seeded world, for reviewer lookups.
+
+    Several tools return only ``store_id`` / ``product_id``; the app shows these
+    names beside the ids, marked as a reviewer lookup the agent did not see.
+    The database is opened read-only. Names are fixed by the seed, so they
+    match what the traced runs saw even if order statuses have changed since.
+    """
+    import sqlite3
+
+    if not WORLD_DB.exists():
+        return {"stores": {}, "products": {}}
+    con = sqlite3.connect(f"file:{WORLD_DB}?mode=ro", uri=True)
+    try:
+        stores = {str(i): n for i, n in con.execute("SELECT id, name FROM stores")}
+        products = {
+            str(i): {"title": t, "store_id": s}
+            for i, s, t in con.execute("SELECT id, store_id, title FROM products")
+        }
+    finally:
+        con.close()
+    return {"stores": stores, "products": products}
 
 # Final-run scenarios only; the HW3 pilot used the "pilot-" prefix.
 SCENARIO_PREFIX = "support-"
@@ -453,5 +478,6 @@ def build_conversations(raw_traces: list[dict[str, Any]]) -> tuple[list[dict[str
         "world_asof": WORLD_ASOF,
         "decision_keys": sorted(DECISION_KEYS),
         "prompt_versions": sorted(prompt_template_versions),
+        "names": load_names(),
     }
     return conversations, context

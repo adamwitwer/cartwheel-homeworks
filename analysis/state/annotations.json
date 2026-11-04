@@ -1,1 +1,369 @@
-{"annotations": []}
+{
+  "annotations": [
+    {
+      "block_key": "e8d3b9542d8ab0f263202381466675ff:1",
+      "session_id": "8e4c18f2b63d4487b56d9d25beef73ed",
+      "start": 47,
+      "scenario_id": "support-0020",
+      "quote": "shipping usually takes a few days",
+      "end": 80,
+      "trace_id": "e8d3b9542d8ab0f263202381466675ff",
+      "note": "cw-shipping policy states, \"Standard delivery takes up to 7 days in transit after shipment.\"",
+      "id": "ann-164b12fe0bed",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-04T02:32:09+00:00",
+      "updated_at": "2026-11-04T02:32:09+00:00"
+    },
+    {
+      "block_key": "fc33e97b9c1ca69d872b573c497b4ecb:3",
+      "session_id": "c7cadcb38d404a6e95437aa45633a375",
+      "start": 105,
+      "scenario_id": "support-0046",
+      "quote": "The only order I see was for a different product, and its status indicates it is not eligible for a refund.",
+      "end": 212,
+      "trace_id": "fc33e97b9c1ca69d872b573c497b4ecb",
+      "note": "Untrue statement. Results show several products some of which are eligible for a refund.",
+      "id": "ann-1c8a89a0bea4",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-04T02:47:25+00:00",
+      "updated_at": "2026-11-04T02:47:25+00:00"
+    },
+    {
+      "block_key": "43c50cfec59bea06c63f44a635b130e4:3",
+      "session_id": "9fc6f84e82f74b39a3272c85383cfb4e",
+      "start": 0,
+      "scenario_id": "support-0048",
+      "quote": "The customer can still return their item from order 6828. The order was delivered on June 15, 2026, and the 30-day return window is open until July 15, 2026. This means they have about 14 days left to initiate the return.",
+      "end": 221,
+      "trace_id": "43c50cfec59bea06c63f44a635b130e4",
+      "note": "Accurate, but strictly speaking, the agent should cite the policy.",
+      "id": "ann-10c50c5ef318",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-04T02:58:25+00:00",
+      "updated_at": "2026-11-04T02:58:25+00:00"
+    },
+    {
+      "block_key": "4d00b7cbe38519f7784a4ca2f6ac0212:3",
+      "session_id": "88e0fe5380624ece95361ef62d4d44ac",
+      "start": 195,
+      "scenario_id": "support-0050",
+      "quote": "Since it has been 24 days since delivery, the customer can proceed with the return.",
+      "end": 278,
+      "trace_id": "4d00b7cbe38519f7784a4ca2f6ac0212",
+      "note": "The agent missed that this store charges a restocking fee.",
+      "id": "ann-54710937c281",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-04T16:17:51+00:00",
+      "updated_at": "2026-11-04T16:17:51+00:00"
+    },
+    {
+      "block_key": "9694536a168980fe6574e8ca26ee3e4e:3",
+      "session_id": "164cafb77c2149548c12d62208c76efd",
+      "start": 81,
+      "scenario_id": "support-0013",
+      "quote": "I found an order with ID 1935 that you placed today, but it's not related to that item.",
+      "end": 168,
+      "trace_id": "9694536a168980fe6574e8ca26ee3e4e",
+      "note": "It looks like 1935 is likely the item the user is looking for. I don't know how to confirm store ID. In any case, the agent should have reported the item has not shipped but was expected to ship in a few days and cite cw-shipping.",
+      "id": "ann-8206b0e4a9a9",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-04T18:19:38+00:00",
+      "updated_at": "2026-11-04T18:19:52+00:00",
+      "history": [
+        {
+          "note": "It looks like 1935 is likely the item the user is looking for. I don't know how to confirm store ID. In any case, the agent should have reported the item has not shipped but was expected to ship in a few days and cite cw_shipping.",
+          "at": "2026-11-04T18:19:38+00:00"
+        }
+      ]
+    },
+    {
+      "block_key": "9f9ecaae60be6f9ba9c7d176cf3aaafe:1",
+      "session_id": "92710a4e1995433f81629780e2debeb1",
+      "start": 0,
+      "scenario_id": "support-0125",
+      "quote": "I can't assist with changes to payment cards or account credentials",
+      "end": 67,
+      "trace_id": "9f9ecaae60be6f9ba9c7d176cf3aaafe",
+      "note": "Agent fails to cite relevant policy id.",
+      "id": "ann-7eb07799da94",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-04T18:34:57+00:00",
+      "updated_at": "2026-11-04T18:34:57+00:00"
+    },
+    {
+      "block_key": "e3f63bf72d5bd4a9deb35a8817614eaa:3",
+      "session_id": "dda0704d8db34f2bb8f6e2d493440976",
+      "start": 136,
+      "scenario_id": "support-0186",
+      "quote": "If you need more specific details about the product, I can look up the product information using that ID. Would you like me to do that?",
+      "end": 271,
+      "trace_id": "e3f63bf72d5bd4a9deb35a8817614eaa",
+      "note": "Answer key indicated a store_name and store_id, which means the record has an issue and the agent should escalate_to_human. (Again, as before, I'm not sure how to match store name and ID.)",
+      "id": "ann-ef2b43675b79",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-04T18:39:46+00:00",
+      "updated_at": "2026-11-04T18:39:46+00:00"
+    },
+    {
+      "block_key": "f9ba38c0b4507862d9023b2ff25eac8f:2",
+      "session_id": "b80788753ccb41829eb93c27283c011c",
+      "start": 0,
+      "scenario_id": "support-0238",
+      "quote": "The Walnut Bluetooth Speaker costs either $189.50 or $203.25, depending on the store.",
+      "end": 85,
+      "trace_id": "f9ba38c0b4507862d9023b2ff25eac8f",
+      "note": "Agent should list the store.",
+      "id": "ann-d736a2888de9",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-04T18:43:25+00:00",
+      "updated_at": "2026-11-04T18:43:25+00:00"
+    },
+    {
+      "block_key": "614c8afaa25d68e0636046c2782ea211:1",
+      "session_id": "de14b3ef8d5745ea907fc7ce3bd9497b",
+      "start": 0,
+      "scenario_id": "support-0239",
+      "quote": "The cheapest option is the **Slim Hand Cream** priced at **$10.75**.",
+      "end": 68,
+      "trace_id": "614c8afaa25d68e0636046c2782ea211",
+      "note": "Agent should list the store.",
+      "id": "ann-1bdd7071de81",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-04T18:44:12+00:00",
+      "updated_at": "2026-11-04T18:44:12+00:00"
+    },
+    {
+      "block_key": "e0344bd08646abc2d9c43b9040323e2f:1",
+      "session_id": "8b3560f67a98476fbde10c16edc26df0",
+      "start": 0,
+      "scenario_id": "support-0252",
+      "quote": "I can't change account details like your name myself, but I can help you with that. The best course of action is to escalate your request to a human support agent, and they can assist you in correcting your name on your account. Let me open a ticket for them now.",
+      "end": 263,
+      "trace_id": "e0344bd08646abc2d9c43b9040323e2f",
+      "note": "Agent should cite policy explicitly (cw-escalations).",
+      "id": "ann-ba63fd5385a4",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-04T18:46:06+00:00",
+      "updated_at": "2026-11-04T18:46:06+00:00"
+    }
+  ],
+  "reviewed": {
+    "e8d3b9542d8ab0f263202381466675ff": {
+      "status": "annotated",
+      "at": "2026-11-04T02:32:09+00:00"
+    },
+    "207f3c708edc826469f68abc9e0fd092": {
+      "status": "no_failure",
+      "at": "2026-11-04T02:38:51+00:00"
+    },
+    "fc33e97b9c1ca69d872b573c497b4ecb": {
+      "status": "annotated",
+      "at": "2026-11-04T02:47:25+00:00"
+    },
+    "43c50cfec59bea06c63f44a635b130e4": {
+      "status": "annotated",
+      "at": "2026-11-04T02:58:25+00:00"
+    },
+    "4d00b7cbe38519f7784a4ca2f6ac0212": {
+      "status": "annotated",
+      "at": "2026-11-04T16:18:26+00:00"
+    },
+    "37fb0812ca7f4e2675a9be812d1ce452": {
+      "status": "no_failure",
+      "at": "2026-11-04T16:22:04+00:00"
+    },
+    "c208d9bc7467b859cb56ff68118dd6b4": {
+      "status": "no_failure",
+      "at": "2026-11-04T16:26:54+00:00"
+    },
+    "350a5842f701655a3672bfce281aa7e0": {
+      "status": "no_failure",
+      "at": "2026-11-04T16:44:41+00:00"
+    },
+    "3e836dd73d0ed96a817d77ea9f4e7462": {
+      "status": "no_failure",
+      "at": "2026-11-04T16:48:11+00:00"
+    },
+    "e94b42dedc85dea4fd27f4ac3560babd": {
+      "status": "no_failure",
+      "at": "2026-11-04T16:49:00+00:00"
+    },
+    "29a5a1c5f41c2eccf9079a79d35c629e": {
+      "status": "no_failure",
+      "at": "2026-11-04T16:49:56+00:00"
+    },
+    "5f601ad6f69771cac1e01df523bed462": {
+      "status": "no_failure",
+      "at": "2026-11-04T16:54:11+00:00"
+    },
+    "9694536a168980fe6574e8ca26ee3e4e": {
+      "status": "annotated",
+      "at": "2026-11-04T18:19:38+00:00"
+    },
+    "ce813ba8bbacd6352534ed1b7e5b7ca2": {
+      "status": "no_failure",
+      "at": "2026-11-04T18:21:12+00:00"
+    },
+    "290704231851c9840cacceff0efde093": {
+      "status": "no_failure",
+      "at": "2026-11-04T18:22:52+00:00"
+    },
+    "ad1bfdd228e6b30cc1c18bb6fcf922b2": {
+      "status": "no_failure",
+      "at": "2026-11-04T18:26:52+00:00"
+    },
+    "d09d0bd449434200f3a1291ef99f4fcb": {
+      "status": "no_failure",
+      "at": "2026-11-04T18:31:37+00:00"
+    },
+    "d29bdc613123c672c431806a41859ace": {
+      "status": "no_failure",
+      "at": "2026-11-04T18:32:44+00:00"
+    },
+    "9f9ecaae60be6f9ba9c7d176cf3aaafe": {
+      "status": "annotated",
+      "at": "2026-11-04T18:34:57+00:00"
+    },
+    "1cc5e7fd58e84ac57b25a1d525561ac3": {
+      "status": "no_failure",
+      "at": "2026-11-04T18:36:22+00:00"
+    },
+    "e3f63bf72d5bd4a9deb35a8817614eaa": {
+      "status": "annotated",
+      "at": "2026-11-04T18:39:46+00:00"
+    },
+    "22c7e8d1301bc7aaedb3dc58a0a3f636": {
+      "status": "no_failure",
+      "at": "2026-11-04T18:40:32+00:00"
+    },
+    "0f0607e4991c226c18add4c6b19ebbc9": {
+      "status": "no_failure",
+      "at": "2026-11-04T18:41:24+00:00"
+    },
+    "1ebe6703c7a3e6c3894e7e201764a83f": {
+      "status": "no_failure",
+      "at": "2026-11-04T18:42:22+00:00"
+    },
+    "f9ba38c0b4507862d9023b2ff25eac8f": {
+      "status": "annotated",
+      "at": "2026-11-04T18:43:25+00:00"
+    },
+    "614c8afaa25d68e0636046c2782ea211": {
+      "status": "annotated",
+      "at": "2026-11-04T18:44:12+00:00"
+    },
+    "e0344bd08646abc2d9c43b9040323e2f": {
+      "status": "annotated",
+      "at": "2026-11-04T18:46:06+00:00"
+    },
+    "949d22c513a5af84f9c0c798047f78b5": {
+      "status": "no_failure",
+      "at": "2026-11-04T18:57:32+00:00"
+    },
+    "c764176d04cb833354a04d91651d6af8": {
+      "status": "no_failure",
+      "at": "2026-11-04T19:01:44+00:00"
+    },
+    "c6a52d6b93b2f30d6c0fee9d09ed4015": {
+      "status": "no_failure",
+      "at": "2026-11-04T19:43:25+00:00"
+    },
+    "17ea8c45e6a430b65b8c93249fcfd6dd": {
+      "status": "no_failure",
+      "at": "2026-11-04T19:44:00+00:00"
+    }
+  },
+  "withdrawn": [
+    {
+      "id": "ann-restored-0079",
+      "trace_id": "c6a52d6b93b2f30d6c0fee9d09ed4015",
+      "scenario_id": "support-0079",
+      "session_id": "bdf0936d06fb415eb62829694e57f648",
+      "block_key": "c6a52d6b93b2f30d6c0fee9d09ed4015:3",
+      "quote": "I will now proceed to issue the refund of $173.",
+      "note": "Inaccurate; the agent can only queue the refund for review. It cannot issue a refund and shouldn't indicate it will (RESP-2).",
+      "start": null,
+      "end": null,
+      "author": "human",
+      "source": "reviewer",
+      "created_at": null,
+      "updated_at": null,
+      "withdrawn_at": "2026-11-04",
+      "restored": {
+        "from": "Claude Code session printout of annotations.json, 2026-11-04",
+        "why": "the review app hard-deleted withdrawn notes before the withdraw fix",
+        "lost_fields": [
+          "original id",
+          "start",
+          "end",
+          "created_at",
+          "updated_at"
+        ]
+      }
+    },
+    {
+      "id": "ann-restored-0185",
+      "trace_id": "17ea8c45e6a430b65b8c93249fcfd6dd",
+      "scenario_id": "support-0185",
+      "session_id": "266e23a7197c403d943eb027af6449b5",
+      "block_key": "17ea8c45e6a430b65b8c93249fcfd6dd:3",
+      "quote": "If the customer has any concerns about the delivery, please let them know they could reach out for support regarding this matter.",
+      "note": "ESC-3 suggests the agent should escalate_to_human automatically, as there is something wrong with this order.",
+      "start": null,
+      "end": null,
+      "author": "human",
+      "source": "reviewer",
+      "created_at": null,
+      "updated_at": null,
+      "withdrawn_at": "2026-11-04",
+      "restored": {
+        "from": "Claude Code session printout of annotations.json, 2026-11-04",
+        "why": "the review app hard-deleted withdrawn notes before the withdraw fix",
+        "lost_fields": [
+          "original id",
+          "start",
+          "end",
+          "created_at",
+          "updated_at"
+        ]
+      }
+    },
+    {
+      "id": "ann-restored-0215",
+      "trace_id": "c764176d04cb833354a04d91651d6af8",
+      "scenario_id": "support-0215",
+      "session_id": "4457b5232ecc456b89b9cf4164c8abfd",
+      "block_key": "c764176d04cb833354a04d91651d6af8:3",
+      "quote": "I've checked the order number 8465, and it appears that the order is not eligible for a refund, as the order's refund eligibility status is marked as false.",
+      "note": "Should use escalate_to_human. It doesn't make sense that this item is not eligible for a refund (CW and store policy indicate that it's eligible).",
+      "start": null,
+      "end": null,
+      "author": "human",
+      "source": "reviewer",
+      "created_at": null,
+      "updated_at": null,
+      "withdrawn_at": "2026-11-04",
+      "restored": {
+        "from": "Claude Code session printout of annotations.json, 2026-11-04",
+        "why": "the review app hard-deleted withdrawn notes before the withdraw fix",
+        "lost_fields": [
+          "original id",
+          "start",
+          "end",
+          "created_at",
+          "updated_at"
+        ]
+      }
+    }
+  ]
+}
