@@ -188,14 +188,29 @@ function renderRail() {
       : 'No conversations match.'}</div>`;
     return;
   }
+  // In sample scope a conversation is listed once under every batch that
+  // holds one of its turns (turns of one session can land in different
+  // batches); its other turns are dimmed in that group.
+  const entries = [];
+  if (S.scope === 'sample') {
+    for (const c of list) {
+      const seen = new Map();
+      for (const t of c.turns) {
+        const s = IDX.sample.get(t.trace_id);
+        if (s && !seen.has(s.batch)) seen.set(s.batch, s.order);
+      }
+      for (const [batch, order] of seen) entries.push({ c, g: batch, order });
+    }
+    entries.sort((a, b) => a.order - b.order || a.c.scenario_id.localeCompare(b.c.scenario_id));
+  } else {
+    for (const c of list) entries.push({ c, g: c.scenario.group || 'scenarios' });
+  }
   const html = []; let group = null;
-  for (const c of list) {
-    const g = S.scope === 'sample'
-      ? (IDX.sample.get(c.turns.find(t => IDX.sample.has(t.trace_id)).trace_id).batch)
-      : (c.scenario.group || 'scenarios');
+  for (const { c, g } of entries) {
     if (g !== group) { html.push(`<div class="rail-group">${esc(g)}</div>`); group = g; }
     const dots = c.turns.map(t => {
-      const out = S.scope === 'sample' && !IDX.sample.has(t.trace_id) ? ' out' : '';
+      const s = IDX.sample.get(t.trace_id);
+      const out = S.scope === 'sample' && (!s || s.batch !== g) ? ' out' : '';
       return `<span class="dot ${turnStatus(t.trace_id)}${out}" title="turn ${t.number}: ${turnStatus(t.trace_id)}"></span>`;
     }).join('');
     html.push(`<button class="conv-item${c.scenario_id === S.cur ? ' active' : ''}" data-sid="${esc(c.scenario_id)}">
@@ -286,7 +301,14 @@ function renderTurn(c, t) {
 }
 
 function renderBlock(c, b) {
-  const who = { user: `Customer · ${c.role}`, note: 'Agent · note before tool call', reply: 'Agent · reply sent to customer' }[b.kind];
+  // Only result.final_output reaches the customer (server/app.py). Text the model
+  // writes alongside a tool call stays in the trace and the session history.
+  const NOTE_TIP = 'Text the model wrote in the same step as a tool call. The server returns only the final reply (result.final_output), so the customer never saw this. The agent does see it again in later turns, as part of the session history.';
+  const who = {
+    user: `Customer · ${c.role}`,
+    note: `<span title="${esc(NOTE_TIP)}">Agent narration before a tool call <span class="chip unseen">✕ not shown to the customer</span></span>`,
+    reply: 'Agent · reply <span class="chip seen">✓ sent to the customer</span>',
+  }[b.kind];
   if (b.kind === 'tool') return renderTool(b);
   const cites = (b.citations || []).map(x => {
     const cls = x.retrieved ? 'retrieved' : 'unretrieved';

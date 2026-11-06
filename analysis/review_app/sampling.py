@@ -1,12 +1,19 @@
-"""HW4 Part B batch 1: 15 uniform random traces + 15 cluster representatives.
+"""HW4 Part B sampling.
 
-Selection uses behavior features only (which tools a turn called, how many
-calls, first turn or follow-up, reply length). It never reads outcomes, the
-answer key, the scenario group, the user role, or citation flags, so no trace
-is chosen because something predicts it fails.
+Batch 1: 15 uniform random traces + 15 cluster representatives. Clustering uses
+behavior features only (which tools a turn called, how many calls, first turn
+or follow-up, reply length).
 
-    uv run python -m analysis.review_app.sampling            # dry run, writes nothing
-    uv run python -m analysis.review_app.sampling --write    # add batch 1 to the manifest
+Batch 2: 10 traces per user role (shopper, merchant, support), uniform random
+within each role, excluding traces already in another batch. The role was
+chosen as the dimension before any batch 1 trace was read.
+
+Neither batch reads outcomes, the answer key, the scenario group, modes, or
+citation flags, so no trace is chosen because something predicts it fails.
+
+    uv run python -m analysis.review_app.sampling                     # batch 1 dry run
+    uv run python -m analysis.review_app.sampling --batch 2           # batch 2 dry run
+    uv run python -m analysis.review_app.sampling --batch 2 --write   # save batch 2
 """
 
 from __future__ import annotations
@@ -28,6 +35,10 @@ N_STARTS = 10  # k-means restarts from seeds SEED..SEED+9; the lowest-inertia fi
 FIT: dict = {}
 POOL = "final-run traces (support- scenarios), one trace per turn"
 
+SEED_B2 = 20261104
+ROLES = ("shopper", "merchant", "support")
+N_PER_ROLE = 10
+
 
 def turn_rows() -> tuple[list[dict], list[str]]:
     """One row per trace with its behavior features."""
@@ -44,6 +55,7 @@ def turn_rows() -> tuple[list[dict], list[str]]:
             rows.append({
                 "trace_id": t["trace_id"],
                 "scenario_id": c["scenario_id"],
+                "role": c["role"],
                 "turn": t["number"],
                 "tools": sorted(called),
                 "n_calls": len(calls),
@@ -130,10 +142,69 @@ def manifest_batches(uniform, reps, tools) -> list[dict]:
     ]
 
 
+def select_by_role(rows: list[dict], exclude: set[str]) -> dict[str, list[dict]]:
+    """N_PER_ROLE uniform picks per role from traces not in another batch.
+
+    One generator seeded with SEED_B2 draws the roles in ROLES order, each from
+    that role's remaining traces sorted by trace id, so the draw is repeatable.
+    """
+    rng = random.Random(SEED_B2)
+    picks = {}
+    for role in ROLES:
+        pool = [r for r in rows if r["role"] == role and r["trace_id"] not in exclude]
+        picks[role] = rng.sample(pool, min(N_PER_ROLE, len(pool)))
+    return picks
+
+
+def batch2(write: bool) -> None:
+    rows, _tools = turn_rows()
+    doc = store.read_doc("sample_manifest.json")
+    others = [b for b in doc.get("batches", []) if b.get("batch") != 2]
+    exclude = {t["trace_id"] for b in others for t in b.get("traces", [])}
+    pool_counts = {role: sum(r["role"] == role and r["trace_id"] not in exclude for r in rows) for role in ROLES}
+    picks = select_by_role(rows, exclude)
+    print(f"pool after excluding {len(exclude)} traces in other batches: "
+          + ", ".join(f"{k} {v}" for k, v in pool_counts.items()))
+    for role in ROLES:
+        print(f"\n{role.upper()} ({len(picks[role])}, seed {SEED_B2}):")
+        for r in sorted(picks[role], key=label):
+            print(f"  {label(r):<22} {' + '.join(r['tools']) or 'no tools'}")
+    chosen = [r["trace_id"] for role in ROLES for r in picks[role]]
+    print(f"\ntotal {len(chosen)}; distinct {len(set(chosen))}; overlap with other batches: {len(set(chosen) & exclude)}")
+    if not write:
+        print("\ndry run: nothing written (pass --write to save)")
+        return
+    entry = {
+        "id": "b2-role", "part": "B", "batch": 2,
+        "method": f"stratified by user role, {N_PER_ROLE} per role; uniform random within each "
+                  "role over sorted trace ids, roles drawn in order " + ", ".join(ROLES)
+                  + "; excludes traces in other batches",
+        "dimension": "user_role", "dimension_chosen": "2026-11-03, before reading any batch 1 trace",
+        "seed": SEED_B2, "pool": POOL, "pool_counts_after_exclusion": pool_counts,
+        "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "traces": [{"trace_id": r["trace_id"], "reason": f"user role: {role}"}
+                   for role in ROLES for r in picks[role]],
+    }
+    with store.LOCK:
+        doc = store.read_doc("sample_manifest.json")
+        batches = doc.get("batches", [])
+        idx = next((i for i, b in enumerate(batches) if b.get("batch") == 2), None)
+        if idx is None:
+            batches.append(entry)
+        else:
+            batches[idx] = entry
+        doc["batches"] = batches
+        store.write_doc("sample_manifest.json", doc)
+    print("\nwrote b2-role to sample_manifest.json")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--write", action="store_true", help="add batch 1 to sample_manifest.json")
+    ap.add_argument("--batch", type=int, choices=(1, 2), default=1)
+    ap.add_argument("--write", action="store_true", help="save the batch to sample_manifest.json")
     args = ap.parse_args()
+    if args.batch == 2:
+        return batch2(args.write)
 
     rows, tools = turn_rows()
     uniform, clusters, reps = select(rows)

@@ -4,33 +4,57 @@
       "name": "policy_claim_without_citation",
       "status": "candidate",
       "definition": "Fail if the reply states a fact or rule that comes from a policy document but does not name that policy's identifier. Pass if every policy-derived statement in the reply carries its policy id, or the reply makes no policy claim.",
-      "boundary": "Nearest: policy_answer_wrong_or_incomplete. This mode is about a missing citation on a claim that may be correct; a wrong or incomplete policy answer belongs there, even when it is also uncited. Also distinct from the course demo mode unsupported_policy_claim (a claim the retrieved policy does not support).",
+      "boundary": "Nearest: policy_answer_wrong_or_incomplete. This mode is about a missing citation on a claim that may be correct; a wrong or incomplete policy answer belongs there, even when it is also uncited. Also distinct from the course demo mode unsupported_policy_claim (a claim the retrieved policy does not support). Batch 2: a follow-up turn that restates a policy-derived deadline (0035 T2, 0069 T3) needs its own citation even when an earlier turn cited the policy. 0101 and 0115 answered with no lookup at all.",
       "requirement_source": "RESP-1",
       "evaluator_type": "judge",
       "annotation_ids": [
         "ann-10c50c5ef318",
         "ann-7eb07799da94",
-        "ann-ba63fd5385a4"
+        "ann-ba63fd5385a4",
+        "ann-24913d1f97da",
+        "ann-5dcbffc5b99f",
+        "ann-448eccf94d2e",
+        "ann-e25813259ad0",
+        "ann-b57e92c0abfe",
+        "ann-8c4bd9730645"
       ],
       "created_from": [
         "43c50cfec59bea06c63f44a635b130e4",
         "9f9ecaae60be6f9ba9c7d176cf3aaafe",
-        "e0344bd08646abc2d9c43b9040323e2f"
+        "e0344bd08646abc2d9c43b9040323e2f",
+        "f8aab2581f88b950e3fa087cf70a3295",
+        "45597f1899099966d101de1bf6058d7a",
+        "075433d99de8c193874901ed43a0ac60",
+        "ea7dfe81922c9577f5d4cd45e1f4faf8",
+        "c98cd17975e8fbca3ebfff4aa03f278d",
+        "4edcd6c7e7a9b0e055762f0cf7c846f3"
       ],
       "example_trace_ids": [
         "43c50cfec59bea06c63f44a635b130e4",
         "9f9ecaae60be6f9ba9c7d176cf3aaafe",
-        "e0344bd08646abc2d9c43b9040323e2f"
+        "e0344bd08646abc2d9c43b9040323e2f",
+        "f8aab2581f88b950e3fa087cf70a3295",
+        "45597f1899099966d101de1bf6058d7a",
+        "075433d99de8c193874901ed43a0ac60",
+        "ea7dfe81922c9577f5d4cd45e1f4faf8",
+        "c98cd17975e8fbca3ebfff4aa03f278d",
+        "4edcd6c7e7a9b0e055762f0cf7c846f3"
       ],
       "close_negative_trace_ids": [],
       "open_questions": [
         "Does RESP-1 apply to a refusal grounded in scope (SCOPE-2), as in 0125?",
-        "Citation presence is code-checkable; deciding which sentences are policy-derived needs a judge."
+        "Citation presence is code-checkable; deciding which sentences are policy-derived needs a judge.",
+        "0101 is also incomplete (omits that a shipped order must be returned instead); first failure coded as the missing citation. Should it also count for policy_answer_wrong_or_incomplete?",
+        "Does RESP-1 cover a policy fact relayed from a tool result (\"5 to 10 business days\" from issue_refund in 0072 and 0078)? Both were judged no failure."
       ],
       "history": [
         {
           "at": "2026-11-04",
           "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        },
+        {
+          "at": "2026-11-06",
+          "change": "batch 2 axial pass: added 0044, 0035, 0101, 0115, 0089, 0069 (the reviewer applied the batch 1 RESP-1 standard to follow-up turns that restate a policy deadline)"
         }
       ]
     },
@@ -38,30 +62,43 @@
       "name": "policy_answer_wrong_or_incomplete",
       "status": "candidate",
       "definition": "Fail if the reply answers a policy question with content that contradicts, understates, or omits a material term of the applicable platform or store policy (for example a delivery time or a store's restocking fee). Pass if the stated terms match the applicable policy.",
-      "boundary": "Nearest: policy_claim_without_citation (correct content, missing id). Both 0020 and 0050 answered without consulting the applicable policy text (0020 retrieved nothing; 0050 used cw-returns but not the store policy).",
+      "boundary": "Nearest: policy_claim_without_citation (correct content, missing id). Both 0020 and 0050 answered without consulting the applicable policy text (0020 retrieved nothing; 0050 used cw-returns but not the store policy). 0121 answered with no lookup; 0055 used cw-returns but not store-cascade-audio-policy (the same omission as 0050). 0250 gives no rule at all and only offers a lookup, so it borders asks_instead_of_acting.",
       "requirement_source": "SCOPE-1 (policy questions answered from the help center); PURPOSE-1",
       "evaluator_type": "judge",
       "annotation_ids": [
         "ann-164b12fe0bed",
-        "ann-54710937c281"
+        "ann-54710937c281",
+        "ann-5cffb77a8311",
+        "ann-478fd12f1116",
+        "ann-75e80af7f0bd"
       ],
       "created_from": [
         "e8d3b9542d8ab0f263202381466675ff",
-        "4d00b7cbe38519f7784a4ca2f6ac0212"
+        "4d00b7cbe38519f7784a4ca2f6ac0212",
+        "f1bc7d23f3f0083c6184e3e0ec5f750f",
+        "4c6fd4af8f69c59e0957704a32dc3200",
+        "ff678a62ab67c3ebd2a8a688f523efb3"
       ],
       "example_trace_ids": [
         "e8d3b9542d8ab0f263202381466675ff",
-        "4d00b7cbe38519f7784a4ca2f6ac0212"
+        "4d00b7cbe38519f7784a4ca2f6ac0212",
+        "f1bc7d23f3f0083c6184e3e0ec5f750f",
+        "4c6fd4af8f69c59e0957704a32dc3200",
+        "ff678a62ab67c3ebd2a8a688f523efb3"
       ],
       "close_negative_trace_ids": [],
       "open_questions": [
-        "Only 2 positives so far; batch 3 should search for more.",
-        "Is the requirement source specific enough, or does this need its own SPEC requirement?"
+        "Is the requirement source specific enough, or does this need its own SPEC requirement?",
+        "0250: is giving no answer and offering a lookup this mode or asks_instead_of_acting?"
       ],
       "history": [
         {
           "at": "2026-11-04",
           "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        },
+        {
+          "at": "2026-11-06",
+          "change": "batch 2 axial pass: added 0121 (invented SLA), 0055 (restocking fee omitted, as in 0050), 0250 (gave no rule; offered to look it up)"
         }
       ]
     },
@@ -92,36 +129,51 @@
         {
           "at": "2026-11-04",
           "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        },
+        {
+          "at": "2026-11-06",
+          "change": "batch 2 axial pass: no new positives"
         }
       ]
     },
     {
       "name": "inconsistent_record_not_escalated",
       "status": "candidate",
-      "definition": "Fail if a tool result shows an inconsistent or damaged record (for example an order whose product belongs to another store) and the reply neither states the inconsistency nor escalates. Pass if the reply states the inconsistency and escalates or tells the caller how it will be handled.",
-      "boundary": "Nearest: reply_contradicts_tool_result. Close negative 0185: the delivery date was missing, the agent said so to a support-staff caller, and the reviewer judged no failure.",
+      "definition": "Fail if a tool result shows an inconsistent or damaged order or product record (for example a product from another store, a shipment date after the delivery date, or a negative price) and the reply presents it as valid, neither stating the inconsistency nor escalating. Pass if the reply states the inconsistency and escalates or tells the caller how it will be handled.",
+      "boundary": "Nearest: reply_contradicts_tool_result. Close negative 0185: the delivery date was missing, the agent said so to a support-staff caller, and the reviewer judged no failure. Close negative 0183: the agent escalated a missing delivery date but did not say why in the reply; that gap is coded under reply_omits_decision_basis.",
       "requirement_source": "ESC-4; RESP-3",
       "evaluator_type": "judge",
       "annotation_ids": [
-        "ann-ef2b43675b79"
+        "ann-ef2b43675b79",
+        "ann-b682b1c15b7c",
+        "ann-5622ffb7e9db"
       ],
       "created_from": [
-        "e3f63bf72d5bd4a9deb35a8817614eaa"
+        "e3f63bf72d5bd4a9deb35a8817614eaa",
+        "56a406a319706af68b6ba4f8fb578d26",
+        "deb9abecaeedfd02a18dddbcdf1f8e0f"
       ],
       "example_trace_ids": [
-        "e3f63bf72d5bd4a9deb35a8817614eaa"
+        "e3f63bf72d5bd4a9deb35a8817614eaa",
+        "56a406a319706af68b6ba4f8fb578d26",
+        "deb9abecaeedfd02a18dddbcdf1f8e0f"
       ],
       "close_negative_trace_ids": [
-        "17ea8c45e6a430b65b8c93249fcfd6dd"
+        "17ea8c45e6a430b65b8c93249fcfd6dd",
+        "c0863f6e91ff8168b1e6f3d149e41ba0"
       ],
       "open_questions": [
-        "Only 1 positive so far; batch 3 should search the data-quality scenarios.",
-        "0186: the mismatch is visible only by looking up product 553; no tool fetches a product by id. Is it fair to expect the agent to detect it?"
+        "0186: the mismatch is visible only by looking up product 553; no tool fetches a product by id. Is it fair to expect the agent to detect it?",
+        "Does a damaged product record (0198) require escalation, or only a refusal to present the value as valid?"
       ],
       "history": [
         {
           "at": "2026-11-04",
           "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        },
+        {
+          "at": "2026-11-06",
+          "change": "batch 2 axial pass: added 0176 (shipped after delivered) and 0198 (negative price); definition widened from order records to product records; 0183 added as a close negative"
         }
       ]
     },
@@ -147,12 +199,129 @@
       "close_negative_trace_ids": [],
       "open_questions": [
         "Trigger (duplicate titles across stores in the search result) is code-checkable; the reply check needs a judge.",
-        "Is 0238 a positive while the running tool still returns only store ids?"
+        "Is 0238 a positive while the running tool still returns only store ids?",
+        "0191 (coded under truncated_search_presented_as_complete) also lists three same-title vases from one store with prices only. Naming the store cannot distinguish them; should RESP-6 require a distinguishing identifier such as the product id?"
       ],
       "history": [
         {
           "at": "2026-11-04",
           "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        },
+        {
+          "at": "2026-11-06",
+          "change": "batch 2 axial pass: no new positives; 0191 raises a RESP-6 wording question"
+        }
+      ]
+    },
+    {
+      "name": "truncated_search_presented_as_complete",
+      "status": "candidate",
+      "definition": "Fail if search_products returns exactly as many results as the requested limit and the reply presents them as the full set (for example \"here are the listings\") without saying more may exist or searching again with a larger limit. Pass if the reply says the list may be partial, or the agent retrieves all matches.",
+      "boundary": "Nearest: same_title_listing_not_distinguished (which listing is which, not how many). In all three the agent passed limit 5 and got 5 back; the reviewer can see only that the result hit the cap (the answer keys show 10, 4 and 13 matching listings). 0241 also calls the results \"the latest novels\" although results carry no dates.",
+      "requirement_source": "RESP-3 (the answer keys for 0142 and 0241 cite it)",
+      "evaluator_type": "judge",
+      "annotation_ids": [
+        "ann-dc97d6942f80",
+        "ann-a7290648cbc4",
+        "ann-1bec0e2a2ab9"
+      ],
+      "created_from": [
+        "05121161face3caf216c0b3ebada73f8",
+        "c1d317db1a412cedd6669c1996fb7360",
+        "5ad8843a265d6abac89bdb77126e0517"
+      ],
+      "example_trace_ids": [
+        "05121161face3caf216c0b3ebada73f8",
+        "c1d317db1a412cedd6669c1996fb7360",
+        "5ad8843a265d6abac89bdb77126e0517"
+      ],
+      "close_negative_trace_ids": [],
+      "open_questions": [
+        "The trigger (count equals limit) is code-checkable; whether the reply claims completeness needs a judge.",
+        "Is the fix a larger default limit in the tool, a prompt rule, or both?"
+      ],
+      "history": [
+        {
+          "at": "2026-11-06",
+          "change": "drafted from batch 2 axial coding; grouping previewed to and accepted by the reviewer"
+        }
+      ]
+    },
+    {
+      "name": "asks_instead_of_acting",
+      "status": "candidate",
+      "definition": "Fail if the agent has what it needs for an action that policy or the instructions require (an eligible refund at or below the threshold, an escalation that must go to a human) and instead asks the user to confirm or offers to do it, so the action has not happened by the end of the session. Pass if the agent takes the action, or asks only for information the action genuinely needs and the user has not given.",
+      "boundary": "Close negatives 0072 and 0078: the caller stated the amount and the reason, and the agent issued the refund directly. 0243 never gave a reason and issue_refund requires one, so asking for the reason is allowed; asking to confirm the amount is not. In 0158 and 0163 the agent offered to escalate an account change every turn and never opened a ticket, against ESC-2 and the system prompt's \"call escalate_to_human\".",
+      "requirement_source": "ESC-2; cw-refunds (refunds of $100 or less execute automatically once the order passes the eligibility check); system prompt escalation rule",
+      "evaluator_type": "judge",
+      "annotation_ids": [
+        "ann-707b10781df8",
+        "ann-a831b4c4e951",
+        "ann-e8fa67f1f433",
+        "ann-df30c2db57cc"
+      ],
+      "created_from": [
+        "7bbb597094e39581861fe1e8b811a8f3",
+        "8959b008bd935394309428a97ff7b250",
+        "d36f704edd72d988d071539132f47f35",
+        "22f360e5b003b63674398fdc026b956c"
+      ],
+      "example_trace_ids": [
+        "7bbb597094e39581861fe1e8b811a8f3",
+        "8959b008bd935394309428a97ff7b250",
+        "d36f704edd72d988d071539132f47f35",
+        "22f360e5b003b63674398fdc026b956c"
+      ],
+      "close_negative_trace_ids": [
+        "0f3f20ca9230d6d17700c14c5808466f",
+        "fc72683e2d1a689e7c1a4f0fc4ad1a58"
+      ],
+      "open_questions": [
+        "Spec tension: cw-account-security says account changes happen only through account settings, while ESC-2 and cw-escalations send them to a human. Record in review_summary.md.",
+        "The batch 2 role split (shoppers asked, merchants and support refunded) follows whether the message stated amount and reason, not the role itself.",
+        "0250 (offers a read-only lookup instead of doing it) is coded under policy_answer_wrong_or_incomplete; does it belong here?"
+      ],
+      "history": [
+        {
+          "at": "2026-11-06",
+          "change": "drafted from batch 2 axial coding; grouping previewed to and accepted by the reviewer"
+        }
+      ]
+    },
+    {
+      "name": "reply_omits_decision_basis",
+      "status": "candidate",
+      "definition": "Fail if the reply reports a decision or outcome (a refusal, an escalation, an order status) but leaves out the reason or the material fact behind it that the tool results show: the closed return window, that the order is outside the caller's store, that the record is missing a date, or that a shipped order has not yet been delivered. Pass if the reply states the basis in terms the caller can act on, without revealing inaccessible data.",
+      "boundary": "In 0221 and 0183 the reason appeared only in the narration before a tool call, which the caller never sees; the system prompt requires that narration, so the reply must restate the reason. Nearest: inconsistent_record_not_escalated (0183 did escalate). 0076 is also uncited; its first failure is the missing explanation.",
+      "requirement_source": "RESP-5 (explains the relevant decision); RESP-4 (explain refusals and escalations); RESP-3 (state missing or inconsistent information)",
+      "evaluator_type": "judge",
+      "annotation_ids": [
+        "ann-b4abef171823",
+        "ann-8c4bd0064863",
+        "ann-dbce223b54db",
+        "ann-8ff571868696"
+      ],
+      "created_from": [
+        "c567a8c9c51b12fc83e3ff9312fd0ffd",
+        "a5bcb8dc086996d94fb976873674d3b3",
+        "c0863f6e91ff8168b1e6f3d149e41ba0",
+        "de2988295031e9bdf4dd48de787d855d"
+      ],
+      "example_trace_ids": [
+        "c567a8c9c51b12fc83e3ff9312fd0ffd",
+        "a5bcb8dc086996d94fb976873674d3b3",
+        "c0863f6e91ff8168b1e6f3d149e41ba0",
+        "de2988295031e9bdf4dd48de787d855d"
+      ],
+      "close_negative_trace_ids": [],
+      "open_questions": [
+        "0028 omits a status fact (not yet delivered) rather than a decision reason, and the caller asked for a short answer. Does it fit, or is it a separate mode?",
+        "A judge needs the tool results and the narration to see what the reply left out."
+      ],
+      "history": [
+        {
+          "at": "2026-11-06",
+          "change": "drafted from batch 2 axial coding; grouping previewed to and accepted by the reviewer"
         }
       ]
     }

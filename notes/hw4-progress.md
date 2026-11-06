@@ -98,23 +98,45 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
   ESC-4, RESP-3), `same_title_listing_not_distinguished` (0238, 0239; RESP-6). Dropped:
   the RESP-2 overclaim group (its only note, 0079, was withdrawn). Status stays
   `candidate`, so the course failure report and its schema test ignore them for now.
-- **Next step:** Part B batch 2, 30 traces across user role, excluding batch 1. Claude
-  presents this teed-up proposal (prepared 2026-11-04, nothing drawn yet) and waits for
-  my go before the manifest changes:
-  - Pool by role (traces): shopper 214, merchant 83, support 59. Batch 1 used 18 / 6 / 6,
-    leaving 196 / 77 / 53.
-  - Allocation: **10 per role** (stratified, equal), not proportional (which would give
-    about 18 / 7 / 5). The point of a dimension batch is to see each value well;
-    proportional would leave support with 5 traces, and batch 1 already followed the
-    collection's shopper-heavy mix.
-  - Draw: uniform random within each role over sorted trace ids, seed 20261104, recorded
-    in the manifest as `b2-role` with the per-role counts; reason per trace
-    "user role: <role>". Selection reads only the role, never outcomes or modes.
-  - Implementation: add a `--batch 2` path to `analysis/review_app/sampling.py` (dry run
-    first, then `--write`), keeping batch 1's entries untouched.
-  - While reading batch 2: open code as before (first failure or "no failure observed").
-    Notes that fit a candidate mode still start as free-form notes; Claude maps them in
-    the next axial pass.
+- **Batch 2 drawn (2026-11-05):** `sampling.py --batch 2` wrote `b2-role` to the manifest:
+  10 per role (shopper / merchant / support), uniform within each role, seed 20261104,
+  pools after excluding batch 1: 196 / 77 / 53. Equal rather than proportional (which
+  would give support only 5). 60 distinct traces across batches 1 and 2. Picks:
+  shopper 0002, 0015, 0035 T2, 0044 T2, 0056, 0069 T3, 0089 T2, 0101, 0158 T2, 0243 T2;
+  merchant 0017 T2, 0024, 0072, 0076, 0115, 0142, 0163, 0183, 0191 T2, 0221;
+  support 0028, 0055, 0078, 0121, 0174, 0176, 0198, 0241, 0247, 0250 (T1 unless noted).
+  0089 T2 shares a conversation with batch 1's 0089 T3; 0101 and 0078 were Part A traces.
+- **Batch 2 open coding done (2026-11-05/06):** 30/30 reviewed; 22 notes, 8 "no failure
+  observed". After Claude's check I made a second pass, mostly holding the agent to the same
+  standard as batch 1: added 0176 (reversed dates), 0158 / 0163 (offered escalation, never
+  escalated; nothing in the spec says to confirm first), 0101 / 0115 / 0044 T2 / 0035 T2 /
+  0089 T2 / 0069 T3 (uncited policy claims), 0250, 0076, 0221, 0183. Kept 0028 T1. Kept
+  "potentially incomplete" on the capped searches: the trace shows only that 5 came back
+  from a limit of 5. 0221 and 0183: the reason appeared only in the narration before a tool call,
+  which the customer never sees.
+- **App fix (2026-11-06):** the sample rail listed a conversation only under its earliest
+  batch, so 0089 (T3 in b1-uniform, T2 in b2-role) was missing from b2-role. It now
+  appears under every batch that holds one of its turns.
+- **Axial coding, batch 2 (2026-11-06):** groups accepted; `patterns.json` now has 8
+  `candidate` modes, every live note in one:
+  `policy_claim_without_citation` 9, `policy_answer_wrong_or_incomplete` 5 (+0121, 0055,
+  0250), `reply_contradicts_tool_result` 2 (no new), `inconsistent_record_not_escalated` 3
+  (+0176, 0198; widened to product records; close negatives 0185, 0183),
+  `same_title_listing_not_distinguished` 2 (0191 raises a RESP-6 wording question: same
+  store, so the store name can't tell them apart). New: `truncated_search_presented_as_complete`
+  (0142, 0191, 0241; RESP-3), `asks_instead_of_acting` (0056, 0243, 0158, 0163; close
+  negatives 0072, 0078; ESC-2, cw-refunds), `reply_omits_decision_basis` (0076, 0221,
+  0183, 0028; RESP-5, RESP-4, RESP-3).
+  - By role: support 7/10 annotated, merchant 7/10, shopper 8/10. The refund split (shoppers
+    asked to confirm, merchants and support got refunds) follows whether the message gave
+    an amount and reason, not the role.
+  - For `review_summary.md`: cw-account-security ("account changes happen only through
+    account settings") conflicts with ESC-2 and cw-escalations (send to a human).
+- **Next step:** batch 3, 25 traces from targeted searches for the thin modes
+  (`reply_contradicts_tool_result`, `same_title_listing_not_distinguished`,
+  `inconsistent_record_not_escalated` via the data-quality scenarios) and the follow-up turns
+  that batch 1 and 2 left unsampled (for example 0028 T2/T3, 0158 T3). Claude proposes the
+  search queries; I approve them before the draw.
 - Restart the app after pulling code changes:
   `uv run python -m analysis.review_app.server` (port 8030).
 - **Still to write later:** `analysis/report/interface_comparison.md` (candidates: kept

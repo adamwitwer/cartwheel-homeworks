@@ -183,6 +183,144 @@
           "reason": "cluster 14 representative (n=34; mostly find_order (33/34); calls median 1; 7 follow-up turns)"
         }
       ]
+    },
+    {
+      "id": "b2-role",
+      "part": "B",
+      "batch": 2,
+      "method": "stratified by user role, 10 per role; uniform random within each role over sorted trace ids, roles drawn in order shopper, merchant, support; excludes traces in other batches",
+      "dimension": "user_role",
+      "dimension_chosen": "2026-11-03, before reading any batch 1 trace",
+      "seed": 20261104,
+      "pool": "final-run traces (support- scenarios), one trace per turn",
+      "pool_counts_after_exclusion": {
+        "shopper": 196,
+        "merchant": 77,
+        "support": 53
+      },
+      "created": "2026-11-05T20:03:57+00:00",
+      "traces": [
+        {
+          "trace_id": "f8aab2581f88b950e3fa087cf70a3295",
+          "reason": "user role: shopper"
+        },
+        {
+          "trace_id": "d36f704edd72d988d071539132f47f35",
+          "reason": "user role: shopper"
+        },
+        {
+          "trace_id": "45597f1899099966d101de1bf6058d7a",
+          "reason": "user role: shopper"
+        },
+        {
+          "trace_id": "7bbb597094e39581861fe1e8b811a8f3",
+          "reason": "user role: shopper"
+        },
+        {
+          "trace_id": "8959b008bd935394309428a97ff7b250",
+          "reason": "user role: shopper"
+        },
+        {
+          "trace_id": "b0cc8db8db5c149f19e478967f5325e1",
+          "reason": "user role: shopper"
+        },
+        {
+          "trace_id": "c98cd17975e8fbca3ebfff4aa03f278d",
+          "reason": "user role: shopper"
+        },
+        {
+          "trace_id": "075433d99de8c193874901ed43a0ac60",
+          "reason": "user role: shopper"
+        },
+        {
+          "trace_id": "4edcd6c7e7a9b0e055762f0cf7c846f3",
+          "reason": "user role: shopper"
+        },
+        {
+          "trace_id": "94c5765a982a174791b24319b7536ad1",
+          "reason": "user role: shopper"
+        },
+        {
+          "trace_id": "05121161face3caf216c0b3ebada73f8",
+          "reason": "user role: merchant"
+        },
+        {
+          "trace_id": "ea7dfe81922c9577f5d4cd45e1f4faf8",
+          "reason": "user role: merchant"
+        },
+        {
+          "trace_id": "22f360e5b003b63674398fdc026b956c",
+          "reason": "user role: merchant"
+        },
+        {
+          "trace_id": "c1d317db1a412cedd6669c1996fb7360",
+          "reason": "user role: merchant"
+        },
+        {
+          "trace_id": "a5bcb8dc086996d94fb976873674d3b3",
+          "reason": "user role: merchant"
+        },
+        {
+          "trace_id": "0f3f20ca9230d6d17700c14c5808466f",
+          "reason": "user role: merchant"
+        },
+        {
+          "trace_id": "c0863f6e91ff8168b1e6f3d149e41ba0",
+          "reason": "user role: merchant"
+        },
+        {
+          "trace_id": "57fae14882812b8ed1c5a85465126af0",
+          "reason": "user role: merchant"
+        },
+        {
+          "trace_id": "c567a8c9c51b12fc83e3ff9312fd0ffd",
+          "reason": "user role: merchant"
+        },
+        {
+          "trace_id": "70bb59f28d6c512d71995b0ceac1dd6c",
+          "reason": "user role: merchant"
+        },
+        {
+          "trace_id": "ff678a62ab67c3ebd2a8a688f523efb3",
+          "reason": "user role: support"
+        },
+        {
+          "trace_id": "24636fd221ef859af508cd990f28eb8c",
+          "reason": "user role: support"
+        },
+        {
+          "trace_id": "f1bc7d23f3f0083c6184e3e0ec5f750f",
+          "reason": "user role: support"
+        },
+        {
+          "trace_id": "56a406a319706af68b6ba4f8fb578d26",
+          "reason": "user role: support"
+        },
+        {
+          "trace_id": "deb9abecaeedfd02a18dddbcdf1f8e0f",
+          "reason": "user role: support"
+        },
+        {
+          "trace_id": "f4456f303f6af50b7008de284641e50e",
+          "reason": "user role: support"
+        },
+        {
+          "trace_id": "4c6fd4af8f69c59e0957704a32dc3200",
+          "reason": "user role: support"
+        },
+        {
+          "trace_id": "fc72683e2d1a689e7c1a4f0fc4ad1a58",
+          "reason": "user role: support"
+        },
+        {
+          "trace_id": "de2988295031e9bdf4dd48de787d855d",
+          "reason": "user role: support"
+        },
+        {
+          "trace_id": "5ad8843a265d6abac89bdb77126e0517",
+          "reason": "user role: support"
+        }
+      ]
     }
   ]
 }

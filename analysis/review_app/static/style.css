@@ -164,9 +164,13 @@ a { color: var(--tool-ink); }
 .blk.user .who { color: var(--customer-ink); }
 .blk.reply { border-left-color: var(--agent); }
 .blk.reply .who { color: var(--agent-ink); }
-.blk.note { border-left-color: var(--agent); background: var(--agent-tint); box-shadow: none; padding: 7px 14px; }
-.blk.note .who { color: var(--agent-ink); opacity: .8; }
-.blk.note .txt { font-style: italic; font-size: 14px; }
+/* Narration is internal: grey, dashed, and set apart from the pink reply so it
+   never reads as something the customer saw. */
+.blk.note { border: 1px dashed var(--muted); border-left: 4px dashed var(--muted); background: transparent; box-shadow: none; padding: 7px 14px; }
+.blk.note .who { color: var(--muted); cursor: help; }
+.blk.note .txt { font-style: italic; font-size: 14px; color: var(--muted); }
+.chip.unseen { background: transparent; color: var(--muted); border: 1px dashed var(--muted); font-weight: 700; margin-left: 6px; }
+.chip.seen { background: var(--agent-tint); color: var(--agent-ink); border: 1px solid var(--agent); font-weight: 700; margin-left: 6px; }
 .blk.tool { border-left-color: var(--tool); background: var(--tool-tint); box-shadow: none; overflow: hidden; }
 .scrollx { overflow-x: auto; max-width: 100%; }
 .kv .kv { margin-top: 0; }
