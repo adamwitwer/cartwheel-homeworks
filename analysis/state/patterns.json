@@ -3,8 +3,8 @@
     {
       "name": "policy_claim_without_citation",
       "status": "candidate",
-      "definition": "Fail if the reply states a fact or rule that comes from a policy document but does not name that policy's identifier. Pass if every policy-derived statement in the reply carries its policy id, or the reply makes no policy claim.",
-      "boundary": "Nearest: policy_answer_wrong_or_incomplete. This mode is about a missing citation on a claim that may be correct; a wrong or incomplete policy answer belongs there, even when it is also uncited. Also distinct from the course demo mode unsupported_policy_claim (a claim the retrieved policy does not support). Batch 2: a follow-up turn that restates a policy-derived deadline (0035 T2, 0069 T3) needs its own citation even when an earlier turn cited the policy. 0101 and 0115 answered with no lookup at all. Batch 3: a policy fact relayed from a tool result (\"5 to 10 business days\" from issue_refund in 0072 and 0078) still needs its policy id, and so does a later turn that restates it with no new tool call (0058 T2, as in 0035 T2).",
+      "definition": "Fail if the reply states a fact or rule that comes from a policy document but does not name that policy's valid identifier. Pass if every policy-derived statement in the reply carries its policy id, or the reply makes no policy claim.",
+      "boundary": "Nearest: policy_answer_wrong_or_incomplete. This mode is about a missing citation on a claim that may be correct; a wrong or incomplete policy answer belongs there, even when it is also uncited. Also distinct from the course demo mode unsupported_policy_claim (a claim the retrieved policy does not support). Batch 2: a follow-up turn that restates a policy-derived deadline (0035 T2, 0069 T3) needs its own citation even when an earlier turn cited the policy. 0101 and 0115 answered with no lookup at all. Batch 3: a policy fact relayed from a tool result (\"5 to 10 business days\" from issue_refund in 0072 and 0078) still needs its policy id, and so does a later turn that restates it with no new tool call (0058 T2, as in 0035 T2). Batch 4: naming a policy by its title (\"the Saltbox Pantry store policy\", 0123) is not a citation; citing an identifier that is not in the corpus (cw-orders, 0093) fails as if uncited.",
       "requirement_source": "RESP-1",
       "evaluator_type": "judge",
       "annotation_ids": [
@@ -20,7 +20,10 @@
         "ann-f40f162ee170",
         "ann-d0c8ab88bd8d",
         "ann-e4b6695a5d9d",
-        "ann-0c693b2f7db3"
+        "ann-0c693b2f7db3",
+        "ann-0ec2dd8d2f21",
+        "ann-03abf0000611",
+        "ann-38c9ee9f2733"
       ],
       "created_from": [
         "43c50cfec59bea06c63f44a635b130e4",
@@ -35,7 +38,10 @@
         "f45146c9566db303d67633e6c3c2598b",
         "61676a33b01d32e21ca65ecf7ed29907",
         "0f3f20ca9230d6d17700c14c5808466f",
-        "fc72683e2d1a689e7c1a4f0fc4ad1a58"
+        "fc72683e2d1a689e7c1a4f0fc4ad1a58",
+        "42885d350bd7de4811cf7b2ec9efd678",
+        "c3e31d5aa35971dbffc12cb8328cc41e",
+        "6ffa9ec5be810a5cf4ce5e4f5564f6cf"
       ],
       "example_trace_ids": [
         "43c50cfec59bea06c63f44a635b130e4",
@@ -50,7 +56,10 @@
         "f45146c9566db303d67633e6c3c2598b",
         "61676a33b01d32e21ca65ecf7ed29907",
         "0f3f20ca9230d6d17700c14c5808466f",
-        "fc72683e2d1a689e7c1a4f0fc4ad1a58"
+        "fc72683e2d1a689e7c1a4f0fc4ad1a58",
+        "42885d350bd7de4811cf7b2ec9efd678",
+        "c3e31d5aa35971dbffc12cb8328cc41e",
+        "6ffa9ec5be810a5cf4ce5e4f5564f6cf"
       ],
       "close_negative_trace_ids": [],
       "open_questions": [
@@ -70,6 +79,10 @@
         {
           "at": "2026-11-07",
           "change": "batch 3 axial pass: added 0252 T2, 0058 T2, and 0072 / 0078 (the reviewer recoded these two in the batch 3 consistency pass: a policy fact relayed from a tool result also needs a citation)"
+        },
+        {
+          "at": "2026-11-07",
+          "change": "batch 4 axial pass: added 0123 (policy named by title, not id), 0036 T2 (follow-up restating the last return day), 0093 (cited cw-orders, which does not exist); definition widened to a valid policy id"
         }
       ]
     },
@@ -88,7 +101,8 @@
         "ann-75e80af7f0bd",
         "ann-b48fdea194ad",
         "ann-830a9daa15a0",
-        "ann-fd884863041d"
+        "ann-fd884863041d",
+        "ann-0914092fa040"
       ],
       "created_from": [
         "e8d3b9542d8ab0f263202381466675ff",
@@ -98,7 +112,8 @@
         "ff678a62ab67c3ebd2a8a688f523efb3",
         "b6af25aade6c487c3fb59867d35aa18b",
         "12c6d426477de81b6436e98d083139f4",
-        "69c567ec5582d52479790903e8d0e546"
+        "69c567ec5582d52479790903e8d0e546",
+        "8c5c1c8fe004a19964c639d0579847c5"
       ],
       "example_trace_ids": [
         "e8d3b9542d8ab0f263202381466675ff",
@@ -108,7 +123,8 @@
         "ff678a62ab67c3ebd2a8a688f523efb3",
         "b6af25aade6c487c3fb59867d35aa18b",
         "12c6d426477de81b6436e98d083139f4",
-        "69c567ec5582d52479790903e8d0e546"
+        "69c567ec5582d52479790903e8d0e546",
+        "8c5c1c8fe004a19964c639d0579847c5"
       ],
       "close_negative_trace_ids": [],
       "open_questions": [
@@ -128,34 +144,41 @@
         {
           "at": "2026-11-07",
           "change": "batch 3 axial pass: added 0118, 0245, 0199 T2; definition widened to include a rule or term the policies do not contain"
+        },
+        {
+          "at": "2026-11-07",
+          "change": "batch 4 axial pass: added 0029 T2 (said there are no shipping timelines; cw-shipping says stores ship within 3 days)"
         }
       ]
     },
     {
       "name": "reply_contradicts_tool_result",
       "status": "candidate",
-      "definition": "Fail if the reply asserts something about an order or record (for example that the user never bought an item) that the tool results in the same turn contradict or cannot support. Pass if every factual statement about records is supported by a tool result or framed as uncertain with a follow-up question.",
-      "boundary": "Nearest: inconsistent_record_not_escalated, where the record itself is damaged; here the record is fine and the agent misreads it. In 0013 and 0046 list_my_orders returned only ids, and the matching order was present. Close negative 0235 T1: the tool results lacked product names, and the agent asked which item rather than guessing; the answer key expects that.",
+      "definition": "Fail if the reply asserts something about an order or record (for example that the user never bought an item) that the tool results in the same turn contradict or cannot support. Pass if every factual statement about records is supported by a tool result or framed as uncertain with a follow-up question. Tool results from earlier turns of the same session count (0222 T2).",
+      "boundary": "Nearest: inconsistent_record_not_escalated, where the record itself is damaged; here the record is fine and the agent misreads it. In 0013 and 0046 list_my_orders returned only ids, and the matching order was present. Close negative 0235 T1: the tool results lacked product names, and the agent asked which item rather than guessing; the answer key expects that. 0222 T2 is the weakest positive: the reply never states that no ticket exists, but offers to \"assist in the escalation process\" if the merchant confirms ownership, without mentioning ticket 159.",
       "requirement_source": "RESP-3",
       "evaluator_type": "judge",
       "annotation_ids": [
         "ann-8206b0e4a9a9",
-        "ann-1c8a89a0bea4"
+        "ann-1c8a89a0bea4",
+        "ann-a23bc5c22a89"
       ],
       "created_from": [
         "9694536a168980fe6574e8ca26ee3e4e",
-        "fc33e97b9c1ca69d872b573c497b4ecb"
+        "fc33e97b9c1ca69d872b573c497b4ecb",
+        "4634a3e9a4b1e9e62f4b6fc3e6b85056"
       ],
       "example_trace_ids": [
         "9694536a168980fe6574e8ca26ee3e4e",
-        "fc33e97b9c1ca69d872b573c497b4ecb"
+        "fc33e97b9c1ca69d872b573c497b4ecb",
+        "4634a3e9a4b1e9e62f4b6fc3e6b85056"
       ],
       "close_negative_trace_ids": [
         "70fe665bffbb408f92d8fc5bca273ba5"
       ],
       "open_questions": [
         "Only 2 positives so far; batch 3 should search for more.",
-        "Still 2 positives; Part D needs 3. Target for the Part D suggestion search."
+        "3 positives after batch 4, one of them (0222 T2) borderline. Still a target for the Part D suggestion search."
       ],
       "history": [
         {
@@ -169,6 +192,10 @@
         {
           "at": "2026-11-07",
           "change": "batch 3 axial pass: no new positives; 0235 T1 added as a close negative"
+        },
+        {
+          "at": "2026-11-07",
+          "change": "batch 4 axial pass: added 0222 T2 (implies an escalation is still pending after escalate_to_human returned ticket 159 in turn 1); definition widened to tool results from earlier turns of the same session"
         }
       ]
     },
@@ -176,7 +203,7 @@
       "name": "inconsistent_record_not_escalated",
       "status": "candidate",
       "definition": "Fail if a tool result shows an inconsistent or damaged order or product record (for example a product from another store, a shipment date after the delivery date, or a negative price) and the reply presents it as valid, neither stating the inconsistency nor escalating. Pass if the reply states the inconsistency and escalates or tells the caller how it will be handled.",
-      "boundary": "Nearest: reply_contradicts_tool_result. Close negative 0185: the delivery date was missing, the agent said so to a support-staff caller, and the reviewer judged no failure. Close negative 0183: the agent escalated a missing delivery date but did not say why in the reply; that gap is coded under reply_omits_decision_basis. Close negatives 0179 (escalated the inconsistent record but did not say why: coded under reply_omits_decision_basis) and 0199 T2 (did not present the bad record as valid; its failure is an invented rule).",
+      "boundary": "Nearest: reply_contradicts_tool_result. Close negative 0185: the delivery date was missing, the agent said so to a support-staff caller, and the reviewer judged no failure. Close negative 0183: the agent escalated a missing delivery date but did not say why in the reply; that gap is coded under reply_omits_decision_basis. Close negatives 0179 (escalated the inconsistent record but did not say why: coded under reply_omits_decision_basis) and 0199 T2 (did not present the bad record as valid; its failure is an invented rule). 0200: turn 1 called the price erroneous, but turn 2 hedged (\"it would be wise to verify it\") and only offered escalation; the follow-up is judged on its own reply.",
       "requirement_source": "ESC-4; RESP-3",
       "evaluator_type": "judge",
       "annotation_ids": [
@@ -185,7 +212,8 @@
         "ann-5622ffb7e9db",
         "ann-4ad028195bd0",
         "ann-9cfcb4792b13",
-        "ann-98abbfbe3b43"
+        "ann-98abbfbe3b43",
+        "ann-fe15527f92e2"
       ],
       "created_from": [
         "e3f63bf72d5bd4a9deb35a8817614eaa",
@@ -193,7 +221,8 @@
         "deb9abecaeedfd02a18dddbcdf1f8e0f",
         "75c01f179ea7625e4a23ebaca3d05663",
         "adb0e929e22ecbc2c0b3aa0d85c19b7c",
-        "1f021bcb21235b1f2c427c33f4d07cc6"
+        "1f021bcb21235b1f2c427c33f4d07cc6",
+        "5472e867fcab1dc1e1e8d4e0ecdca80e"
       ],
       "example_trace_ids": [
         "e3f63bf72d5bd4a9deb35a8817614eaa",
@@ -201,7 +230,8 @@
         "deb9abecaeedfd02a18dddbcdf1f8e0f",
         "75c01f179ea7625e4a23ebaca3d05663",
         "adb0e929e22ecbc2c0b3aa0d85c19b7c",
-        "1f021bcb21235b1f2c427c33f4d07cc6"
+        "1f021bcb21235b1f2c427c33f4d07cc6",
+        "5472e867fcab1dc1e1e8d4e0ecdca80e"
       ],
       "close_negative_trace_ids": [
         "17ea8c45e6a430b65b8c93249fcfd6dd",
@@ -225,6 +255,10 @@
         {
           "at": "2026-11-07",
           "change": "batch 3 axial pass: added 0196 (negative price), 0181, 0189 (store mismatch); 0179 and 0199 T2 recorded as close negatives"
+        },
+        {
+          "at": "2026-11-07",
+          "change": "batch 4 axial pass: added 0200 T2 (follow-up treats a negative price as possibly valid)"
         }
       ]
     },
@@ -331,7 +365,7 @@
       "name": "asks_instead_of_acting",
       "status": "candidate",
       "definition": "Fail if the agent has what it needs for an action that policy or the instructions require (an eligible refund at or below the threshold, an escalation that must go to a human) and instead asks the user to confirm or offers to do it, so the action has not happened by the end of the session. Pass if the agent takes the action, or asks only for information the action genuinely needs and the user has not given.",
-      "boundary": "Close negatives 0072 and 0078: the caller stated the amount and the reason, and the agent issued the refund directly. 0243 never gave a reason and issue_refund requires one, so asking for the reason is allowed; asking to confirm the amount is not. In 0158 and 0163 the agent offered to escalate an account change every turn and never opened a ticket, against ESC-2 and the system prompt's \"call escalate_to_human\". Close negative 0252 T1: an account change escalated in the same turn with no confirmation step.",
+      "boundary": "Close negatives 0072 and 0078: the caller stated the amount and the reason, and the agent issued the refund directly. 0243 never gave a reason and issue_refund requires one, so asking for the reason is allowed; asking to confirm the amount is not. In 0158 and 0163 the agent offered to escalate an account change every turn and never opened a ticket, against ESC-2 and the system prompt's \"call escalate_to_human\". Close negative 0252 T1: an account change escalated in the same turn with no confirmation step. Close negative 0248: the customer wanted \"some money back\" without an amount, so asking how much is information the action genuinely needs (the answer key expects it); the order total in the tool result is not the requested amount.",
       "requirement_source": "ESC-2; cw-refunds (refunds of $100 or less execute automatically once the order passes the eligibility check); system prompt escalation rule; ESC-3",
       "evaluator_type": "judge",
       "annotation_ids": [
@@ -339,26 +373,33 @@
         "ann-a831b4c4e951",
         "ann-e8fa67f1f433",
         "ann-df30c2db57cc",
-        "ann-ec7958276b45"
+        "ann-ec7958276b45",
+        "ann-200afa8f0f51",
+        "ann-8672b8491f64"
       ],
       "created_from": [
         "7bbb597094e39581861fe1e8b811a8f3",
         "8959b008bd935394309428a97ff7b250",
         "d36f704edd72d988d071539132f47f35",
         "22f360e5b003b63674398fdc026b956c",
-        "1bb70a6b4c14b56133f2e9e5358f6974"
+        "1bb70a6b4c14b56133f2e9e5358f6974",
+        "7c32f0f133e3881b673eb671de56ebc0",
+        "93e22132d41ccc884fca8148c3e6d510"
       ],
       "example_trace_ids": [
         "7bbb597094e39581861fe1e8b811a8f3",
         "8959b008bd935394309428a97ff7b250",
         "d36f704edd72d988d071539132f47f35",
         "22f360e5b003b63674398fdc026b956c",
-        "1bb70a6b4c14b56133f2e9e5358f6974"
+        "1bb70a6b4c14b56133f2e9e5358f6974",
+        "7c32f0f133e3881b673eb671de56ebc0",
+        "93e22132d41ccc884fca8148c3e6d510"
       ],
       "close_negative_trace_ids": [
         "0f3f20ca9230d6d17700c14c5808466f",
         "fc72683e2d1a689e7c1a4f0fc4ad1a58",
-        "e0344bd08646abc2d9c43b9040323e2f"
+        "e0344bd08646abc2d9c43b9040323e2f",
+        "3ad8eaa00c6aa47b0a101954faca4549"
       ],
       "open_questions": [
         "Spec tension: cw-account-security says account changes happen only through account settings, while ESC-2 and cw-escalations send them to a human. Record in review_summary.md.",
@@ -373,6 +414,10 @@
         {
           "at": "2026-11-07",
           "change": "batch 3 axial pass: added 0180 T3 (asked before escalating a dispute, ESC-3); 0252 T1 recorded as a close negative"
+        },
+        {
+          "at": "2026-11-07",
+          "change": "batch 4 axial pass: added 0180 T2 and 0251 T2 (offered escalation, never escalated); 0248 recorded as a close negative"
         }
       ]
     },
@@ -485,6 +530,41 @@
         {
           "at": "2026-11-07",
           "change": "drafted from batch 3 axial coding; grouping previewed to and accepted by the reviewer"
+        }
+      ]
+    },
+    {
+      "name": "unrequested_refund_status_volunteered",
+      "status": "candidate",
+      "definition": "Fail if the caller did not ask about refunds or returns and the reply volunteers the order's refund eligibility (for example \"it is not eligible for a refund at this time\"). Pass if the reply answers only what was asked, or the caller asked about refunds or returns.",
+      "boundary": "Order-status questions (0026, 0229 T1, 0229 T2): the reply repeats get_order's or find_order's refund_eligible flag. On a shipped order (0229 T2) the line can mislead, since the return window has not started. Nearest: policy_answer_wrong_or_incomplete (a wrong answer to a question that was asked).",
+      "requirement_source": "RESP-5 (direct language that explains the relevant decision); reviewer's mapping, 2026-11-07",
+      "evaluator_type": "judge",
+      "annotation_ids": [
+        "ann-4c4646777f22",
+        "ann-f512a02df694",
+        "ann-f03ac6f968a0"
+      ],
+      "created_from": [
+        "1ebe6703c7a3e6c3894e7e201764a83f",
+        "0ac58189d7a7b225628a6d36eb7924aa",
+        "19fffb711c9fcbfcedddbf7824031071"
+      ],
+      "example_trace_ids": [
+        "1ebe6703c7a3e6c3894e7e201764a83f",
+        "0ac58189d7a7b225628a6d36eb7924aa",
+        "19fffb711c9fcbfcedddbf7824031071"
+      ],
+      "close_negative_trace_ids": [],
+      "open_questions": [
+        "RESP-5 is a loose fit; Part D decides whether this stays a mode or a note.",
+        "Likely common (also seen in unsampled 0029 T1 and 0230 T2); the Part D search can measure it.",
+        "0229 T1 was recoded from no failure in batch 4's consistency pass."
+      ],
+      "history": [
+        {
+          "at": "2026-11-07",
+          "change": "drafted from batch 4 coding (0229 T1, 0229 T2, 0026); reviewer chose RESP-5 and candidate status"
         }
       ]
     }

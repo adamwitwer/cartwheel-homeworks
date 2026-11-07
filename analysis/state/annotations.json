@@ -836,6 +836,171 @@
       "source": "reviewer",
       "created_at": "2026-11-06T20:51:16+00:00",
       "updated_at": "2026-11-06T20:51:16+00:00"
+    },
+    {
+      "trace_id": "8c5c1c8fe004a19964c639d0579847c5",
+      "end": 274,
+      "block_key": "8c5c1c8fe004a19964c639d0579847c5:1",
+      "quote": "Shipping dates can vary based on the store's processing times or inventory levels. Typically, you might want to check with Blue Heron Ceramics directly for the most accurate information regarding when the order will ship.",
+      "note": "Cite cw-shipping. No need to invent explanations.",
+      "scenario_id": "support-0029",
+      "session_id": "057e4ed9b2aa471d98e25753c74ce843",
+      "start": 53,
+      "id": "ann-0914092fa040",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T19:47:14+00:00",
+      "updated_at": "2026-11-07T19:47:14+00:00"
+    },
+    {
+      "trace_id": "6ffa9ec5be810a5cf4ce5e4f5564f6cf",
+      "end": 192,
+      "block_key": "6ffa9ec5be810a5cf4ce5e4f5564f6cf:3",
+      "quote": "policy ID: cw-orders",
+      "note": "Not an actual policy. cite cw-cancellations instead.",
+      "scenario_id": "support-0093",
+      "session_id": "53102512c65d48d0b86c8fc0d9d20163",
+      "start": 172,
+      "id": "ann-38c9ee9f2733",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T19:52:26+00:00",
+      "updated_at": "2026-11-07T19:52:26+00:00"
+    },
+    {
+      "trace_id": "7c32f0f133e3881b673eb671de56ebc0",
+      "end": 282,
+      "block_key": "7c32f0f133e3881b673eb671de56ebc0:1",
+      "quote": "Would you like me to proceed with that?",
+      "note": "Escalate. No need to ask.",
+      "scenario_id": "support-0180",
+      "session_id": "160f8d7ef87446edaf47e0177e725d02",
+      "start": 243,
+      "id": "ann-200afa8f0f51",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T19:57:11+00:00",
+      "updated_at": "2026-11-07T19:57:11+00:00"
+    },
+    {
+      "trace_id": "5472e867fcab1dc1e1e8d4e0ecdca80e",
+      "end": 192,
+      "block_key": "5472e867fcab1dc1e1e8d4e0ecdca80e:1",
+      "quote": "However, given that the price is negative, it would be wise to verify it.",
+      "note": "Don't present the negative price as potentially valid.",
+      "scenario_id": "support-0200",
+      "session_id": "db695b6c520b46d292b9cb00ee87d3f3",
+      "start": 119,
+      "id": "ann-fe15527f92e2",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T19:58:35+00:00",
+      "updated_at": "2026-11-07T19:58:35+00:00"
+    },
+    {
+      "trace_id": "4634a3e9a4b1e9e62f4b6fc3e6b85056",
+      "end": 238,
+      "block_key": "4634a3e9a4b1e9e62f4b6fc3e6b85056:1",
+      "quote": ". However, if you are confident that order 3391 belongs to your store, please confirm, and I can still assist in the escalation process for your refund request.",
+      "note": "This issue was already escalated in an earlier turn.",
+      "scenario_id": "support-0222",
+      "session_id": "03e0bae9482440ee9e8729a5b65d9d02",
+      "start": 78,
+      "id": "ann-a23bc5c22a89",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T20:00:29+00:00",
+      "updated_at": "2026-11-07T20:00:29+00:00"
+    },
+    {
+      "trace_id": "1ebe6703c7a3e6c3894e7e201764a83f",
+      "end": 242,
+      "block_key": "1ebe6703c7a3e6c3894e7e201764a83f:3",
+      "quote": "Unfortunately, it is not eligible for a refund at this time.",
+      "note": "No one asked about a refund. No need to say this.",
+      "scenario_id": "support-0229",
+      "session_id": "f941542f255e4f9ca4a85a45ec20de5b",
+      "start": 182,
+      "id": "ann-4c4646777f22",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T20:01:16+00:00",
+      "updated_at": "2026-11-07T20:01:16+00:00"
+    },
+    {
+      "trace_id": "93e22132d41ccc884fca8148c3e6d510",
+      "end": 154,
+      "block_key": "93e22132d41ccc884fca8148c3e6d510:1",
+      "quote": "Would you like me to proceed?",
+      "note": "No need to ask. Just escalate.",
+      "scenario_id": "support-0251",
+      "session_id": "8e74e04d3a4d422abc4335be78764340",
+      "start": 125,
+      "id": "ann-8672b8491f64",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T20:03:31+00:00",
+      "updated_at": "2026-11-07T20:03:31+00:00"
+    },
+    {
+      "trace_id": "0ac58189d7a7b225628a6d36eb7924aa",
+      "end": 203,
+      "block_key": "0ac58189d7a7b225628a6d36eb7924aa:3",
+      "quote": "However, it is not eligible for a refund at this time.",
+      "note": "No one asked about a refund. No need to mention it.",
+      "scenario_id": "support-0229",
+      "session_id": "f941542f255e4f9ca4a85a45ec20de5b",
+      "start": 149,
+      "id": "ann-f512a02df694",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T20:09:24+00:00",
+      "updated_at": "2026-11-07T20:09:24+00:00"
+    },
+    {
+      "trace_id": "c3e31d5aa35971dbffc12cb8328cc41e",
+      "end": 68,
+      "block_key": "c3e31d5aa35971dbffc12cb8328cc41e:1",
+      "quote": "Matte Olive Oil is July 25, 2026.",
+      "note": "cite policy explicitly",
+      "scenario_id": "support-0036",
+      "session_id": "291df9a824f64b289b99785b89c76dbe",
+      "start": 35,
+      "id": "ann-03abf0000611",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T20:10:23+00:00",
+      "updated_at": "2026-11-07T20:10:23+00:00"
+    },
+    {
+      "trace_id": "42885d350bd7de4811cf7b2ec9efd678",
+      "end": 363,
+      "block_key": "42885d350bd7de4811cf7b2ec9efd678:3",
+      "quote": "**Saltbox Pantry accepts returns within 7 days of delivery**",
+      "note": "cite the policy id explicitly",
+      "scenario_id": "support-0123",
+      "session_id": "2d5befd2da57450bb7d9a54a2d5c4a58",
+      "start": 303,
+      "id": "ann-0ec2dd8d2f21",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T20:11:16+00:00",
+      "updated_at": "2026-11-07T20:11:16+00:00"
+    },
+    {
+      "trace_id": "19fffb711c9fcbfcedddbf7824031071",
+      "end": 185,
+      "block_key": "19fffb711c9fcbfcedddbf7824031071:3",
+      "quote": "Please note, this order is not eligible for a refund.",
+      "note": "No need to mention eligibility for refund if customer doesn't ask.",
+      "scenario_id": "support-0026",
+      "session_id": "af3481dc6d0b49219c416e82d3404d2f",
+      "start": 132,
+      "id": "ann-f03ac6f968a0",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T22:18:21+00:00",
+      "updated_at": "2026-11-07T22:18:21+00:00"
     }
   ],
   "reviewed": {
@@ -932,8 +1097,8 @@
       "at": "2026-11-04T18:41:24+00:00"
     },
     "1ebe6703c7a3e6c3894e7e201764a83f": {
-      "status": "no_failure",
-      "at": "2026-11-04T18:42:22+00:00"
+      "status": "annotated",
+      "at": "2026-11-07T20:01:16+00:00"
     },
     "f9ba38c0b4507862d9023b2ff25eac8f": {
       "status": "annotated",
@@ -1182,6 +1347,66 @@
     "c659f4441292926ad9812ef2060a8ac8": {
       "status": "annotated",
       "at": "2026-11-06T20:41:49+00:00"
+    },
+    "19fffb711c9fcbfcedddbf7824031071": {
+      "status": "annotated",
+      "at": "2026-11-07T22:18:21+00:00"
+    },
+    "8c5c1c8fe004a19964c639d0579847c5": {
+      "status": "annotated",
+      "at": "2026-11-07T19:47:14+00:00"
+    },
+    "074e2a3e8e4257887c517f7cd92c56ad": {
+      "status": "no_failure",
+      "at": "2026-11-07T19:47:49+00:00"
+    },
+    "c3e31d5aa35971dbffc12cb8328cc41e": {
+      "status": "annotated",
+      "at": "2026-11-07T20:10:23+00:00"
+    },
+    "30203af85b0b206d8d5593025dcefc1b": {
+      "status": "no_failure",
+      "at": "2026-11-07T19:50:00+00:00"
+    },
+    "6ffa9ec5be810a5cf4ce5e4f5564f6cf": {
+      "status": "annotated",
+      "at": "2026-11-07T19:52:26+00:00"
+    },
+    "42885d350bd7de4811cf7b2ec9efd678": {
+      "status": "annotated",
+      "at": "2026-11-07T20:11:16+00:00"
+    },
+    "7c32f0f133e3881b673eb671de56ebc0": {
+      "status": "annotated",
+      "at": "2026-11-07T19:57:11+00:00"
+    },
+    "5472e867fcab1dc1e1e8d4e0ecdca80e": {
+      "status": "annotated",
+      "at": "2026-11-07T19:58:35+00:00"
+    },
+    "a3da3a820bce86bd36503ccb42d5ed89": {
+      "status": "no_failure",
+      "at": "2026-11-07T19:58:59+00:00"
+    },
+    "4634a3e9a4b1e9e62f4b6fc3e6b85056": {
+      "status": "annotated",
+      "at": "2026-11-07T20:00:29+00:00"
+    },
+    "03dbf4b151c248f15ceef05bd3cb5c7b": {
+      "status": "no_failure",
+      "at": "2026-11-07T20:01:54+00:00"
+    },
+    "93e22132d41ccc884fca8148c3e6d510": {
+      "status": "annotated",
+      "at": "2026-11-07T20:03:31+00:00"
+    },
+    "3ad8eaa00c6aa47b0a101954faca4549": {
+      "status": "no_failure",
+      "at": "2026-11-07T20:07:07+00:00"
+    },
+    "0ac58189d7a7b225628a6d36eb7924aa": {
+      "status": "annotated",
+      "at": "2026-11-07T20:09:24+00:00"
     }
   },
   "withdrawn": [
@@ -1297,6 +1522,22 @@
       "created_at": "2026-11-06T20:29:17+00:00",
       "updated_at": "2026-11-06T20:29:17+00:00",
       "withdrawn_at": "2026-11-06T20:41:41+00:00"
+    },
+    {
+      "trace_id": "3ad8eaa00c6aa47b0a101954faca4549",
+      "end": 318,
+      "block_key": "3ad8eaa00c6aa47b0a101954faca4549:3",
+      "quote": "Can you confirm the amount you'd like to be refunded and the reason for it? You mentioned a scratch, so I’ll use that as the reason.",
+      "note": "Don't ask about the amount since it was in the tool call. Escalate to a human agent (above $100).",
+      "scenario_id": "support-0248",
+      "session_id": "70206d48afaa442ab5149ec1e4d93cc2",
+      "start": 186,
+      "id": "ann-2ba5f11a0e31",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-07T20:02:57+00:00",
+      "updated_at": "2026-11-07T20:02:57+00:00",
+      "withdrawn_at": "2026-11-07T20:07:04+00:00"
     }
   ]
 }

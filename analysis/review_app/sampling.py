@@ -16,10 +16,15 @@ matches the situation in which a mode could occur (for example a product
 search that returned as many results as its limit), not the failure, so the
 results include close negatives. See QUERIES_B3.
 
+Batch 4: 15 uniform random traces from those not in any earlier batch, as a
+stability check: the reviewer codes them blind to the modes, and notes that
+fit no candidate mode show whether the mode list is complete.
+
     uv run python -m analysis.review_app.sampling                     # batch 1 dry run
     uv run python -m analysis.review_app.sampling --batch 2           # batch 2 dry run
     uv run python -m analysis.review_app.sampling --batch 2 --write   # save batch 2
     uv run python -m analysis.review_app.sampling --batch 3           # batch 3 dry run
+    uv run python -m analysis.review_app.sampling --batch 4 --write   # save batch 4
 """
 
 from __future__ import annotations
@@ -358,15 +363,54 @@ def batch3(write: bool) -> None:
     print("\nwrote b3-depth to sample_manifest.json")
 
 
+# ------------------------------------------------------------------ batch 4
+SEED_B4 = 20261106
+N_B4 = 15
+
+
+def batch4(write: bool) -> None:
+    rows, _tools = turn_rows()
+    doc = store.read_doc("sample_manifest.json")
+    others = [b for b in doc.get("batches", []) if b.get("batch") != 4]
+    exclude = {t["trace_id"] for b in others for t in b.get("traces", [])}
+    pool = sorted((r for r in rows if r["trace_id"] not in exclude), key=lambda r: r["trace_id"])
+    picks = random.Random(SEED_B4).sample(pool, N_B4)
+    print(f"pool after excluding {len(exclude)} traces in other batches: {len(pool)} (seed {SEED_B4})\n")
+    for r in sorted(picks, key=label):
+        print(f"  {label(r):<22} {r['role']:<9} {' + '.join(r['tools']) or 'no tools'}")
+    chosen = {r["trace_id"] for r in picks}
+    print(f"\ntotal {len(picks)}; distinct {len(chosen)}; overlap with other batches: {len(chosen & exclude)}; "
+          f"distinct across all batches: {len(chosen | exclude)}")
+    print("roles: " + ", ".join(f"{k} {v}" for k, v in Counter(r["role"] for r in picks).items()))
+    if not write:
+        print("\ndry run: nothing written (pass --write to save)")
+        return
+    entry = {
+        "id": "b4-uniform", "part": "B", "batch": 4,
+        "method": "uniform random over traces not in an earlier batch, sorted by trace id; stability check "
+                  "coded blind to the candidate modes",
+        "seed": SEED_B4, "pool": POOL, "pool_size_after_exclusion": len(pool),
+        "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "traces": [{"trace_id": r["trace_id"], "reason": "uniform random pick (stability check)"} for r in picks],
+    }
+    with store.LOCK:
+        doc = store.read_doc("sample_manifest.json")
+        doc["batches"] = [b for b in doc.get("batches", []) if b.get("batch") != 4] + [entry]
+        store.write_doc("sample_manifest.json", doc)
+    print("\nwrote b4-uniform to sample_manifest.json")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--batch", type=int, choices=(1, 2, 3), default=1)
+    ap.add_argument("--batch", type=int, choices=(1, 2, 3, 4), default=1)
     ap.add_argument("--write", action="store_true", help="save the batch to sample_manifest.json")
     args = ap.parse_args()
     if args.batch == 2:
         return batch2(args.write)
     if args.batch == 3:
         return batch3(args.write)
+    if args.batch == 4:
+        return batch4(args.write)
 
     rows, tools = turn_rows()
     uniform, clusters, reps = select(rows)

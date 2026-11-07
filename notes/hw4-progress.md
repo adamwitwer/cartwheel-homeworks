@@ -167,14 +167,44 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
   each: `store_id_passed_as_store_name` (0140; also seen in 0191 T1 and 0199 T1, which are unsampled turns;
   code check) and `required_escalation_not_made` (0175; 0206 also never queued its refund).
   Ten is over the 5–8 limit: Part D merges or drops.
-- **Next step:** draw batch 4 (15 uniform, stability check), then open code it.
+- **Batch 4 drawn (2026-11-07):** `sampling.py --batch 4` wrote `b4-uniform` (15, seed
+  20261106, uniform over the 271 traces not in an earlier batch, sorted by trace id). 100
+  distinct traces across batches 1–4. Picks: 0026, 0029 T2, 0034, 0036 T2, 0051 T2, 0093,
+  0123, 0180 T2, 0200 T2, 0207, 0222 T2, 0229 T2, 0230, 0248, 0251 T2 (T1 unless noted);
+  shopper 9, merchant 3, support 3. 0180 T2 and 0229 T2 share conversations with 0180 T3
+  (b3) and 0229 T1 (b1).
+- **Batch 4 open coding done (2026-11-07):** 15/15 reviewed; 10 notes, 5 "no failure
+  observed" (0051 T2, 0207, 0230, 0034, 0248). After Claude's check I made a second pass: added 0123 (policy named by title,
+  not id), 0036 T2 (follow-up restating the last day, uncited), 0229 T2 and 0026
+  (volunteered "not eligible for a refund" when nobody asked); withdrew 0248 (the customer
+  wanted "some money back" with no amount, so asking how much was right, as the answer key
+  expects). Recoded batch 1's **0229 T1** from no failure to the same unrequested-refund note.
+- **Stability (batch 4):** of 10 notes, 7 fit existing modes; 0222 T2 fits only after
+  widening `reply_contradicts_tool_result` to earlier turns; 0229 T1/T2 and 0026 form one
+  new pattern. No large new pattern appeared, so the mode list is close to saturated.
+- **Axial coding, batch 4 (2026-11-07):** 11 `candidate` modes, every live note in one
+  (positives / close negatives): `policy_claim_without_citation` 16/0 (+0123, 0036 T2, 0093;
+  now requires a *valid* id; a title is not a citation), `policy_answer_wrong_or_incomplete`
+  9/0 (+0029 T2), `reply_contradicts_tool_result` 3/1 (+0222 T2, borderline; widened to tool
+  results from earlier turns), `inconsistent_record_not_escalated` 7/4 (+0200 T2),
+  `same_title_listing_not_distinguished` 4/1, `truncated_search_presented_as_complete` 7/0,
+  `asks_instead_of_acting` 7/4 (+0180 T2, 0251 T2; close negative 0248),
+  `reply_omits_decision_basis` 8/0, `store_id_passed_as_store_name` 1/0,
+  `required_escalation_not_made` 1/0, and new `unrequested_refund_status_volunteered` 3/0
+  (0229 T1, 0229 T2, 0026; RESP-5 by my mapping, a loose fit).
+- **Next step:** Part D: cut 11 candidates to 5–8 final modes (merge, drop, or keep), find 3
+  close negatives per mode where possible, run the suggestion search (at least one rejected
+  suggestion), compare with AgentDebug, and record one revision.
 - Restart the app after pulling code changes:
   `uv run python -m analysis.review_app.server` (port 8030).
 - **Still to write later:** `analysis/report/interface_comparison.md` (candidates: kept
   the reference's margin notes and tool call/result grouping; changed to session grouping
   plus the context drawer; limitation: labels need Langfuse unless `--local-labels`).
-- **Open decisions:**
-  - Part C (Raindrop Workshop) is optional: decide after Part B.
+- **Part C skipped (2026-11-07):** the taxonomy was close to saturated after batch 4; Part D's
+  search finds missed instances in traces I can label; fresh runs would land in the Air's
+  Langfuse under the same `support-` scenario ids and mix into the review pool; and the
+  video's 5 minutes are already full. No `workshop_notes.md`; no Workshop item in the video.
+  Possible later, after submission, on a branch with Langfuse off.
 - **Baseline tests (2026-11-02, before any HW4 code):** 160 passed, 1 failed, 4 skipped,
   18 xfailed, 9 xpassed. The failure,
   `test_m2_run_judge_persists_store_predictions_for_prevalence`, passes alone and fails
@@ -230,9 +260,9 @@ Part B, review at least 100 distinct traces (no trace in two batches)
 - [ ] Axial coding after each batch; original open codes kept in the history
 
 Part C, Raindrop Workshop (optional)
-- [ ] Decide whether to do it
-- [ ] If yes: 5-10 runs inspected; `analysis/report/workshop_notes.md` with run ids,
-  candidate failures, one uncertain case; accept/revise/reject for each suggestion used
+- [x] Decide whether to do it: skipped (2026-11-07)
+- [ ] ~~If yes: 5-10 runs inspected; `analysis/report/workshop_notes.md` with run ids,
+  candidate failures, one uncertain case; accept/revise/reject for each suggestion used~~
 
 Part D, taxonomy
 - [ ] 5-8 binary modes, each with: snake_case name, binary definition, 3+ positives,
@@ -261,7 +291,7 @@ Files to commit
 - [ ] One label file per final mode under `analysis/state/labels/`
 - [ ] `analysis/report/review_summary.md`: sample size and composition, new modes in the
   final 15, one taxonomy revision, the annotation behind any SPEC.md revision
-- [ ] `analysis/report/workshop_notes.md` (only if Part C)
+- [x] ~~`analysis/report/workshop_notes.md`~~ (not needed: Part C skipped)
 - [ ] `analysis/report/interface_comparison.md`
 - [ ] Any `SPEC.md` revision
 

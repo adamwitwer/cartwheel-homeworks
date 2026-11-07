@@ -489,6 +489,78 @@
           "reason": "depth search Q7: policy question or store-specific policy"
         }
       ]
+    },
+    {
+      "id": "b4-uniform",
+      "part": "B",
+      "batch": 4,
+      "method": "uniform random over traces not in an earlier batch, sorted by trace id; stability check coded blind to the candidate modes",
+      "seed": 20261106,
+      "pool": "final-run traces (support- scenarios), one trace per turn",
+      "pool_size_after_exclusion": 271,
+      "created": "2026-11-07T19:35:30+00:00",
+      "traces": [
+        {
+          "trace_id": "19fffb711c9fcbfcedddbf7824031071",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "30203af85b0b206d8d5593025dcefc1b",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "42885d350bd7de4811cf7b2ec9efd678",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "7c32f0f133e3881b673eb671de56ebc0",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "03dbf4b151c248f15ceef05bd3cb5c7b",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "a3da3a820bce86bd36503ccb42d5ed89",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "c3e31d5aa35971dbffc12cb8328cc41e",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "93e22132d41ccc884fca8148c3e6d510",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "074e2a3e8e4257887c517f7cd92c56ad",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "0ac58189d7a7b225628a6d36eb7924aa",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "3ad8eaa00c6aa47b0a101954faca4549",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "6ffa9ec5be810a5cf4ce5e4f5564f6cf",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "8c5c1c8fe004a19964c639d0579847c5",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "4634a3e9a4b1e9e62f4b6fc3e6b85056",
+          "reason": "uniform random pick (stability check)"
+        },
+        {
+          "trace_id": "5472e867fcab1dc1e1e8d4e0ecdca80e",
+          "reason": "uniform random pick (stability check)"
+        }
+      ]
     }
   ]
 }
