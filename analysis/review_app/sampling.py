@@ -11,9 +11,15 @@ chosen as the dimension before any batch 1 trace was read.
 Neither batch reads outcomes, the answer key, the scenario group, modes, or
 citation flags, so no trace is chosen because something predicts it fails.
 
+Batch 3: 25 traces from depth searches for the candidate modes. Each query
+matches the situation in which a mode could occur (for example a product
+search that returned as many results as its limit), not the failure, so the
+results include close negatives. See QUERIES_B3.
+
     uv run python -m analysis.review_app.sampling                     # batch 1 dry run
     uv run python -m analysis.review_app.sampling --batch 2           # batch 2 dry run
     uv run python -m analysis.review_app.sampling --batch 2 --write   # save batch 2
+    uv run python -m analysis.review_app.sampling --batch 3           # batch 3 dry run
 """
 
 from __future__ import annotations
@@ -198,13 +204,169 @@ def batch2(write: bool) -> None:
     print("\nwrote b2-role to sample_manifest.json")
 
 
+# ------------------------------------------------------------------ batch 3
+# Depth searches. Each query matches the situation in which a candidate mode
+# could occur (a trigger), never the failure itself, so a query returns both
+# possible positives and close negatives. Queries run in order; each excludes
+# traces already in a batch or picked by an earlier query.
+
+SEED_B3 = 20261105
+N_B3 = 25
+DQ_TYPES = ("dq-order-reversed-dates", "dq-order-missing-delivery-date", "dq-order-store-mismatch",
+            "dq-product-invalid-price", "dq-product-missing-title")
+
+
+def _res(block: dict) -> dict:
+    return block.get("result") if isinstance(block.get("result"), dict) else {}
+
+
+def _searches(row: dict) -> list[dict]:
+    return [b for b in row["calls"] if b["name"] == "search_products" and _res(b).get("ok")]
+
+
+def q_search_at_limit(row: dict) -> bool:
+    return any(_res(b).get("count") == ((b.get("arguments") or {}).get("limit") or 5) for b in _searches(row))
+
+
+def q_repeated_title(row: dict) -> bool:
+    for b in _searches(row):
+        titles = [p.get("title") for p in _res(b).get("products", [])]
+        if len(titles) != len(set(titles)):
+            return True
+    return False
+
+
+def q_order_list(row: dict) -> bool:
+    return any(b["name"] in ("list_my_orders", "find_order") and len(_res(b).get("orders", [])) >= 2
+               for b in row["calls"])
+
+
+def q_required_action(row: dict) -> bool:
+    return row["tuple"].get("intent") in ("refund", "account_change")
+
+
+def q_decision(row: dict) -> bool:
+    return any(_res(b).get("error") in ("permission_denied", "not_eligible") or _res(b).get("eligible") is False
+               or b["name"] == "escalate_to_human" for b in row["calls"])
+
+
+def q_policy(row: dict) -> bool:
+    pol = str(row["tuple"].get("applicable_policy") or "")
+    return row["tuple"].get("intent") == "policy_question" or pol.startswith("store-") or pol == "cw-restocking-fees"
+
+
+# (id, description, target mode, predicate or None for the per-type data-quality draw, quota)
+QUERIES_B3 = [
+    ("Q1", "search_products returned as many results as its limit", "truncated_search_presented_as_complete", q_search_at_limit, 6),
+    ("Q2", "search result contains a repeated title", "same_title_listing_not_distinguished", q_repeated_title, 4),
+    ("Q3", "data-quality scenario, one per case type", "inconsistent_record_not_escalated", None, len(DQ_TYPES)),
+    ("Q4", "list_my_orders or find_order returned 2+ orders", "reply_contradicts_tool_result", q_order_list, 3),
+    ("Q5", "refund or account-change request", "asks_instead_of_acting", q_required_action, 3),
+    ("Q6", "tool returned permission_denied or not eligible, or the agent escalated", "reply_omits_decision_basis", q_decision, 2),
+    ("Q7", "policy question or store-specific policy", "policy_claim_without_citation / policy_answer_wrong_or_incomplete", q_policy, 2),
+]
+
+
+def trigger_rows() -> list[dict]:
+    """One row per trace with the fields the batch 3 triggers read: tool calls
+    and results, plus the scenario's intent, applicable policy, and data-quality
+    case (scenario design, not outcomes or answer keys)."""
+    data.load_env()
+    raw, _src = data.load_raw()
+    convs, _ctx = data.build_conversations(raw)
+    rows = []
+    for c in convs:
+        if not (c["scenario_id"] or "").startswith(data.SCENARIO_PREFIX):
+            continue
+        for t in c["turns"]:
+            rows.append({
+                "trace_id": t["trace_id"], "scenario_id": c["scenario_id"], "role": c["role"],
+                "turn": t["number"], "tools": sorted(set(t["tool_names"])),
+                "calls": [b for b in t["blocks"] if b["kind"] == "tool"],
+                "tuple": c["scenario"]["tuple"] or {}, "dq": c["scenario"]["data_quality_case_id"],
+            })
+    rows.sort(key=lambda r: r["trace_id"])
+    return rows
+
+
+def select_b3(rows: list[dict], exclude: set[str]) -> tuple[list[tuple[str, dict, str]], dict[str, int]]:
+    """Run the queries in order. Spare Q1/Q2 slots go to Q4 so the total is N_B3."""
+    rng = random.Random(SEED_B3)
+    taken = set(exclude)
+    picks: list[tuple[str, dict, str]] = []
+    pools: dict[str, int] = {}
+    spare = 0
+    for qid, desc, _mode, pred, quota in QUERIES_B3:
+        if qid == "Q4":
+            quota += spare
+        if pred is None:
+            for dq in DQ_TYPES:
+                pool = [r for r in rows if r["dq"] == dq and r["trace_id"] not in taken]
+                pools[f"{qid} {dq}"] = len(pool)
+                for r in rng.sample(pool, min(1, len(pool))):
+                    picks.append((qid, r, f"{desc} ({dq})"))
+                    taken.add(r["trace_id"])
+            continue
+        pool = [r for r in rows if r["trace_id"] not in taken and pred(r)]
+        pools[qid] = len(pool)
+        chosen = rng.sample(pool, min(quota, len(pool)))
+        if qid in ("Q1", "Q2"):
+            spare += quota - len(chosen)
+        for r in chosen:
+            picks.append((qid, r, desc))
+            taken.add(r["trace_id"])
+    return picks, pools
+
+
+def batch3(write: bool) -> None:
+    rows = trigger_rows()
+    doc = store.read_doc("sample_manifest.json")
+    others = [b for b in doc.get("batches", []) if b.get("batch") != 3]
+    exclude = {t["trace_id"] for b in others for t in b.get("traces", [])}
+    picks, pools = select_b3(rows, exclude)
+    print(f"pool after excluding {len(exclude)} traces in other batches: "
+          f"{sum(r['trace_id'] not in exclude for r in rows)} (seed {SEED_B3})")
+    print("pool per query (after earlier queries' picks): " + ", ".join(f"{k} {v}" for k, v in pools.items()))
+    for qid, desc, mode, _pred, _quota in QUERIES_B3:
+        mine = [(r, why) for q, r, why in picks if q == qid]
+        print(f"\n{qid} ({len(mine)}) {desc}  [for {mode}]")
+        for r, why in sorted(mine, key=lambda x: label(x[0])):
+            extra = f"  {r['dq']}" if r["dq"] and qid == "Q3" else ""
+            print(f"  {label(r):<22} {r['role']:<9} {' + '.join(r['tools']) or 'no tools'}{extra}")
+    chosen = [r["trace_id"] for _q, r, _w in picks]
+    print(f"\ntotal {len(chosen)}; distinct {len(set(chosen))}; overlap with other batches: {len(set(chosen) & exclude)}")
+    print("roles: " + ", ".join(f"{k} {v}" for k, v in Counter(r["role"] for _q, r, _w in picks).items()))
+    if not write:
+        print("\ndry run: nothing written (pass --write to save)")
+        return
+    entry = {
+        "id": "b3-depth", "part": "B", "batch": 3,
+        "method": "depth searches for candidate modes and close negatives: each query matches the situation in "
+                  "which a mode could occur (tool results, scenario intent, applicable policy, or data-quality "
+                  "case), not the failure; queries run in order, each excluding earlier picks; uniform random "
+                  "within a query's pool when it exceeds the quota",
+        "queries": [{"id": q, "trigger": d, "target_mode": m, "quota": n} for q, d, m, _p, n in QUERIES_B3],
+        "seed": SEED_B3, "pool": POOL, "pool_counts": pools,
+        "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "traces": [{"trace_id": r["trace_id"], "reason": f"depth search {q}: {why}"} for q, r, why in picks],
+    }
+    with store.LOCK:
+        doc = store.read_doc("sample_manifest.json")
+        batches = [b for b in doc.get("batches", []) if b.get("batch") != 3]
+        doc["batches"] = batches + [entry]
+        store.write_doc("sample_manifest.json", doc)
+    print("\nwrote b3-depth to sample_manifest.json")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--batch", type=int, choices=(1, 2), default=1)
+    ap.add_argument("--batch", type=int, choices=(1, 2, 3), default=1)
     ap.add_argument("--write", action="store_true", help="save the batch to sample_manifest.json")
     args = ap.parse_args()
     if args.batch == 2:
         return batch2(args.write)
+    if args.batch == 3:
+        return batch3(args.write)
 
     rows, tools = turn_rows()
     uniform, clusters, reps = select(rows)

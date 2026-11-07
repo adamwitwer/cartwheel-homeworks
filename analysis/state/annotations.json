@@ -485,6 +485,357 @@
       "source": "reviewer",
       "created_at": "2026-11-06T17:44:00+00:00",
       "updated_at": "2026-11-06T17:44:00+00:00"
+    },
+    {
+      "trace_id": "61676a33b01d32e21ca65ecf7ed29907",
+      "end": 67,
+      "block_key": "61676a33b01d32e21ca65ecf7ed29907:1",
+      "quote": "within 5 to 10 business days",
+      "note": "cite cw-refunds",
+      "scenario_id": "support-0058",
+      "session_id": "824e5b5145384b54ba4c63b0f1bbb73e",
+      "start": 39,
+      "id": "ann-d0c8ab88bd8d",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:08:57+00:00",
+      "updated_at": "2026-11-06T18:08:57+00:00"
+    },
+    {
+      "trace_id": "b6af25aade6c487c3fb59867d35aa18b",
+      "end": 363,
+      "block_key": "b6af25aade6c487c3fb59867d35aa18b:1",
+      "quote": "The response time can vary; sometimes it depends on the volume of requests. Generally, there is a queue system in place, and agents do their best to respond as quickly as possible.",
+      "note": "cite cw-escalations and 24-hour response time",
+      "scenario_id": "support-0118",
+      "session_id": "dadae4b622174035b8e196a25399d680",
+      "start": 183,
+      "id": "ann-b48fdea194ad",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:10:40+00:00",
+      "updated_at": "2026-11-06T18:10:40+00:00"
+    },
+    {
+      "trace_id": "ec1a9eb07b7407b14742ab49140ef9b9",
+      "end": 37,
+      "block_key": "ec1a9eb07b7407b14742ab49140ef9b9:3",
+      "quote": "the webcams currently listed",
+      "note": "potentially incomplete list; agent should increase search cap",
+      "scenario_id": "support-0139",
+      "session_id": "82c6cbe403734f13a5177fd6814a4e81",
+      "start": 9,
+      "id": "ann-390b3be84b11",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:12:37+00:00",
+      "updated_at": "2026-11-06T18:12:37+00:00"
+    },
+    {
+      "trace_id": "9d9de066bb043aa4bc0012658c88a427",
+      "end": 54,
+      "block_key": "9d9de066bb043aa4bc0012658c88a427:2",
+      "quote": "store: \"14\"",
+      "note": "agent should search for the actual store name; the customer cited it explicitly",
+      "scenario_id": "support-0140",
+      "session_id": "4188d9ff924f43f793ddb2b715fbc448",
+      "start": 43,
+      "id": "ann-62cff3429ecc",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:14:14+00:00",
+      "updated_at": "2026-11-06T18:14:14+00:00"
+    },
+    {
+      "trace_id": "5b5543c95bc213cc38c774ca995a2767",
+      "end": 47,
+      "block_key": "5b5543c95bc213cc38c774ca995a2767:3",
+      "quote": "Here are the tea samplers listed for your store",
+      "note": "potentially incomplete list; customer asked for a list of all tea samplers",
+      "scenario_id": "support-0141",
+      "session_id": "af1a021bfa1e44ce814620ae5a233a74",
+      "start": 0,
+      "id": "ann-a4f82c9b39c3",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:15:28+00:00",
+      "updated_at": "2026-11-06T18:15:28+00:00"
+    },
+    {
+      "trace_id": "d4f502be51c13b0f8adf0f188359e620",
+      "end": 46,
+      "block_key": "d4f502be51c13b0f8adf0f188359e620:3",
+      "quote": "human support agent",
+      "note": "The agent is talking to a support person; why would it escalate to support? Unclear what is best here. Spec gap.",
+      "scenario_id": "support-0175",
+      "session_id": "e2e4e0171ff94326935bce8cd5cd7a16",
+      "start": 27,
+      "id": "ann-7429b83a3199",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:17:45+00:00",
+      "updated_at": "2026-11-06T20:45:37+00:00",
+      "history": [
+        {
+          "note": "The agent is talking to a support person; why would it escalate to support?",
+          "at": "2026-11-06T18:17:45+00:00"
+        }
+      ]
+    },
+    {
+      "trace_id": "4f03045a4b3fb2b5111dcfb3caa74e2a",
+      "end": 63,
+      "block_key": "4f03045a4b3fb2b5111dcfb3caa74e2a:5",
+      "quote": "I've successfully escalated the issue to a human support agent.",
+      "note": "the agent should explain that the record is inconsistent, and for that reason, the question has been escalated to a human agent",
+      "scenario_id": "support-0179",
+      "session_id": "ffd91a3d85b94a69b873dc86ed6e9580",
+      "start": 0,
+      "id": "ann-3189a74173a8",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:19:21+00:00",
+      "updated_at": "2026-11-06T18:19:21+00:00"
+    },
+    {
+      "trace_id": "1bb70a6b4c14b56133f2e9e5358f6974",
+      "end": 278,
+      "block_key": "1bb70a6b4c14b56133f2e9e5358f6974:1",
+      "quote": "Would you like me to escalate your request now?",
+      "note": "No need to ask. Just escalate disputes per ESC-3.",
+      "scenario_id": "support-0180",
+      "session_id": "160f8d7ef87446edaf47e0177e725d02",
+      "start": 231,
+      "id": "ann-ec7958276b45",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:21:20+00:00",
+      "updated_at": "2026-11-06T18:21:20+00:00"
+    },
+    {
+      "trace_id": "adb0e929e22ecbc2c0b3aa0d85c19b7c",
+      "end": 158,
+      "block_key": "adb0e929e22ecbc2c0b3aa0d85c19b7c:3",
+      "quote": "It looks like your Classic Pencil Set has not been delivered yet; it's still in the order process. If you need any further assistance or updates, let me know!",
+      "note": "this record is inconsistent, which the agent should explain and escalate to a human agent for further investigation",
+      "scenario_id": "support-0181",
+      "session_id": "5b562197ed564fcbbfcbbfd017c63682",
+      "start": 0,
+      "id": "ann-9cfcb4792b13",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:22:57+00:00",
+      "updated_at": "2026-11-06T18:22:57+00:00"
+    },
+    {
+      "trace_id": "1f021bcb21235b1f2c427c33f4d07cc6",
+      "end": 149,
+      "block_key": "1f021bcb21235b1f2c427c33f4d07cc6:3",
+      "quote": "Your order number 8003 came from the store **Blue Heron Ceramics**. If you need any more information about your order or the store, feel free to ask!",
+      "note": "the product ID indicates that the store is Golden Hour Coffee, which doesn't match the store ID; inconsistent record; explain and escalate to human",
+      "scenario_id": "support-0189",
+      "session_id": "aaa0689635cf4a29bd2749f1aed25b37",
+      "start": 0,
+      "id": "ann-98abbfbe3b43",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:25:54+00:00",
+      "updated_at": "2026-11-06T18:25:54+00:00"
+    },
+    {
+      "trace_id": "993b1d7f34755621ad240c3ab9a21acb",
+      "end": 80,
+      "block_key": "993b1d7f34755621ad240c3ab9a21acb:3",
+      "quote": "Here's what I found for vase listings under \"Blue Heron Ceramics\" in your store:",
+      "note": "Potentially incomplete list.",
+      "scenario_id": "support-0195",
+      "session_id": "65f636aa97ba41bdb3ee7f15cf387a71",
+      "start": 0,
+      "id": "ann-b0bd4ef1da2c",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:52:50+00:00",
+      "updated_at": "2026-11-06T18:52:50+00:00"
+    },
+    {
+      "trace_id": "75c01f179ea7625e4a23ebaca3d05663",
+      "end": 63,
+      "block_key": "75c01f179ea7625e4a23ebaca3d05663:2",
+      "quote": "The Rustic Pitcher from Blue Heron Ceramics is priced at $5.00.",
+      "note": "the agent should not report a negative price as valid. explain inconsistent record and escalate",
+      "scenario_id": "support-0196",
+      "session_id": "b7ec8c2c3efa4ee0adb757bb14c61a6f",
+      "start": 0,
+      "id": "ann-4ad028195bd0",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T18:54:27+00:00",
+      "updated_at": "2026-11-06T18:54:27+00:00"
+    },
+    {
+      "trace_id": "69c567ec5582d52479790903e8d0e546",
+      "end": 98,
+      "block_key": "69c567ec5582d52479790903e8d0e546:1",
+      "quote": "you typically wouldn't be eligible to purchase your own product at the listed price",
+      "note": "Why wouldn't a merchant be eligible to purchase his/her own product? Weird question from the merchant; equally odd answer.",
+      "scenario_id": "support-0199",
+      "session_id": "ba2de0585ff841ae98151dafa62ccae5",
+      "start": 15,
+      "id": "ann-fd884863041d",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:18:52+00:00",
+      "updated_at": "2026-11-06T20:18:52+00:00"
+    },
+    {
+      "trace_id": "2ef86815021aa35e393e1c3d8a9857d5",
+      "end": 168,
+      "block_key": "2ef86815021aa35e393e1c3d8a9857d5:4",
+      "quote": "which means you have until then to process your return",
+      "note": "The agent should explicitly indicate that today is the last day that the item is eligible to be returned.",
+      "scenario_id": "support-0206",
+      "session_id": "605dddbf54e74b2d9c329aedf8539d6b",
+      "start": 114,
+      "id": "ann-c43a3500cc01",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:21:42+00:00",
+      "updated_at": "2026-11-06T20:21:42+00:00"
+    },
+    {
+      "trace_id": "d6dc508948b5d88b45f5173c26b670c7",
+      "end": 134,
+      "block_key": "d6dc508948b5d88b45f5173c26b670c7:3",
+      "quote": "not eligible for a refund",
+      "note": "agent should state store policy explicitly (7-day window)",
+      "scenario_id": "support-0211",
+      "session_id": "0b4b7f4d40a0468086326b250c252973",
+      "start": 109,
+      "id": "ann-adb48dddaebe",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:23:21+00:00",
+      "updated_at": "2026-11-06T20:23:21+00:00"
+    },
+    {
+      "trace_id": "5a03bbbb323985ae432282aaec765da7",
+      "end": 379,
+      "block_key": "5a03bbbb323985ae432282aaec765da7:3",
+      "quote": "There are a few others as well",
+      "note": "The customer asked for all options; agent provided a subset.",
+      "scenario_id": "support-0240",
+      "session_id": "f0f1b545764f43c1b8a2a80f3f1b3aaa",
+      "start": 349,
+      "id": "ann-8e39edc782a4",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:26:32+00:00",
+      "updated_at": "2026-11-06T20:26:32+00:00"
+    },
+    {
+      "trace_id": "f45146c9566db303d67633e6c3c2598b",
+      "end": 268,
+      "block_key": "f45146c9566db303d67633e6c3c2598b:1",
+      "quote": "The escalation to a human support agent is necessary for these types of requests to ensure they handle it securely and properly.",
+      "note": "cite policy explicitly",
+      "scenario_id": "support-0252",
+      "session_id": "8b3560f67a98476fbde10c16edc26df0",
+      "start": 140,
+      "id": "ann-f40f162ee170",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:31:11+00:00",
+      "updated_at": "2026-11-06T20:31:11+00:00"
+    },
+    {
+      "trace_id": "c659f4441292926ad9812ef2060a8ac8",
+      "end": 128,
+      "block_key": "c659f4441292926ad9812ef2060a8ac8:2",
+      "quote": "I found your orders, but it appears none of them are eligible for a refund or return. All of them show \"refund eligible: false.\"",
+      "note": "the reply doesn't give the 30-day rule or explain why, and it doesn't ask which item \"the thing from last month\" is.",
+      "scenario_id": "support-0242",
+      "session_id": "49de7dee5ef04ab4a71f25f0faa0ad9b",
+      "start": 0,
+      "id": "ann-aa245ba68262",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:41:49+00:00",
+      "updated_at": "2026-11-06T20:41:49+00:00"
+    },
+    {
+      "trace_id": "0f3f20ca9230d6d17700c14c5808466f",
+      "end": 227,
+      "block_key": "0f3f20ca9230d6d17700c14c5808466f:5",
+      "quote": "within 5 to 10 business days.",
+      "note": "cite cw-refunds",
+      "scenario_id": "support-0072",
+      "session_id": "8709c9f9c4e94e65a23e835d04e7c093",
+      "start": 198,
+      "id": "ann-e4b6695a5d9d",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:42:41+00:00",
+      "updated_at": "2026-11-06T20:42:41+00:00"
+    },
+    {
+      "trace_id": "fc72683e2d1a689e7c1a4f0fc4ad1a58",
+      "end": 180,
+      "block_key": "fc72683e2d1a689e7c1a4f0fc4ad1a58:5",
+      "quote": "within 5 to 10 business days.",
+      "note": "cite cw-refunds",
+      "scenario_id": "support-0078",
+      "session_id": "f1ad8703cf234d17a74674d34d1fed45",
+      "start": 151,
+      "id": "ann-0c693b2f7db3",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:43:05+00:00",
+      "updated_at": "2026-11-06T20:43:05+00:00"
+    },
+    {
+      "trace_id": "e200ebda00f76a5516c2dbc6a821d01b",
+      "end": 198,
+      "block_key": "e200ebda00f76a5516c2dbc6a821d01b:3",
+      "quote": "1. **Vintage Marble Run** - $12.00\n2. **Slim Marble Run** - $34.75\n3. **Portable Marble Run** - $35.50\n4. **Portable Marble Run** - $50.25",
+      "note": "Agent should list the stores",
+      "scenario_id": "support-0143",
+      "session_id": "d907f9355eaf408083e5c4a762870d42",
+      "start": 60,
+      "id": "ann-43da891da40b",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:48:29+00:00",
+      "updated_at": "2026-11-06T20:48:29+00:00"
+    },
+    {
+      "trace_id": "0f979aa3271d9a79cf4f13116f908683",
+      "end": 98,
+      "block_key": "0f979aa3271d9a79cf4f13116f908683:3",
+      "quote": "I found several listings for the \"Heavy-Duty Vase\" from Blue Heron Ceramics. Here are the options:",
+      "note": "The agent should clarify what the customer means by the \"right one.\"",
+      "scenario_id": "support-0193",
+      "session_id": "3b6ec68858e14a3dae62e0d774540bf6",
+      "start": 0,
+      "id": "ann-62bb5f7b3a87",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:50:24+00:00",
+      "updated_at": "2026-11-06T20:50:24+00:00"
+    },
+    {
+      "trace_id": "12c6d426477de81b6436e98d083139f4",
+      "end": 370,
+      "block_key": "12c6d426477de81b6436e98d083139f4:3",
+      "quote": "If it takes longer than expected",
+      "note": "Cite cw-shipping's \"up to 7 days in transit\"",
+      "scenario_id": "support-0245",
+      "session_id": "ae21579383b44e01ac2e15fba3adcdb9",
+      "start": 338,
+      "id": "ann-830a9daa15a0",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:51:16+00:00",
+      "updated_at": "2026-11-06T20:51:16+00:00"
     }
   ],
   "reviewed": {
@@ -653,16 +1004,16 @@
       "at": "2026-11-06T17:44:00+00:00"
     },
     "0f3f20ca9230d6d17700c14c5808466f": {
-      "status": "no_failure",
-      "at": "2026-11-05T20:37:17+00:00"
+      "status": "annotated",
+      "at": "2026-11-06T20:42:41+00:00"
     },
     "c567a8c9c51b12fc83e3ff9312fd0ffd": {
       "status": "annotated",
       "at": "2026-11-05T21:49:34+00:00"
     },
     "fc72683e2d1a689e7c1a4f0fc4ad1a58": {
-      "status": "no_failure",
-      "at": "2026-11-05T21:04:43+00:00"
+      "status": "annotated",
+      "at": "2026-11-06T20:43:05+00:00"
     },
     "075433d99de8c193874901ed43a0ac60": {
       "status": "annotated",
@@ -731,6 +1082,106 @@
     "22f360e5b003b63674398fdc026b956c": {
       "status": "annotated",
       "at": "2026-11-05T21:45:15+00:00"
+    },
+    "61676a33b01d32e21ca65ecf7ed29907": {
+      "status": "annotated",
+      "at": "2026-11-06T18:08:57+00:00"
+    },
+    "b6af25aade6c487c3fb59867d35aa18b": {
+      "status": "annotated",
+      "at": "2026-11-06T18:10:40+00:00"
+    },
+    "ec1a9eb07b7407b14742ab49140ef9b9": {
+      "status": "annotated",
+      "at": "2026-11-06T18:12:37+00:00"
+    },
+    "9d9de066bb043aa4bc0012658c88a427": {
+      "status": "annotated",
+      "at": "2026-11-06T18:14:14+00:00"
+    },
+    "5b5543c95bc213cc38c774ca995a2767": {
+      "status": "annotated",
+      "at": "2026-11-06T18:15:28+00:00"
+    },
+    "e200ebda00f76a5516c2dbc6a821d01b": {
+      "status": "annotated",
+      "at": "2026-11-06T20:48:29+00:00"
+    },
+    "d4f502be51c13b0f8adf0f188359e620": {
+      "status": "annotated",
+      "at": "2026-11-06T18:17:45+00:00"
+    },
+    "4f03045a4b3fb2b5111dcfb3caa74e2a": {
+      "status": "annotated",
+      "at": "2026-11-06T18:19:21+00:00"
+    },
+    "1bb70a6b4c14b56133f2e9e5358f6974": {
+      "status": "annotated",
+      "at": "2026-11-06T18:21:20+00:00"
+    },
+    "adb0e929e22ecbc2c0b3aa0d85c19b7c": {
+      "status": "annotated",
+      "at": "2026-11-06T18:22:57+00:00"
+    },
+    "1f021bcb21235b1f2c427c33f4d07cc6": {
+      "status": "annotated",
+      "at": "2026-11-06T18:25:54+00:00"
+    },
+    "0f979aa3271d9a79cf4f13116f908683": {
+      "status": "annotated",
+      "at": "2026-11-06T20:50:24+00:00"
+    },
+    "be6276b165db7a67e477e2f66e53f1c5": {
+      "status": "no_failure",
+      "at": "2026-11-06T18:31:09+00:00"
+    },
+    "993b1d7f34755621ad240c3ab9a21acb": {
+      "status": "annotated",
+      "at": "2026-11-06T18:52:50+00:00"
+    },
+    "75c01f179ea7625e4a23ebaca3d05663": {
+      "status": "annotated",
+      "at": "2026-11-06T18:54:27+00:00"
+    },
+    "69c567ec5582d52479790903e8d0e546": {
+      "status": "annotated",
+      "at": "2026-11-06T20:18:52+00:00"
+    },
+    "37c0760b3d57fd749551931f9e8c4928": {
+      "status": "no_failure",
+      "at": "2026-11-06T20:20:05+00:00"
+    },
+    "2ef86815021aa35e393e1c3d8a9857d5": {
+      "status": "annotated",
+      "at": "2026-11-06T20:21:42+00:00"
+    },
+    "d6dc508948b5d88b45f5173c26b670c7": {
+      "status": "annotated",
+      "at": "2026-11-06T20:23:21+00:00"
+    },
+    "5a03bbbb323985ae432282aaec765da7": {
+      "status": "annotated",
+      "at": "2026-11-06T20:26:32+00:00"
+    },
+    "f3e0627ccfeb7f4ab070b00699a8880a": {
+      "status": "no_failure",
+      "at": "2026-11-06T20:28:01+00:00"
+    },
+    "12c6d426477de81b6436e98d083139f4": {
+      "status": "annotated",
+      "at": "2026-11-06T20:51:16+00:00"
+    },
+    "f45146c9566db303d67633e6c3c2598b": {
+      "status": "annotated",
+      "at": "2026-11-06T20:31:11+00:00"
+    },
+    "70fe665bffbb408f92d8fc5bca273ba5": {
+      "status": "no_failure",
+      "at": "2026-11-06T20:39:00+00:00"
+    },
+    "c659f4441292926ad9812ef2060a8ac8": {
+      "status": "annotated",
+      "at": "2026-11-06T20:41:49+00:00"
     }
   },
   "withdrawn": [
@@ -814,6 +1265,38 @@
           "updated_at"
         ]
       }
+    },
+    {
+      "trace_id": "70fe665bffbb408f92d8fc5bca273ba5",
+      "end": 123,
+      "block_key": "70fe665bffbb408f92d8fc5bca273ba5:3",
+      "quote": "trekking poles",
+      "note": "This item is listed in the previous tool call. The agent has all of the info it needs to answer the question.",
+      "scenario_id": "support-0235",
+      "session_id": "d833a031a9d04cbca3cd47a59070216c",
+      "start": 109,
+      "id": "ann-1b8d3ee9510f",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:24:56+00:00",
+      "updated_at": "2026-11-06T20:24:56+00:00",
+      "withdrawn_at": "2026-11-06T20:38:55+00:00"
+    },
+    {
+      "trace_id": "c659f4441292926ad9812ef2060a8ac8",
+      "end": 128,
+      "block_key": "c659f4441292926ad9812ef2060a8ac8:2",
+      "quote": "\"refund eligible: false.\"",
+      "note": "cite policy",
+      "scenario_id": "support-0242",
+      "session_id": "49de7dee5ef04ab4a71f25f0faa0ad9b",
+      "start": 103,
+      "id": "ann-74efafe615e8",
+      "author": "human",
+      "source": "reviewer",
+      "created_at": "2026-11-06T20:29:17+00:00",
+      "updated_at": "2026-11-06T20:29:17+00:00",
+      "withdrawn_at": "2026-11-06T20:41:41+00:00"
     }
   ]
 }

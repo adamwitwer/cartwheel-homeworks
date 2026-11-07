@@ -132,11 +132,42 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
     an amount and reason, not the role.
   - For `review_summary.md`: cw-account-security ("account changes happen only through
     account settings") conflicts with ESC-2 and cw-escalations (send to a human).
-- **Next step:** batch 3, 25 traces from targeted searches for the thin modes
-  (`reply_contradicts_tool_result`, `same_title_listing_not_distinguished`,
-  `inconsistent_record_not_escalated` via the data-quality scenarios) and the follow-up turns
-  that batch 1 and 2 left unsampled (for example 0028 T2/T3, 0158 T3). Claude proposes the
-  search queries; I approve them before the draw.
+- **Batch 3 drawn (2026-11-06):** `sampling.py --batch 3` wrote `b3-depth` (25, seed
+  20261105). Each query matches the situation in which a mode could occur, not the failure,
+  so it returns close negatives too; queries run in order, excluding earlier picks:
+  Q1 search hit its limit (6: 0139, 0140, 0141, 0195, 0196, 0240), Q2 repeated title in a
+  search result (4: 0143, 0193, 0194, 0239 T1), Q3 one per data-quality type (5: 0180 T3,
+  0181, 0189, 0199 T2, 0204 T2), Q4 2+ orders listed (3: 0235, 0242 T2, 0245), Q5 refund or
+  account change (3: 0058 T2, 0206, 0252 T2), Q6 denial or escalation (2: 0175, 0179),
+  Q7 policy (2: 0118, 0211). 85 distinct traces across batches 1–3. Left out on purpose:
+  unsampled follow-ups already known to fail (0028 T2/T3), since picking them would
+  select by outcome. Kept Q3's no-tool follow-up turns (they test whether the agent keeps
+  treating a bad record as valid).
+- **Batch 3 open coding done (2026-11-06):** 25/25 reviewed; 21 notes, 4 "no failure
+  observed" (0194, 0204 T2, 0235 T1, 0239 T1). After Claude's check I made a second pass for
+  consistency: added 0143, 0193, 0245; recoded 0242 T2 (omits the 30-day rule and doesn't ask
+  which item); withdrew 0235 T1 (the tool results lacked names, so asking was right); added
+  "cite cw-refunds" to batch 2's 0072 and 0078 to match 0058 T2. Kept 0139 (count hit the
+  cap, so presenting it as the full list fails even though the answer key shows exactly 5),
+  0140, 0206, 0199 T2. 0239 T1 stays no failure, although 0143 and 0238 in the same
+  situation are failures; noted as an open question.
+- **SPEC.md revision (2026-11-07):** section 5 now says escalation applies to every caller
+  role, including support staff, and that when a case also includes a SCOPE-2 refusal the
+  agent declines that part, still escalates, and the reply states both. Motivating trace:
+  0175 (support staff relayed a legal threat; the refusal was only in the narration; no ticket).
+- **Axial coding, batch 3 (2026-11-07):** 10 `candidate` modes, every live note in one
+  (positives / close negatives): `policy_claim_without_citation` 13/0 (+0252 T2, 0058 T2,
+  0072, 0078), `policy_answer_wrong_or_incomplete` 8/0 (+0118, 0245, 0199 T2; widened to
+  invented rules), `reply_contradicts_tool_result` 2/1 (close negative 0235 T1),
+  `inconsistent_record_not_escalated` 6/4 (+0196, 0181, 0189; close negatives 0179, 0199 T2),
+  `same_title_listing_not_distinguished` 4/1 (+0143, 0193; close negative 0194),
+  `truncated_search_presented_as_complete` 7/0 (+0141, 0139, 0195, 0240; the failure is the
+  presentation, not the true count), `asks_instead_of_acting` 5/3 (+0180 T3; close negative
+  0252 T1), `reply_omits_decision_basis` 8/0 (+0179, 0211, 0242 T2, 0206). New, 1 positive
+  each: `store_id_passed_as_store_name` (0140; also seen in 0191 T1 and 0199 T1, which are unsampled turns;
+  code check) and `required_escalation_not_made` (0175; 0206 also never queued its refund).
+  Ten is over the 5–8 limit: Part D merges or drops.
+- **Next step:** draw batch 4 (15 uniform, stability check), then open code it.
 - Restart the app after pulling code changes:
   `uv run python -m analysis.review_app.server` (port 8030).
 - **Still to write later:** `analysis/report/interface_comparison.md` (candidates: kept

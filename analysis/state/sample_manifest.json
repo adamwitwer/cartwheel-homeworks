@@ -321,6 +321,174 @@
           "reason": "user role: support"
         }
       ]
+    },
+    {
+      "id": "b3-depth",
+      "part": "B",
+      "batch": 3,
+      "method": "depth searches for candidate modes and close negatives: each query matches the situation in which a mode could occur (tool results, scenario intent, applicable policy, or data-quality case), not the failure; queries run in order, each excluding earlier picks; uniform random within a query's pool when it exceeds the quota",
+      "queries": [
+        {
+          "id": "Q1",
+          "trigger": "search_products returned as many results as its limit",
+          "target_mode": "truncated_search_presented_as_complete",
+          "quota": 6
+        },
+        {
+          "id": "Q2",
+          "trigger": "search result contains a repeated title",
+          "target_mode": "same_title_listing_not_distinguished",
+          "quota": 4
+        },
+        {
+          "id": "Q3",
+          "trigger": "data-quality scenario, one per case type",
+          "target_mode": "inconsistent_record_not_escalated",
+          "quota": 5
+        },
+        {
+          "id": "Q4",
+          "trigger": "list_my_orders or find_order returned 2+ orders",
+          "target_mode": "reply_contradicts_tool_result",
+          "quota": 3
+        },
+        {
+          "id": "Q5",
+          "trigger": "refund or account-change request",
+          "target_mode": "asks_instead_of_acting",
+          "quota": 3
+        },
+        {
+          "id": "Q6",
+          "trigger": "tool returned permission_denied or not eligible, or the agent escalated",
+          "target_mode": "reply_omits_decision_basis",
+          "quota": 2
+        },
+        {
+          "id": "Q7",
+          "trigger": "policy question or store-specific policy",
+          "target_mode": "policy_claim_without_citation / policy_answer_wrong_or_incomplete",
+          "quota": 2
+        }
+      ],
+      "seed": 20261105,
+      "pool": "final-run traces (support- scenarios), one trace per turn",
+      "pool_counts": {
+        "Q1": 6,
+        "Q2": 4,
+        "Q3 dq-order-reversed-dates": 6,
+        "Q3 dq-order-missing-delivery-date": 3,
+        "Q3 dq-order-store-mismatch": 3,
+        "Q3 dq-product-invalid-price": 7,
+        "Q3 dq-product-missing-title": 5,
+        "Q4": 23,
+        "Q5": 66,
+        "Q6": 20,
+        "Q7": 42
+      },
+      "created": "2026-11-06T18:01:48+00:00",
+      "traces": [
+        {
+          "trace_id": "5b5543c95bc213cc38c774ca995a2767",
+          "reason": "depth search Q1: search_products returned as many results as its limit"
+        },
+        {
+          "trace_id": "ec1a9eb07b7407b14742ab49140ef9b9",
+          "reason": "depth search Q1: search_products returned as many results as its limit"
+        },
+        {
+          "trace_id": "5a03bbbb323985ae432282aaec765da7",
+          "reason": "depth search Q1: search_products returned as many results as its limit"
+        },
+        {
+          "trace_id": "9d9de066bb043aa4bc0012658c88a427",
+          "reason": "depth search Q1: search_products returned as many results as its limit"
+        },
+        {
+          "trace_id": "993b1d7f34755621ad240c3ab9a21acb",
+          "reason": "depth search Q1: search_products returned as many results as its limit"
+        },
+        {
+          "trace_id": "75c01f179ea7625e4a23ebaca3d05663",
+          "reason": "depth search Q1: search_products returned as many results as its limit"
+        },
+        {
+          "trace_id": "e200ebda00f76a5516c2dbc6a821d01b",
+          "reason": "depth search Q2: search result contains a repeated title"
+        },
+        {
+          "trace_id": "0f979aa3271d9a79cf4f13116f908683",
+          "reason": "depth search Q2: search result contains a repeated title"
+        },
+        {
+          "trace_id": "be6276b165db7a67e477e2f66e53f1c5",
+          "reason": "depth search Q2: search result contains a repeated title"
+        },
+        {
+          "trace_id": "f3e0627ccfeb7f4ab070b00699a8880a",
+          "reason": "depth search Q2: search result contains a repeated title"
+        },
+        {
+          "trace_id": "1bb70a6b4c14b56133f2e9e5358f6974",
+          "reason": "depth search Q3: data-quality scenario, one per case type (dq-order-reversed-dates)"
+        },
+        {
+          "trace_id": "adb0e929e22ecbc2c0b3aa0d85c19b7c",
+          "reason": "depth search Q3: data-quality scenario, one per case type (dq-order-missing-delivery-date)"
+        },
+        {
+          "trace_id": "1f021bcb21235b1f2c427c33f4d07cc6",
+          "reason": "depth search Q3: data-quality scenario, one per case type (dq-order-store-mismatch)"
+        },
+        {
+          "trace_id": "69c567ec5582d52479790903e8d0e546",
+          "reason": "depth search Q3: data-quality scenario, one per case type (dq-product-invalid-price)"
+        },
+        {
+          "trace_id": "37c0760b3d57fd749551931f9e8c4928",
+          "reason": "depth search Q3: data-quality scenario, one per case type (dq-product-missing-title)"
+        },
+        {
+          "trace_id": "70fe665bffbb408f92d8fc5bca273ba5",
+          "reason": "depth search Q4: list_my_orders or find_order returned 2+ orders"
+        },
+        {
+          "trace_id": "12c6d426477de81b6436e98d083139f4",
+          "reason": "depth search Q4: list_my_orders or find_order returned 2+ orders"
+        },
+        {
+          "trace_id": "c659f4441292926ad9812ef2060a8ac8",
+          "reason": "depth search Q4: list_my_orders or find_order returned 2+ orders"
+        },
+        {
+          "trace_id": "2ef86815021aa35e393e1c3d8a9857d5",
+          "reason": "depth search Q5: refund or account-change request"
+        },
+        {
+          "trace_id": "f45146c9566db303d67633e6c3c2598b",
+          "reason": "depth search Q5: refund or account-change request"
+        },
+        {
+          "trace_id": "61676a33b01d32e21ca65ecf7ed29907",
+          "reason": "depth search Q5: refund or account-change request"
+        },
+        {
+          "trace_id": "d4f502be51c13b0f8adf0f188359e620",
+          "reason": "depth search Q6: tool returned permission_denied or not eligible, or the agent escalated"
+        },
+        {
+          "trace_id": "4f03045a4b3fb2b5111dcfb3caa74e2a",
+          "reason": "depth search Q6: tool returned permission_denied or not eligible, or the agent escalated"
+        },
+        {
+          "trace_id": "d6dc508948b5d88b45f5173c26b670c7",
+          "reason": "depth search Q7: policy question or store-specific policy"
+        },
+        {
+          "trace_id": "b6af25aade6c487c3fb59867d35aa18b",
+          "reason": "depth search Q7: policy question or store-specific policy"
+        }
+      ]
     }
   ]
 }

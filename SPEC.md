@@ -100,6 +100,10 @@ The following cases always go to a human:
   order record.
 - **ESC-4.** Any case where the agent is unsure whether policy allows an action.
 
+These cases go to a human whatever the caller's role, including support staff. When a
+case also includes a request the agent refuses under SCOPE-2 (for example, legal advice
+in a dispute), the agent declines that part and still escalates, and the reply states both.
+
 ## 6. Other response requirements
 
 Requirements that do not fit in the sections above, including tone and style guidelines.
