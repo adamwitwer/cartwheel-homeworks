@@ -1250,6 +1250,195 @@
           "at": "2026-11-09T15:09:10+00:00"
         }
       ]
+    },
+    {
+      "start": 166,
+      "session_id": "2eb10360e0bc48cf8b0342ebf0957f86",
+      "note": "cite cw-refunds (as 0072, 0078).",
+      "scenario_id": "support-0073",
+      "quote": "within 5 to 10 business days",
+      "end": 194,
+      "block_key": "290704231851c9840cacceff0efde093:5",
+      "trace_id": "290704231851c9840cacceff0efde093",
+      "id": "ann-8aef1110123f",
+      "author": "human",
+      "source": "consistency_recode",
+      "created_at": "2026-11-09T21:58:08+00:00",
+      "updated_at": "2026-11-09T21:58:08+00:00",
+      "recode": {
+        "reason": "Consistency recode (Part E, 2026-11-09): first marked no failure before the citation and escalation standards settled.",
+        "mode": "policy_claim_without_citation",
+        "drafted_by": "claude",
+        "accepted_by": "reviewer"
+      }
+    },
+    {
+      "start": 62,
+      "session_id": "bdf0936d06fb415eb62829694e57f648",
+      "note": "cite cw-refunds for the $100 auto-approval threshold.",
+      "scenario_id": "support-0079",
+      "quote": "since it exceeds the auto-approval threshold",
+      "end": 106,
+      "block_key": "c6a52d6b93b2f30d6c0fee9d09ed4015:5",
+      "trace_id": "c6a52d6b93b2f30d6c0fee9d09ed4015",
+      "id": "ann-a3edb785a930",
+      "author": "human",
+      "source": "consistency_recode",
+      "created_at": "2026-11-09T21:58:08+00:00",
+      "updated_at": "2026-11-09T21:58:08+00:00",
+      "recode": {
+        "reason": "Consistency recode (Part E, 2026-11-09): first marked no failure before the citation and escalation standards settled.",
+        "mode": "policy_claim_without_citation",
+        "drafted_by": "claude",
+        "accepted_by": "reviewer"
+      }
+    },
+    {
+      "start": 49,
+      "session_id": "f976a89b60394fa1b3670074a872a2c6",
+      "note": "cite cw-cancellations.",
+      "scenario_id": "support-0088",
+      "quote": "it cannot be canceled at this stage",
+      "end": 84,
+      "block_key": "c208d9bc7467b859cb56ff68118dd6b4:3",
+      "trace_id": "c208d9bc7467b859cb56ff68118dd6b4",
+      "id": "ann-b27d2eba034a",
+      "author": "human",
+      "source": "consistency_recode",
+      "created_at": "2026-11-09T21:58:08+00:00",
+      "updated_at": "2026-11-09T21:58:08+00:00",
+      "recode": {
+        "reason": "Consistency recode (Part E, 2026-11-09): first marked no failure before the citation and escalation standards settled.",
+        "mode": "policy_claim_without_citation",
+        "drafted_by": "claude",
+        "accepted_by": "reviewer"
+      }
+    },
+    {
+      "start": 35,
+      "session_id": "69bb1b35b83a49b69b5ebd90005c971d",
+      "note": "cite cw-cancellations (and cw-returns for the 30-day window).",
+      "scenario_id": "support-0089",
+      "quote": "since the order has already shipped, I'm unable to cancel it",
+      "end": 95,
+      "block_key": "350a5842f701655a3672bfce281aa7e0:1",
+      "trace_id": "350a5842f701655a3672bfce281aa7e0",
+      "id": "ann-a809968e8b0e",
+      "author": "human",
+      "source": "consistency_recode",
+      "created_at": "2026-11-09T21:58:08+00:00",
+      "updated_at": "2026-11-09T21:58:08+00:00",
+      "recode": {
+        "reason": "Consistency recode (Part E, 2026-11-09): first marked no failure before the citation and escalation standards settled.",
+        "mode": "policy_claim_without_citation",
+        "drafted_by": "claude",
+        "accepted_by": "reviewer"
+      }
+    },
+    {
+      "start": 15,
+      "session_id": "2fb96bbfc4ae420f9ca83e23c06fb5b0",
+      "note": "cite cw-cancellations.",
+      "scenario_id": "support-0098",
+      "quote": "once an order has been shipped, there is no way to pull it back or cancel it",
+      "end": 91,
+      "block_key": "d09d0bd449434200f3a1291ef99f4fcb:1",
+      "trace_id": "d09d0bd449434200f3a1291ef99f4fcb",
+      "id": "ann-3e3bd44b81ca",
+      "author": "human",
+      "source": "consistency_recode",
+      "created_at": "2026-11-09T21:58:08+00:00",
+      "updated_at": "2026-11-09T21:58:08+00:00",
+      "recode": {
+        "reason": "Consistency recode (Part E, 2026-11-09): first marked no failure before the citation and escalation standards settled.",
+        "mode": "policy_claim_without_citation",
+        "drafted_by": "claude",
+        "accepted_by": "reviewer"
+      }
+    },
+    {
+      "start": 101,
+      "session_id": "793daae0cefb45d6b3b08f470b1ef1e5",
+      "note": "cite store-saltbox-pantry-policy; naming the store's policy is not a citation (as 0123).",
+      "scenario_id": "support-0107",
+      "quote": "You can return items within **7 days of delivery**",
+      "end": 151,
+      "block_key": "d29bdc613123c672c431806a41859ace:3",
+      "trace_id": "d29bdc613123c672c431806a41859ace",
+      "id": "ann-41f95b8c761f",
+      "author": "human",
+      "source": "consistency_recode",
+      "created_at": "2026-11-09T21:58:08+00:00",
+      "updated_at": "2026-11-09T21:58:08+00:00",
+      "recode": {
+        "reason": "Consistency recode (Part E, 2026-11-09): first marked no failure before the citation and escalation standards settled.",
+        "mode": "policy_claim_without_citation",
+        "drafted_by": "claude",
+        "accepted_by": "reviewer"
+      }
+    },
+    {
+      "start": 0,
+      "session_id": "ee09062f78f74559be2594b48425c4e9",
+      "note": "cite cw-escalations / cw-account-security for the refusal (as 0158, 0163).",
+      "scenario_id": "support-0156",
+      "quote": "I can't directly change your email address",
+      "end": 42,
+      "block_key": "29a5a1c5f41c2eccf9079a79d35c629e:1",
+      "trace_id": "29a5a1c5f41c2eccf9079a79d35c629e",
+      "id": "ann-aad8f9dc601a",
+      "author": "human",
+      "source": "consistency_recode",
+      "created_at": "2026-11-09T21:58:08+00:00",
+      "updated_at": "2026-11-09T21:58:08+00:00",
+      "recode": {
+        "reason": "Consistency recode (Part E, 2026-11-09): first marked no failure before the citation and escalation standards settled.",
+        "mode": "policy_claim_without_citation",
+        "drafted_by": "claude",
+        "accepted_by": "reviewer"
+      }
+    },
+    {
+      "start": 133,
+      "session_id": "ee09062f78f74559be2594b48425c4e9",
+      "note": "offers to escalate an account change instead of opening the ticket (ESC-2), as 0158, 0163, 0251.",
+      "scenario_id": "support-0156",
+      "quote": "Would you like me to do that?",
+      "end": 162,
+      "block_key": "29a5a1c5f41c2eccf9079a79d35c629e:1",
+      "trace_id": "29a5a1c5f41c2eccf9079a79d35c629e",
+      "id": "ann-7ff1cab9874f",
+      "author": "human",
+      "source": "consistency_recode",
+      "created_at": "2026-11-09T21:58:08+00:00",
+      "updated_at": "2026-11-09T21:58:08+00:00",
+      "recode": {
+        "reason": "Consistency recode (Part E, 2026-11-09): first marked no failure before the citation and escalation standards settled.",
+        "mode": "required_action_not_taken",
+        "drafted_by": "claude",
+        "accepted_by": "reviewer"
+      }
+    },
+    {
+      "start": 96,
+      "session_id": "4457b5232ecc456b89b9cf4164c8abfd",
+      "note": "explain the window (delivered May 16; the 30-day window closed June 15) instead of the flag, as 0076.",
+      "scenario_id": "support-0215",
+      "quote": "as the order's refund eligibility status is marked as false",
+      "end": 155,
+      "block_key": "c764176d04cb833354a04d91651d6af8:3",
+      "trace_id": "c764176d04cb833354a04d91651d6af8",
+      "id": "ann-1ac0c6c2b413",
+      "author": "human",
+      "source": "consistency_recode",
+      "created_at": "2026-11-09T21:58:08+00:00",
+      "updated_at": "2026-11-09T21:58:08+00:00",
+      "recode": {
+        "reason": "Consistency recode (Part E, 2026-11-09): first marked no failure before the citation and escalation standards settled.",
+        "mode": "reply_omits_decision_basis",
+        "drafted_by": "claude",
+        "accepted_by": "reviewer"
+      }
     }
   ],
   "reviewed": {
@@ -1278,12 +1467,20 @@
       "at": "2026-11-04T16:22:04+00:00"
     },
     "c208d9bc7467b859cb56ff68118dd6b4": {
-      "status": "no_failure",
-      "at": "2026-11-04T16:26:54+00:00"
+      "status": "annotated",
+      "at": "2026-11-09T21:58:08+00:00",
+      "previous": {
+        "status": "no_failure",
+        "at": "2026-11-04T16:26:54+00:00"
+      }
     },
     "350a5842f701655a3672bfce281aa7e0": {
-      "status": "no_failure",
-      "at": "2026-11-04T16:44:41+00:00"
+      "status": "annotated",
+      "at": "2026-11-09T21:58:08+00:00",
+      "previous": {
+        "status": "no_failure",
+        "at": "2026-11-04T16:44:41+00:00"
+      }
     },
     "3e836dd73d0ed96a817d77ea9f4e7462": {
       "status": "no_failure",
@@ -1294,8 +1491,12 @@
       "at": "2026-11-04T16:49:00+00:00"
     },
     "29a5a1c5f41c2eccf9079a79d35c629e": {
-      "status": "no_failure",
-      "at": "2026-11-04T16:49:56+00:00"
+      "status": "annotated",
+      "at": "2026-11-09T21:58:08+00:00",
+      "previous": {
+        "status": "no_failure",
+        "at": "2026-11-04T16:49:56+00:00"
+      }
     },
     "5f601ad6f69771cac1e01df523bed462": {
       "status": "no_failure",
@@ -1310,20 +1511,32 @@
       "at": "2026-11-04T18:21:12+00:00"
     },
     "290704231851c9840cacceff0efde093": {
-      "status": "no_failure",
-      "at": "2026-11-04T18:22:52+00:00"
+      "status": "annotated",
+      "at": "2026-11-09T21:58:08+00:00",
+      "previous": {
+        "status": "no_failure",
+        "at": "2026-11-04T18:22:52+00:00"
+      }
     },
     "ad1bfdd228e6b30cc1c18bb6fcf922b2": {
       "status": "no_failure",
       "at": "2026-11-04T18:26:52+00:00"
     },
     "d09d0bd449434200f3a1291ef99f4fcb": {
-      "status": "no_failure",
-      "at": "2026-11-04T18:31:37+00:00"
+      "status": "annotated",
+      "at": "2026-11-09T21:58:08+00:00",
+      "previous": {
+        "status": "no_failure",
+        "at": "2026-11-04T18:31:37+00:00"
+      }
     },
     "d29bdc613123c672c431806a41859ace": {
-      "status": "no_failure",
-      "at": "2026-11-04T18:32:44+00:00"
+      "status": "annotated",
+      "at": "2026-11-09T21:58:08+00:00",
+      "previous": {
+        "status": "no_failure",
+        "at": "2026-11-04T18:32:44+00:00"
+      }
     },
     "9f9ecaae60be6f9ba9c7d176cf3aaafe": {
       "status": "annotated",
@@ -1366,12 +1579,20 @@
       "at": "2026-11-04T18:57:32+00:00"
     },
     "c764176d04cb833354a04d91651d6af8": {
-      "status": "no_failure",
-      "at": "2026-11-04T19:01:44+00:00"
+      "status": "annotated",
+      "at": "2026-11-09T21:58:08+00:00",
+      "previous": {
+        "status": "no_failure",
+        "at": "2026-11-04T19:01:44+00:00"
+      }
     },
     "c6a52d6b93b2f30d6c0fee9d09ed4015": {
-      "status": "no_failure",
-      "at": "2026-11-04T19:43:25+00:00"
+      "status": "annotated",
+      "at": "2026-11-09T21:58:08+00:00",
+      "previous": {
+        "status": "no_failure",
+        "at": "2026-11-04T19:43:25+00:00"
+      }
     },
     "17ea8c45e6a430b65b8c93249fcfd6dd": {
       "status": "no_failure",

@@ -154,7 +154,8 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
 - **SPEC.md revision (2026-11-07):** section 5 now says escalation applies to every caller
   role, including support staff, and that when a case also includes a SCOPE-2 refusal the
   agent declines that part, still escalates, and the reply states both. Motivating trace:
-  0175 (support staff relayed a legal threat; the refusal was only in the narration; no ticket).
+  0175 (support staff relayed a legal threat; the refusal was only in the narration; ~~no ticket~~: it did
+  escalate, ticket 154; corrected 2026-11-09).
 - **Axial coding, batch 3 (2026-11-07):** 10 `candidate` modes, every live note in one
   (positives / close negatives): `policy_claim_without_citation` 13/0 (+0252 T2, 0058 T2,
   0072, 0078), `policy_answer_wrong_or_incomplete` 8/0 (+0118, 0245, 0199 T2; widened to
@@ -196,7 +197,7 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
   negatives and the search are done), by the handout's product-change test. Decisions:
   - **Merged** `asks_instead_of_acting` + `required_escalation_not_made` →
     `required_action_not_taken` (8 positives, 4 close negatives): one fix ("call the required tool
-    now, for any role, without asking") covers offering to act and deciding not to (0175).
+    now, for any role, without asking") covers offering to act and deciding not to (~~0175~~ 0206; corrected 2026-11-09, see Part E).
     This is the taxonomy revision for the summary and the video.
   - **Dropped** `store_id_passed_as_store_name` (setup defect, for HW8) and
     `unrequested_refund_status_volunteered` (least consequential; loose RESP-5 fit). Both kept in
@@ -267,7 +268,43 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
   test now fails there (it skipped while no mode was confirmed; upstream's `patterns.json` has
   no modes). Expected with student data; test left unchanged. Rest of `test_hw_holes.py`
   unchanged (offline): 18 passed, 7 xfailed, 9 xpassed, 2 skipped.
-- **Next step:** Part E labels (117 traces x 8 modes).
+- **Correction (2026-11-09, found while deriving Part E labels):** 0175 did call
+  `escalate_to_human` (ticket 154). Its failure is the reply leaving out the legal-advice refusal
+  that SPEC section 5 says the reply must state, so it moved from `required_action_not_taken`
+  (now 7 positives) to `reply_omits_decision_basis` (now 9). The merge stands on 0206 (never
+  queued its $547 refund, ESC-1): deciding not to take a required escalation.
+- **Part E plan (2026-11-09):** 936 pairs (117 x 8). Settled without proposals: 74 positives,
+  25 close negatives, 270 from traces I marked no failure (kept as absent for every mode), 326
+  trigger-absent by code rules (checked: no positive misses its trigger). Claude drafts the
+  rest (about 240) with reasons; I accept or override by mode. Claude also flags any no-failure
+  trace that looks positive under a revised definition. 0126 T1 (reviewed, not in the manifest)
+  stays out of the label set.
+- **Part E decisions (2026-11-09):** accepted Claude's 241 proposals (31 present), including
+  four rules: R1 a bare refund-eligibility flag is a record fact, not a policy claim (no citation
+  needed; stating the rule does need one); R2 an ESC-4 bad record the agent never noticed counts
+  only under `inconsistent_record_not_escalated`, not also `required_action_not_taken`; R3 a
+  misquoted or contradicted damaged record is both modes; R4 "within 24 hours" without
+  cw-escalations and policy-grounded refusals without an id fail the citation mode. Borderline
+  calls accepted: 0211 and 0242 T2 not grounded; 0101 absent (closes its open question); 0235 T2
+  omits basis; 0197 not an inconsistent-record positive; 0241 "latest novels" contradicts.
+- **Consistency recode (2026-11-09):** eight of my early no-failure marks predate the settled
+  standards, so I recoded them (Claude drafted the notes, source `consistency_recode`; the old
+  mark is kept under `reviewed[...].previous`): citation 0073, 0079, 0088, 0089 T3, 0098 T3,
+  0107 T1, 0156 T1; required action 0156 T1; omits basis 0215. I chose consistency over leaving
+  them as a record of earlier thinking; the earlier marks stay inspectable.
+- **Final label set (not yet written):** 936 pairs. Sample fractions (n = 117): citation 39
+  (33.3%), contradicts 19 (16.2%; 13 from the d-search batch), not grounded 13 (11.1%), omits
+  basis 11 (9.4%), required action 11 (9.4%), inconsistent record 10 (8.5%), truncated 8 (6.8%),
+  same title 4 (3.4%). Sample fractions, not prevalence: batches b1-cluster, b2-role, b3-depth,
+  and d-search were not uniform draws.
+- **Labels written (2026-11-09, on the Air, `MBA-M4`):** Docker Desktop was stopped, so Claude
+  started it and ran `docker compose -f observability/docker-compose.yml up -d` (no data
+  change). Before: 397 traces, 0 scores. Wrote 936 judgments with `store.set_label` (Langfuse
+  score first, then `labels/<mode>.jsonl`; each note carries its origin and reason). Verified:
+  117 scores and 117 file rows per mode, 936 scores in Langfuse, 0 mismatches against the
+  accepted set. The course demo file `labels/unsupported_policy_claim.jsonl` is untouched.
+- **Next step:** commit; then `analysis/report/review_summary.md` and
+  `analysis/report/interface_comparison.md`; then the video (mine).
 - Restart the app after pulling code changes:
   `uv run python -m analysis.review_app.server` (port 8030).
 - **Still to write later:** `analysis/report/interface_comparison.md` (candidates: kept

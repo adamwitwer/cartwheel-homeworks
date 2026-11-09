@@ -23,7 +23,14 @@
         "ann-0c693b2f7db3",
         "ann-0ec2dd8d2f21",
         "ann-03abf0000611",
-        "ann-38c9ee9f2733"
+        "ann-38c9ee9f2733",
+        "ann-8aef1110123f",
+        "ann-a3edb785a930",
+        "ann-b27d2eba034a",
+        "ann-a809968e8b0e",
+        "ann-3e3bd44b81ca",
+        "ann-41f95b8c761f",
+        "ann-aad8f9dc601a"
       ],
       "created_from": [
         "43c50cfec59bea06c63f44a635b130e4",
@@ -41,7 +48,14 @@
         "fc72683e2d1a689e7c1a4f0fc4ad1a58",
         "42885d350bd7de4811cf7b2ec9efd678",
         "c3e31d5aa35971dbffc12cb8328cc41e",
-        "6ffa9ec5be810a5cf4ce5e4f5564f6cf"
+        "6ffa9ec5be810a5cf4ce5e4f5564f6cf",
+        "290704231851c9840cacceff0efde093",
+        "c6a52d6b93b2f30d6c0fee9d09ed4015",
+        "c208d9bc7467b859cb56ff68118dd6b4",
+        "350a5842f701655a3672bfce281aa7e0",
+        "d09d0bd449434200f3a1291ef99f4fcb",
+        "d29bdc613123c672c431806a41859ace",
+        "29a5a1c5f41c2eccf9079a79d35c629e"
       ],
       "example_trace_ids": [
         "43c50cfec59bea06c63f44a635b130e4",
@@ -59,7 +73,14 @@
         "fc72683e2d1a689e7c1a4f0fc4ad1a58",
         "42885d350bd7de4811cf7b2ec9efd678",
         "c3e31d5aa35971dbffc12cb8328cc41e",
-        "6ffa9ec5be810a5cf4ce5e4f5564f6cf"
+        "6ffa9ec5be810a5cf4ce5e4f5564f6cf",
+        "290704231851c9840cacceff0efde093",
+        "c6a52d6b93b2f30d6c0fee9d09ed4015",
+        "c208d9bc7467b859cb56ff68118dd6b4",
+        "350a5842f701655a3672bfce281aa7e0",
+        "d09d0bd449434200f3a1291ef99f4fcb",
+        "d29bdc613123c672c431806a41859ace",
+        "29a5a1c5f41c2eccf9079a79d35c629e"
       ],
       "close_negative_trace_ids": [
         "207f3c708edc826469f68abc9e0fd092",
@@ -99,6 +120,10 @@
         {
           "at": "2026-11-09",
           "change": "Part D: confirmed (final taxonomy of 8 modes)"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part E consistency recode: added 0073 T1, 0079 T1, 0088 T1, 0089 T3, 0098 T3, 0107 T1, 0156 T1 (earlier no-failure marks, recoded by the reviewer to match the settled standard)"
         }
       ],
       "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): No counterpart: AgentDebug has no communication-quality category (built on success/fail tasks)."
@@ -191,7 +216,7 @@
       "name": "reply_omits_decision_basis",
       "status": "confirmed",
       "definition": "Fail if the reply reports a decision or outcome (a refusal, an escalation, an order status) but leaves out the reason or the material fact behind it that the tool results show: the closed return window, that the order is outside the caller's store, that the record is missing a date, or that a shipped order has not yet been delivered. Pass if the reply states the basis in terms the caller can act on, without revealing inaccessible data.",
-      "boundary": "In 0221 and 0183 the reason appeared only in the narration before a tool call, which the caller never sees; the system prompt requires that narration, so the reply must restate the reason. Nearest: inconsistent_record_not_escalated (0183 did escalate). 0076 is also uncited; its first failure is the missing explanation. Batch 3: 0211 (store's 7-day window not stated) and 0242 T2 (30-day rule not given) state an outcome without the rule; 0206 does not say today is the last eligible day. 0242 T2 also does not ask which item the customer meant. 0206 additionally never queued the $547 refund (ESC-1); see required_escalation_not_made. Close negatives (Part D): each states the decision with its reason: 0207 T1 (window closed, with the dates), 0047 T1 (shipped but not delivered, so the window has not started), 0079 T1 (refund queued because it is above the $100 threshold).",
+      "boundary": "In 0221 and 0183 the reason appeared only in the narration before a tool call, which the caller never sees; the system prompt requires that narration, so the reply must restate the reason. Nearest: inconsistent_record_not_escalated (0183 did escalate). 0076 is also uncited; its first failure is the missing explanation. Batch 3: 0211 (store's 7-day window not stated) and 0242 T2 (30-day rule not given) state an outcome without the rule; 0206 does not say today is the last eligible day. 0242 T2 also does not ask which item the customer meant. 0206 additionally never queued the $547 refund (ESC-1); see required_escalation_not_made. Close negatives (Part D): each states the decision with its reason: 0207 T1 (window closed, with the dates), 0047 T1 (shipped but not delivered, so the window has not started), 0079 T1 (refund queued because it is above the $100 threshold). 0175 (moved here 2026-11-09): support staff relayed a legal threat; the agent escalated (ticket 154) but only the narration said it cannot give legal advice. SPEC.md section 5 requires the reply to state both the refusal and the escalation.",
       "requirement_source": "RESP-5 (explains the relevant decision); RESP-4 (explain refusals and escalations); RESP-3 (state missing or inconsistent information)",
       "evaluator_type": "judge",
       "annotation_ids": [
@@ -202,7 +227,9 @@
         "ann-3189a74173a8",
         "ann-adb48dddaebe",
         "ann-aa245ba68262",
-        "ann-c43a3500cc01"
+        "ann-c43a3500cc01",
+        "ann-7429b83a3199",
+        "ann-1ac0c6c2b413"
       ],
       "created_from": [
         "c567a8c9c51b12fc83e3ff9312fd0ffd",
@@ -212,7 +239,9 @@
         "4f03045a4b3fb2b5111dcfb3caa74e2a",
         "d6dc508948b5d88b45f5173c26b670c7",
         "c659f4441292926ad9812ef2060a8ac8",
-        "2ef86815021aa35e393e1c3d8a9857d5"
+        "2ef86815021aa35e393e1c3d8a9857d5",
+        "d4f502be51c13b0f8adf0f188359e620",
+        "c764176d04cb833354a04d91651d6af8"
       ],
       "example_trace_ids": [
         "c567a8c9c51b12fc83e3ff9312fd0ffd",
@@ -222,7 +251,9 @@
         "4f03045a4b3fb2b5111dcfb3caa74e2a",
         "d6dc508948b5d88b45f5173c26b670c7",
         "c659f4441292926ad9812ef2060a8ac8",
-        "2ef86815021aa35e393e1c3d8a9857d5"
+        "2ef86815021aa35e393e1c3d8a9857d5",
+        "d4f502be51c13b0f8adf0f188359e620",
+        "c764176d04cb833354a04d91651d6af8"
       ],
       "close_negative_trace_ids": [
         "a3da3a820bce86bd36503ccb42d5ed89",
@@ -254,6 +285,14 @@
         {
           "at": "2026-11-09",
           "change": "Part D: confirmed (final taxonomy of 8 modes)"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part E prep: added 0175 (reply omits the SCOPE-2 refusal; moved from required_action_not_taken)"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part E consistency recode: added 0215 T1 (earlier no-failure marks, recoded by the reviewer to match the settled standard)"
         }
       ],
       "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): No counterpart: AgentDebug has no communication-quality category."
@@ -467,7 +506,7 @@
       "name": "required_action_not_taken",
       "status": "confirmed",
       "definition": "Fail if the turn ends without the write that policy requires and the agent had everything the action needs: an eligible refund at or below the threshold (issue_refund), or a case under ESC-1 to ESC-4 (escalate_to_human, or for ESC-1 the queued refund), whatever the caller's role. This covers offering or asking permission to act instead of acting, and deciding not to act. Pass if the agent takes the action in that turn, or asks only for information the action genuinely needs and the caller has not given.",
-      "boundary": "Close negatives 0072 and 0078: the caller stated the amount and the reason, and the agent issued the refund directly. 0243 never gave a reason and issue_refund requires one, so asking for the reason is allowed; asking to confirm the amount is not. In 0158 and 0163 the agent offered to escalate an account change every turn and never opened a ticket, against ESC-2 and the system prompt's \"call escalate_to_human\". Close negative 0252 T1: an account change escalated in the same turn with no confirmation step. Close negative 0248: the customer wanted \"some money back\" without an amount, so asking how much is information the action genuinely needs (the answer key expects it); the order total in the tool result is not the requested amount. Merged 2026-11-08 with required_escalation_not_made: 0175 (support staff relayed a legal threat; the agent declined legal advice only in the narration and opened no ticket; standard set by the 2026-11-07 SPEC.md section 5 clarification). One product change fixes both: an instruction to call the required tool now, for any role, without asking permission, plus a guard that flags ESC cases with no escalate_to_human call. Nearest: reply_omits_decision_basis (the action happened but the reply does not explain it).",
+      "boundary": "Close negatives 0072 and 0078: the caller stated the amount and the reason, and the agent issued the refund directly. 0243 never gave a reason and issue_refund requires one, so asking for the reason is allowed; asking to confirm the amount is not. In 0158 and 0163 the agent offered to escalate an account change every turn and never opened a ticket, against ESC-2 and the system prompt's \"call escalate_to_human\". Close negative 0252 T1: an account change escalated in the same turn with no confirmation step. Close negative 0248: the customer wanted \"some money back\" without an amount, so asking how much is information the action genuinely needs (the answer key expects it); the order total in the tool result is not the requested amount. Merged 2026-11-08 with required_escalation_not_made: deciding not to take a required escalation, as in 0206 (never queued its $547 refund for approval, ESC-1). Correction 2026-11-09: the merge was first argued from 0175, but 0175 did escalate (ticket 154); its failure is the reply leaving out the legal-advice refusal, so it moved to reply_omits_decision_basis. One product change fixes both: an instruction to call the required tool now, for any role, without asking permission, plus a guard that flags ESC cases with no escalate_to_human call. Nearest: reply_omits_decision_basis (the action happened but the reply does not explain it).",
       "requirement_source": "ESC-1 to ESC-4; SPEC.md section 5 role clarification (2026-11-07); cw-refunds (refunds of $100 or less execute automatically once the order passes the eligibility check); system prompt escalation rule",
       "evaluator_type": "judge",
       "annotation_ids": [
@@ -478,7 +517,7 @@
         "ann-ec7958276b45",
         "ann-200afa8f0f51",
         "ann-8672b8491f64",
-        "ann-7429b83a3199"
+        "ann-7ff1cab9874f"
       ],
       "created_from": [
         "7bbb597094e39581861fe1e8b811a8f3",
@@ -488,7 +527,7 @@
         "1bb70a6b4c14b56133f2e9e5358f6974",
         "7c32f0f133e3881b673eb671de56ebc0",
         "93e22132d41ccc884fca8148c3e6d510",
-        "d4f502be51c13b0f8adf0f188359e620"
+        "29a5a1c5f41c2eccf9079a79d35c629e"
       ],
       "example_trace_ids": [
         "7bbb597094e39581861fe1e8b811a8f3",
@@ -498,7 +537,7 @@
         "1bb70a6b4c14b56133f2e9e5358f6974",
         "7c32f0f133e3881b673eb671de56ebc0",
         "93e22132d41ccc884fca8148c3e6d510",
-        "d4f502be51c13b0f8adf0f188359e620"
+        "29a5a1c5f41c2eccf9079a79d35c629e"
       ],
       "close_negative_trace_ids": [
         "0f3f20ca9230d6d17700c14c5808466f",
@@ -531,6 +570,14 @@
         {
           "at": "2026-11-09",
           "change": "Part D: confirmed (final taxonomy of 8 modes)"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part E prep: 0175 removed (it escalated, ticket 154; recoded to reply_omits_decision_basis); merge evidence corrected to 0206"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part E consistency recode: added 0156 T1 (earlier no-failure marks, recoded by the reviewer to match the settled standard)"
         }
       ],
       "former_names": [
@@ -650,7 +697,7 @@
       "name": "required_escalation_not_made",
       "status": "rejected",
       "definition": "Fail if the case falls under ESC-1 to ESC-4 and the session ends without escalate_to_human (or, for ESC-1, without the refund being queued), whatever the caller's role. Pass if the agent escalates, including when it also declines part of the request under SCOPE-2 and says so in the reply.",
-      "boundary": "Nearest: asks_instead_of_acting (offers or asks to escalate, never does). Here the agent decided not to escalate. 0175: support staff relayed a legal threat; the agent declined legal advice only in the narration and opened no ticket. Standard set by the 2026-11-07 SPEC.md section 5 clarification (escalation applies to every role).",
+      "boundary": "Nearest: asks_instead_of_acting (offers or asks to escalate, never does). Here the agent decided not to escalate. 0175: support staff relayed a legal threat; the agent declined legal advice only in the narration and opened no ticket. Standard set by the 2026-11-07 SPEC.md section 5 clarification (escalation applies to every role). Correction 2026-11-09: 0175 did call escalate_to_human (ticket 154); \"opened no ticket\" was a coding error. Its failure is the reply leaving out the refusal (reply_omits_decision_basis). The remaining instance of this pattern is 0206 (ESC-1 refund never queued), which still supports the merge.",
       "requirement_source": "ESC-3; SPEC.md section 5 role clarification; SCOPE-2; RESP-4",
       "evaluator_type": "code",
       "annotation_ids": [
@@ -664,7 +711,6 @@
       ],
       "close_negative_trace_ids": [],
       "open_questions": [
-        "The 0175 note still reads as a spec gap; the reviewer may update it to the new standard.",
         "0206 never queued the $547 refund (ESC-1), a later failure behind its first-coded one. Count it in Part E labels.",
         "Code can check whether escalate_to_human ran; deciding whether a case required it needs a judge or the scenario's intent."
       ],
@@ -676,6 +722,10 @@
         {
           "at": "2026-11-08",
           "change": "Part D: merged into required_action_not_taken (same product change); kept here, rejected, for traceability"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Correction: 0175 escalated; recoded to reply_omits_decision_basis"
         }
       ],
       "merged_into": "required_action_not_taken"
