@@ -192,9 +192,82 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
   `reply_omits_decision_basis` 8/0, `store_id_passed_as_store_name` 1/0,
   `required_escalation_not_made` 1/0, and new `unrequested_refund_status_volunteered` 3/0
   (0229 T1, 0229 T2, 0026; RESP-5 by my mapping, a loose fit).
-- **Next step:** Part D: cut 11 candidates to 5–8 final modes (merge, drop, or keep), find 3
-  close negatives per mode where possible, run the suggestion search (at least one rejected
-  suggestion), compare with AgentDebug, and record one revision.
+- **Part D taxonomy cut (2026-11-08):** 11 candidates → 8 modes (still `candidate` until close
+  negatives and the search are done), by the handout's product-change test. Decisions:
+  - **Merged** `asks_instead_of_acting` + `required_escalation_not_made` →
+    `required_action_not_taken` (8 positives, 4 close negatives): one fix ("call the required tool
+    now, for any role, without asking") covers offering to act and deciding not to (0175).
+    This is the taxonomy revision for the summary and the video.
+  - **Dropped** `store_id_passed_as_store_name` (setup defect, for HW8) and
+    `unrequested_refund_status_volunteered` (least consequential; loose RESP-5 fit). Both kept in
+    `patterns.json` as `rejected` with reasons.
+  - Kept `truncated_search` and `same_title` separate (different fixes: how many vs which one).
+  - Boundary: missing reason that was in that turn's tool result → `reply_omits_decision_basis`;
+    answer not taken from the policy → `policy_answer_not_grounded`.
+- **AgentDebug comparison (2026-11-08)** (Zhu et al. 2025, arXiv 2509.25370, Table 2; recorded
+  per mode in `patterns.json` under `agentdebug`):
+  - **Renamed** `policy_answer_wrong_or_incomplete` → `policy_answer_not_grounded`. AgentDebug
+    splits hallucination (0121, 0199 T2, 0029 T2) from retrieval failure (0050, 0055); one fix
+    covers both, but the old name hid the shared cause.
+  - 0222 T2 is retrieval failure (lost its own turn 1 ticket), unlike 0013 / 0046 (outcome
+    misinterpretation); kept in `reply_contradicts_tool_result`, split if the search finds more.
+  - **Omission considered and rejected:** Action / parameter error = the dropped store-id mode.
+    Exactly 3 instances in the 356 traces (0140 T1, 0191 T1, 0199 T1); not added (9 modes, 2
+    unannotated, fix is setup).
+  - Disagreement for `review_summary.md`: AgentDebug calls bad records an environment error
+    ("not agent's fault"); SPEC.md makes noticing them the agent's job.
+  - No counterpart for citation, omitted basis, same title: AgentDebug has no
+    communication-quality category. Its System module is empty here: 0 tool exceptions, every
+    `ok: false` is a contract failure.
+- **Search round 1, `reply_contradicts_tool_result` (2026-11-08):** deterministic filter
+  (retrieval signal only) over the 256 unreviewed traces: status words, eligibility, "not found"
+  claims despite returned rows, amounts/dates absent from tool results; plus the cross-turn
+  check over all 356. 26 flagged; Claude read each: 15 dropped as filter noise (8 status flags
+  matched "hasn't been delivered"; amounts the caller typed; correctly quoted "-$5.00"), 11
+  written to `suggestions.json` (4 high, 3 medium, 4 low/likely reject) and added to the
+  manifest as `d-search` (review set now 111). Cross-turn: only 3 turns in the corpus follow
+  an escalation; 0222 T2 is the only one that loses track, so no split.
+  - Pattern: in 0001, 0081, 0083, 0090 (like 0013, 0046) `list_my_orders` returns product ids
+    only, and the reply claims the named item is absent. The product fix may be in the tool
+    (return titles), not the reply; consider for the mode boundary and HW8.
+- **Round 1 decisions (2026-11-09):** accepted 7 (0001, 0081, 0083, 0090, 0246, 0196 T2, 0197);
+  rejected 4 (0145, 0100: the reply agrees with the tool; 0077: the value came from the caller;
+  0089 T1: states the tool's limitation, so a close negative). I first accepted all 11, misreading
+  "accept" as "agree with the note"; the four were re-decided, their annotations withdrawn (kept
+  under `withdrawn`). Interface-comparison point: the accept button's meaning is ambiguous.
+  `reply_contradicts_tool_result` now 10 positives, 2 close negatives. My read on the cause: the
+  agent needs to reach for another tool (`find_order`), or the tool needs to return what the agent
+  needs (titles).
+- **Coded the four (2026-11-09):** 0089 T1 no failure; 0145 ("your store" to a support caller);
+  0100 (answer the question first); 0077 ("use another tool to confirm price").
+- **Search round 2 (2026-11-09):** definition revised to "contradicts **or cannot show**"
+  (presence, absence, identity, values), boundary records my root-cause read. Code filter over the
+  245 unreviewed turns: 0 new hits, though on reviewed traces it recovers the known positives, so
+  Claude also read all 13 unreviewed turns that chose among 2+ id-only order rows, checking named
+  orders against the database. 6 suggestions: 0150 (calls order 5000 the teapot), 0228 (refunded
+  order 4962 but told the customer it was the Slim Pencil Set), 0235 T2 (reported Meridian's
+  order as Trailhead's), 0236 (says the plush fox is absent; find_order returned two), 0249
+  (correct but unverifiable: a boundary test), 0237 (likely reject). Review set now 117.
+- **Round 2 decisions (2026-11-09):** accepted 5 (0150, 0228, 0235 T2, 0236, 0249); rejected
+  0237 (every stated fact matches the rows: close negative). 0077 question settled: a value from
+  the caller counts only after a tool confirms it, so 0077 and 0249 are positives.
+  `reply_contradicts_tool_result` now 16 positives, 3 close negatives.
+- **Close negatives (2026-11-09):** taken from reviewed traces, confirmed by me in chat.
+  citation: 0042 T1, 0051 T2, 0190 T1; not_grounded: 0107 T1, 0123 T1 (content right, only the
+  citation fails), 0054 T1; omits_basis: 0207 T1, 0047 T1, 0079 T1; truncated: 0192 T1, 0194 T1,
+  0239 T1 (below the limit, so complete); same_title: 0194 T1, 0192 T1 only. The data does not
+  permit a third same-title negative (all 9 same-title searches are reviewed; 0239 T1 is
+  inconsistent with 0143/0238), nor a truncated negative that hit the limit and said so (every
+  at-limit search is reviewed and positive). Decision: RESP-6 needs store plus price, not a
+  product id. All 8 modes now have 3+ positives; 7 have 3+ close negatives.
+- **Modes confirmed (2026-11-09):** all 8 set to `confirmed`; the 3 dropped modes stay
+  `rejected` with reasons. `test_m2_failure_report_matches_artifact_l_schema`: every per-mode
+  check passes on my 8 modes, but its last check looks for the course demo mode
+  (`unsupported_policy_claim`, corrected prevalence 0.163), which is not in my state, so the
+  test now fails there (it skipped while no mode was confirmed; upstream's `patterns.json` has
+  no modes). Expected with student data; test left unchanged. Rest of `test_hw_holes.py`
+  unchanged (offline): 18 passed, 7 xfailed, 9 xpassed, 2 skipped.
+- **Next step:** Part E labels (117 traces x 8 modes).
 - Restart the app after pulling code changes:
   `uv run python -m analysis.review_app.server` (port 8030).
 - **Still to write later:** `analysis/report/interface_comparison.md` (candidates: kept

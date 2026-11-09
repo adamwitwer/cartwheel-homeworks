@@ -2,9 +2,9 @@
   "modes": [
     {
       "name": "policy_claim_without_citation",
-      "status": "candidate",
+      "status": "confirmed",
       "definition": "Fail if the reply states a fact or rule that comes from a policy document but does not name that policy's valid identifier. Pass if every policy-derived statement in the reply carries its policy id, or the reply makes no policy claim.",
-      "boundary": "Nearest: policy_answer_wrong_or_incomplete. This mode is about a missing citation on a claim that may be correct; a wrong or incomplete policy answer belongs there, even when it is also uncited. Also distinct from the course demo mode unsupported_policy_claim (a claim the retrieved policy does not support). Batch 2: a follow-up turn that restates a policy-derived deadline (0035 T2, 0069 T3) needs its own citation even when an earlier turn cited the policy. 0101 and 0115 answered with no lookup at all. Batch 3: a policy fact relayed from a tool result (\"5 to 10 business days\" from issue_refund in 0072 and 0078) still needs its policy id, and so does a later turn that restates it with no new tool call (0058 T2, as in 0035 T2). Batch 4: naming a policy by its title (\"the Saltbox Pantry store policy\", 0123) is not a citation; citing an identifier that is not in the corpus (cw-orders, 0093) fails as if uncited.",
+      "boundary": "Nearest: policy_answer_wrong_or_incomplete. This mode is about a missing citation on a claim that may be correct; a wrong or incomplete policy answer belongs there, even when it is also uncited. Also distinct from the course demo mode unsupported_policy_claim (a claim the retrieved policy does not support). Batch 2: a follow-up turn that restates a policy-derived deadline (0035 T2, 0069 T3) needs its own citation even when an earlier turn cited the policy. 0101 and 0115 answered with no lookup at all. Batch 3: a policy fact relayed from a tool result (\"5 to 10 business days\" from issue_refund in 0072 and 0078) still needs its policy id, and so does a later turn that restates it with no new tool call (0058 T2, as in 0035 T2). Batch 4: naming a policy by its title (\"the Saltbox Pantry store policy\", 0123) is not a citation; citing an identifier that is not in the corpus (cw-orders, 0093) fails as if uncited. Close negatives (Part D): 0042 T1, 0051 T2, 0190 T1 make the same return-window claims and cite cw-returns; all marked no failure.",
       "requirement_source": "RESP-1",
       "evaluator_type": "judge",
       "annotation_ids": [
@@ -61,7 +61,11 @@
         "c3e31d5aa35971dbffc12cb8328cc41e",
         "6ffa9ec5be810a5cf4ce5e4f5564f6cf"
       ],
-      "close_negative_trace_ids": [],
+      "close_negative_trace_ids": [
+        "207f3c708edc826469f68abc9e0fd092",
+        "30203af85b0b206d8d5593025dcefc1b",
+        "22c7e8d1301bc7aaedb3dc58a0a3f636"
+      ],
       "open_questions": [
         "Does RESP-1 apply to a refusal grounded in scope (SCOPE-2), as in 0125?",
         "Citation presence is code-checkable; deciding which sentences are policy-derived needs a judge.",
@@ -83,14 +87,27 @@
         {
           "at": "2026-11-07",
           "change": "batch 4 axial pass: added 0123 (policy named by title, not id), 0036 T2 (follow-up restating the last return day), 0093 (cited cw-orders, which does not exist); definition widened to a valid policy id"
+        },
+        {
+          "at": "2026-11-08",
+          "change": "Part D: AgentDebug comparison recorded"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: close negatives added from reviewed traces (0042 T1, 0051 T2, 0190 T1), confirmed by the reviewer"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: confirmed (final taxonomy of 8 modes)"
         }
-      ]
+      ],
+      "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): No counterpart: AgentDebug has no communication-quality category (built on success/fail tasks)."
     },
     {
-      "name": "policy_answer_wrong_or_incomplete",
-      "status": "candidate",
-      "definition": "Fail if the reply answers a policy question with content that contradicts, understates, or omits a material term of the applicable platform or store policy (for example a delivery time or a store's restocking fee). Pass if the stated terms match the applicable policy. Also fail if the reply states a rule, restriction, or term that no policy or tool result supports (for example 0199 T2's claim that a merchant cannot buy its own product).",
-      "boundary": "Nearest: policy_claim_without_citation (correct content, missing id). Both 0020 and 0050 answered without consulting the applicable policy text (0020 retrieved nothing; 0050 used cw-returns but not the store policy). 0121 answered with no lookup; 0055 used cw-returns but not store-cascade-audio-policy (the same omission as 0050). 0250 gives no rule at all and only offers a lookup, so it borders asks_instead_of_acting. Batch 3: 0245 answers a shipping question without the cw-shipping transit window (like 0020); 0118 and 0199 T2 state rules no policy contains. 0199 T2 is also a close negative for inconsistent_record_not_escalated.",
+      "name": "policy_answer_not_grounded",
+      "status": "confirmed",
+      "definition": "Fail if the reply's answer to a policy question is not taken from the applicable platform and store policies: it was answered without looking the policy up, leaves out an applicable store override or a material term (for example a delivery window or a restocking fee), or states a rule, restriction, or term that no policy or tool result supports. Pass if the stated terms match the applicable policies.",
+      "boundary": "Nearest: policy_claim_without_citation (correct content, missing id). Both 0020 and 0050 answered without consulting the applicable policy text (0020 retrieved nothing; 0050 used cw-returns but not the store policy). 0121 answered with no lookup; 0055 used cw-returns but not store-cascade-audio-policy (the same omission as 0050). 0250 gives no rule at all and only offers a lookup, so it borders asks_instead_of_acting. Batch 3: 0245 answers a shipping question without the cw-shipping transit window (like 0020); 0118 and 0199 T2 state rules no policy contains. 0199 T2 is also a close negative for inconsistent_record_not_escalated. Part D boundary with reply_omits_decision_basis: if the missing reason or term was in a tool result in that turn and the reply left it out, it is reply_omits_decision_basis; if the answer was not grounded in the policy (not looked up, override missed, or invented), it is this mode. Close negatives (Part D): 0107 T1 and 0123 T1 state Saltbox Pantry's 7-day store override; 0054 T1 answers return eligibility from the Juniper store policy. 0123 marks the line with policy_claim_without_citation: its content is grounded and only the citation fails, so it is a positive there and a close negative here.",
       "requirement_source": "SCOPE-1 (policy questions answered from the help center); PURPOSE-1",
       "evaluator_type": "judge",
       "annotation_ids": [
@@ -126,11 +143,14 @@
         "69c567ec5582d52479790903e8d0e546",
         "8c5c1c8fe004a19964c639d0579847c5"
       ],
-      "close_negative_trace_ids": [],
+      "close_negative_trace_ids": [
+        "d29bdc613123c672c431806a41859ace",
+        "42885d350bd7de4811cf7b2ec9efd678",
+        "37fb0812ca7f4e2675a9be812d1ce452"
+      ],
       "open_questions": [
         "Is the requirement source specific enough, or does this need its own SPEC requirement?",
-        "0250: is giving no answer and offering a lookup this mode or asks_instead_of_acting?",
-        "Is an invented rule (0121, 0118, 0199 T2) a separate mode from an incomplete answer? Decide in Part D."
+        "0250: is giving no answer and offering a lookup this mode or asks_instead_of_acting?"
       ],
       "history": [
         {
@@ -148,60 +168,99 @@
         {
           "at": "2026-11-07",
           "change": "batch 4 axial pass: added 0029 T2 (said there are no shipping timelines; cw-shipping says stores ship within 3 days)"
+        },
+        {
+          "at": "2026-11-08",
+          "change": "Part D: renamed from policy_answer_wrong_or_incomplete after the AgentDebug comparison; definition restated around grounding; invented-rule question settled (same mode)"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: close negatives added from reviewed traces (0107 T1, 0123 T1, 0054 T1), confirmed by the reviewer"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: confirmed (final taxonomy of 8 modes)"
         }
-      ]
+      ],
+      "former_names": [
+        "policy_answer_wrong_or_incomplete"
+      ],
+      "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): Memory / hallucination (0121, 0199 T2, 0029 T2) and Memory / retrieval failure (0050, 0055 missed the store's restocking fee). AgentDebug splits these; the product-change test keeps them together (look up the platform and store policies and answer only from them). The comparison showed the old name hid that shared cause."
     },
     {
-      "name": "reply_contradicts_tool_result",
-      "status": "candidate",
-      "definition": "Fail if the reply asserts something about an order or record (for example that the user never bought an item) that the tool results in the same turn contradict or cannot support. Pass if every factual statement about records is supported by a tool result or framed as uncertain with a follow-up question. Tool results from earlier turns of the same session count (0222 T2).",
-      "boundary": "Nearest: inconsistent_record_not_escalated, where the record itself is damaged; here the record is fine and the agent misreads it. In 0013 and 0046 list_my_orders returned only ids, and the matching order was present. Close negative 0235 T1: the tool results lacked product names, and the agent asked which item rather than guessing; the answer key expects that. 0222 T2 is the weakest positive: the reply never states that no ticket exists, but offers to \"assist in the escalation process\" if the merchant confirms ownership, without mentioning ticket 159.",
-      "requirement_source": "RESP-3",
+      "name": "reply_omits_decision_basis",
+      "status": "confirmed",
+      "definition": "Fail if the reply reports a decision or outcome (a refusal, an escalation, an order status) but leaves out the reason or the material fact behind it that the tool results show: the closed return window, that the order is outside the caller's store, that the record is missing a date, or that a shipped order has not yet been delivered. Pass if the reply states the basis in terms the caller can act on, without revealing inaccessible data.",
+      "boundary": "In 0221 and 0183 the reason appeared only in the narration before a tool call, which the caller never sees; the system prompt requires that narration, so the reply must restate the reason. Nearest: inconsistent_record_not_escalated (0183 did escalate). 0076 is also uncited; its first failure is the missing explanation. Batch 3: 0211 (store's 7-day window not stated) and 0242 T2 (30-day rule not given) state an outcome without the rule; 0206 does not say today is the last eligible day. 0242 T2 also does not ask which item the customer meant. 0206 additionally never queued the $547 refund (ESC-1); see required_escalation_not_made. Close negatives (Part D): each states the decision with its reason: 0207 T1 (window closed, with the dates), 0047 T1 (shipped but not delivered, so the window has not started), 0079 T1 (refund queued because it is above the $100 threshold).",
+      "requirement_source": "RESP-5 (explains the relevant decision); RESP-4 (explain refusals and escalations); RESP-3 (state missing or inconsistent information)",
       "evaluator_type": "judge",
       "annotation_ids": [
-        "ann-8206b0e4a9a9",
-        "ann-1c8a89a0bea4",
-        "ann-a23bc5c22a89"
+        "ann-b4abef171823",
+        "ann-8c4bd0064863",
+        "ann-dbce223b54db",
+        "ann-8ff571868696",
+        "ann-3189a74173a8",
+        "ann-adb48dddaebe",
+        "ann-aa245ba68262",
+        "ann-c43a3500cc01"
       ],
       "created_from": [
-        "9694536a168980fe6574e8ca26ee3e4e",
-        "fc33e97b9c1ca69d872b573c497b4ecb",
-        "4634a3e9a4b1e9e62f4b6fc3e6b85056"
+        "c567a8c9c51b12fc83e3ff9312fd0ffd",
+        "a5bcb8dc086996d94fb976873674d3b3",
+        "c0863f6e91ff8168b1e6f3d149e41ba0",
+        "de2988295031e9bdf4dd48de787d855d",
+        "4f03045a4b3fb2b5111dcfb3caa74e2a",
+        "d6dc508948b5d88b45f5173c26b670c7",
+        "c659f4441292926ad9812ef2060a8ac8",
+        "2ef86815021aa35e393e1c3d8a9857d5"
       ],
       "example_trace_ids": [
-        "9694536a168980fe6574e8ca26ee3e4e",
-        "fc33e97b9c1ca69d872b573c497b4ecb",
-        "4634a3e9a4b1e9e62f4b6fc3e6b85056"
+        "c567a8c9c51b12fc83e3ff9312fd0ffd",
+        "a5bcb8dc086996d94fb976873674d3b3",
+        "c0863f6e91ff8168b1e6f3d149e41ba0",
+        "de2988295031e9bdf4dd48de787d855d",
+        "4f03045a4b3fb2b5111dcfb3caa74e2a",
+        "d6dc508948b5d88b45f5173c26b670c7",
+        "c659f4441292926ad9812ef2060a8ac8",
+        "2ef86815021aa35e393e1c3d8a9857d5"
       ],
       "close_negative_trace_ids": [
-        "70fe665bffbb408f92d8fc5bca273ba5"
+        "a3da3a820bce86bd36503ccb42d5ed89",
+        "ce813ba8bbacd6352534ed1b7e5b7ca2",
+        "c6a52d6b93b2f30d6c0fee9d09ed4015"
       ],
       "open_questions": [
-        "Only 2 positives so far; batch 3 should search for more.",
-        "3 positives after batch 4, one of them (0222 T2) borderline. Still a target for the Part D suggestion search."
+        "0028 omits a status fact (not yet delivered) rather than a decision reason, and the caller asked for a short answer. Does it fit, or is it a separate mode?",
+        "A judge needs the tool results and the narration to see what the reply left out.",
+        "0211 and 0242 T2 omit a policy rule: this mode, or policy_answer_wrong_or_incomplete? Decide in Part D."
       ],
       "history": [
         {
-          "at": "2026-11-04",
-          "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
-        },
-        {
           "at": "2026-11-06",
-          "change": "batch 2 axial pass: no new positives"
+          "change": "drafted from batch 2 axial coding; grouping previewed to and accepted by the reviewer"
         },
         {
           "at": "2026-11-07",
-          "change": "batch 3 axial pass: no new positives; 0235 T1 added as a close negative"
+          "change": "batch 3 axial pass: added 0179, 0211, 0242 T2, 0206"
         },
         {
-          "at": "2026-11-07",
-          "change": "batch 4 axial pass: added 0222 T2 (implies an escalation is still pending after escalate_to_human returned ticket 159 in turn 1); definition widened to tool results from earlier turns of the same session"
+          "at": "2026-11-08",
+          "change": "Part D: AgentDebug comparison recorded"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: close negatives added from reviewed traces (0207 T1, 0047 T1, 0079 T1), confirmed by the reviewer"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: confirmed (final taxonomy of 8 modes)"
         }
-      ]
+      ],
+      "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): No counterpart: AgentDebug has no communication-quality category."
     },
     {
       "name": "inconsistent_record_not_escalated",
-      "status": "candidate",
+      "status": "confirmed",
       "definition": "Fail if a tool result shows an inconsistent or damaged order or product record (for example a product from another store, a shipment date after the delivery date, or a negative price) and the reply presents it as valid, neither stating the inconsistency nor escalating. Pass if the reply states the inconsistency and escalates or tells the caller how it will be handled.",
       "boundary": "Nearest: reply_contradicts_tool_result. Close negative 0185: the delivery date was missing, the agent said so to a support-staff caller, and the reviewer judged no failure. Close negative 0183: the agent escalated a missing delivery date but did not say why in the reply; that gap is coded under reply_omits_decision_basis. Close negatives 0179 (escalated the inconsistent record but did not say why: coded under reply_omits_decision_basis) and 0199 T2 (did not present the bad record as valid; its failure is an invented rule). 0200: turn 1 called the price erroneous, but turn 2 hedged (\"it would be wise to verify it\") and only offered escalation; the follow-up is judged on its own reply.",
       "requirement_source": "ESC-4; RESP-3",
@@ -259,63 +318,23 @@
         {
           "at": "2026-11-07",
           "change": "batch 4 axial pass: added 0200 T2 (follow-up treats a negative price as possibly valid)"
-        }
-      ]
-    },
-    {
-      "name": "same_title_listing_not_distinguished",
-      "status": "candidate",
-      "definition": "Fail if the product search returns the same title from more than one store and the reply gives a price without naming the store for each listing or asking which store the user means, including presenting one listing's price as the price. Pass if each listing is identified by store or the agent asks which one.",
-      "boundary": "Motivating annotation for the RESP-6 revision: 0239 (gave one store's $10.75 as the price; the same title is $218.50 elsewhere). 0238 listed both prices without store names, which search_products could not supply before the TOOL-3 contract revision.",
-      "requirement_source": "RESP-6 (SPEC revision 2026-11-04; TOOL-3 contract now includes store name)",
-      "evaluator_type": "judge",
-      "annotation_ids": [
-        "ann-d736a2888de9",
-        "ann-1bdd7071de81",
-        "ann-43da891da40b",
-        "ann-62bb5f7b3a87"
-      ],
-      "created_from": [
-        "f9ba38c0b4507862d9023b2ff25eac8f",
-        "614c8afaa25d68e0636046c2782ea211",
-        "e200ebda00f76a5516c2dbc6a821d01b",
-        "0f979aa3271d9a79cf4f13116f908683"
-      ],
-      "example_trace_ids": [
-        "f9ba38c0b4507862d9023b2ff25eac8f",
-        "614c8afaa25d68e0636046c2782ea211",
-        "e200ebda00f76a5516c2dbc6a821d01b",
-        "0f979aa3271d9a79cf4f13116f908683"
-      ],
-      "close_negative_trace_ids": [
-        "be6276b165db7a67e477e2f66e53f1c5"
-      ],
-      "open_questions": [
-        "Trigger (duplicate titles across stores in the search result) is code-checkable; the reply check needs a judge.",
-        "Is 0238 a positive while the running tool still returns only store ids?",
-        "0191 (coded under truncated_search_presented_as_complete) also lists three same-title vases from one store with prices only. Naming the store cannot distinguish them; should RESP-6 require a distinguishing identifier such as the product id?",
-        "0239 T1 shows the same title at two stores with no store named and was marked no failure, while 0143 and 0238 in the same situation are positives. Left as the reviewer marked it; not usable as a close negative unless a distinguishing reason is recorded."
-      ],
-      "history": [
-        {
-          "at": "2026-11-04",
-          "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
         },
         {
-          "at": "2026-11-06",
-          "change": "batch 2 axial pass: no new positives; 0191 raises a RESP-6 wording question"
+          "at": "2026-11-08",
+          "change": "Part D: AgentDebug comparison recorded"
         },
         {
-          "at": "2026-11-07",
-          "change": "batch 3 axial pass: added 0143 (stores not named) and 0193 (did not ask which one the customer meant); 0194 recorded as a close negative"
+          "at": "2026-11-09",
+          "change": "Part D: confirmed (final taxonomy of 8 modes)"
         }
-      ]
+      ],
+      "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): System / environment error (\"not agent's fault\"). Disagrees: AgentDebug would blame the data; SPEC.md (RESP-3, ESC-4) makes noticing it the agent's job. Note for review_summary.md."
     },
     {
       "name": "truncated_search_presented_as_complete",
-      "status": "candidate",
+      "status": "confirmed",
       "definition": "Fail if search_products returns exactly as many results as the requested limit and the reply presents them as the full set (for example \"here are the listings\") without saying more may exist or searching again with a larger limit. Pass if the reply says the list may be partial, or the agent retrieves all matches. Also fail if the customer asked for all matching items and the reply shows only part of the results the agent retrieved, even when it says more exist (0240).",
-      "boundary": "Nearest: same_title_listing_not_distinguished (which listing is which, not how many). In all three the agent passed limit 5 and got 5 back; the reviewer can see only that the result hit the cap (the answer keys show 10, 4 and 13 matching listings). 0241 also calls the results \"the latest novels\" although results carry no dates. Batch 3 decision: the failure is presenting a capped result as complete, which the trace shows, not whether the list really was incomplete. 0139 counts although its answer key lists exactly 5 matches.",
+      "boundary": "Nearest: same_title_listing_not_distinguished (which listing is which, not how many). In all three the agent passed limit 5 and got 5 back; the reviewer can see only that the result hit the cap (the answer keys show 10, 4 and 13 matching listings). 0241 also calls the results \"the latest novels\" although results carry no dates. Batch 3 decision: the failure is presenting a capped result as complete, which the trace shows, not whether the list really was incomplete. 0139 counts although its answer key lists exactly 5 matches. Close negatives (Part D): 0192 T1 (4 of limit 5), 0194 T1 (2/5), 0239 T1 (2/5) read like the positives (\"I found... here are\") but returned fewer results than the limit, so the list is complete. The data permits no closer negative: every search in the 356 traces that hit its limit is in the review set, and every one is a positive; no reply says the results may be partial.",
       "requirement_source": "RESP-3 (the answer keys for 0142 and 0241 cite it)",
       "evaluator_type": "judge",
       "annotation_ids": [
@@ -345,7 +364,11 @@
         "993b1d7f34755621ad240c3ab9a21acb",
         "5a03bbbb323985ae432282aaec765da7"
       ],
-      "close_negative_trace_ids": [],
+      "close_negative_trace_ids": [
+        "0f0607e4991c226c18add4c6b19ebbc9",
+        "be6276b165db7a67e477e2f66e53f1c5",
+        "f3e0627ccfeb7f4ab070b00699a8880a"
+      ],
       "open_questions": [
         "The trigger (count equals limit) is code-checkable; whether the reply claims completeness needs a judge.",
         "Is the fix a larger default limit in the tool, a prompt rule, or both?"
@@ -358,15 +381,94 @@
         {
           "at": "2026-11-07",
           "change": "batch 3 axial pass: added 0141, 0139, 0195, 0240; boundary set to the presentation, not the true count; widened per 0240"
+        },
+        {
+          "at": "2026-11-08",
+          "change": "Part D: AgentDebug comparison recorded"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: close negatives added from reviewed traces (0192 T1, 0194 T1, 0239 T1), confirmed by the reviewer"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: confirmed (final taxonomy of 8 modes)"
         }
-      ]
+      ],
+      "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): Reflection / progress misassessment (\"misses completion\"): treats a capped result as the finished task."
     },
     {
-      "name": "asks_instead_of_acting",
-      "status": "candidate",
-      "definition": "Fail if the agent has what it needs for an action that policy or the instructions require (an eligible refund at or below the threshold, an escalation that must go to a human) and instead asks the user to confirm or offers to do it, so the action has not happened by the end of the session. Pass if the agent takes the action, or asks only for information the action genuinely needs and the user has not given.",
-      "boundary": "Close negatives 0072 and 0078: the caller stated the amount and the reason, and the agent issued the refund directly. 0243 never gave a reason and issue_refund requires one, so asking for the reason is allowed; asking to confirm the amount is not. In 0158 and 0163 the agent offered to escalate an account change every turn and never opened a ticket, against ESC-2 and the system prompt's \"call escalate_to_human\". Close negative 0252 T1: an account change escalated in the same turn with no confirmation step. Close negative 0248: the customer wanted \"some money back\" without an amount, so asking how much is information the action genuinely needs (the answer key expects it); the order total in the tool result is not the requested amount.",
-      "requirement_source": "ESC-2; cw-refunds (refunds of $100 or less execute automatically once the order passes the eligibility check); system prompt escalation rule; ESC-3",
+      "name": "same_title_listing_not_distinguished",
+      "status": "confirmed",
+      "definition": "Fail if the product search returns the same title from more than one store and the reply gives a price without naming the store for each listing or asking which store the user means, including presenting one listing's price as the price. Pass if each listing is identified by store or the agent asks which one.",
+      "boundary": "Motivating annotation for the RESP-6 revision: 0239 (gave one store's $10.75 as the price; the same title is $218.50 elsewhere). 0238 listed both prices without store names, which search_products could not supply before the TOOL-3 contract revision. Close negatives (Part D): 0194 T1 and 0192 T1 list several same-title listings from one store, name the store, and give each listing's price. Decision (2026-11-09): RESP-6 does not require a product id; store plus price distinguishes the listings. Only 2 close negatives: all 9 same-title searches in the 356 traces are in the review set (batch 3 targeted them), and the remaining candidate, 0239 T1, is inconsistent with 0143 and 0238 (see open questions), so the reviewed data does not permit a third.",
+      "requirement_source": "RESP-6 (SPEC revision 2026-11-04; TOOL-3 contract now includes store name)",
+      "evaluator_type": "judge",
+      "annotation_ids": [
+        "ann-d736a2888de9",
+        "ann-1bdd7071de81",
+        "ann-43da891da40b",
+        "ann-62bb5f7b3a87"
+      ],
+      "created_from": [
+        "f9ba38c0b4507862d9023b2ff25eac8f",
+        "614c8afaa25d68e0636046c2782ea211",
+        "e200ebda00f76a5516c2dbc6a821d01b",
+        "0f979aa3271d9a79cf4f13116f908683"
+      ],
+      "example_trace_ids": [
+        "f9ba38c0b4507862d9023b2ff25eac8f",
+        "614c8afaa25d68e0636046c2782ea211",
+        "e200ebda00f76a5516c2dbc6a821d01b",
+        "0f979aa3271d9a79cf4f13116f908683"
+      ],
+      "close_negative_trace_ids": [
+        "be6276b165db7a67e477e2f66e53f1c5",
+        "0f0607e4991c226c18add4c6b19ebbc9"
+      ],
+      "open_questions": [
+        "Trigger (duplicate titles across stores in the search result) is code-checkable; the reply check needs a judge.",
+        "Is 0238 a positive while the running tool still returns only store ids?",
+        "0239 T1 shows the same title at two stores with no store named and was marked no failure, while 0143 and 0238 in the same situation are positives. Left as the reviewer marked it; not usable as a close negative unless a distinguishing reason is recorded."
+      ],
+      "history": [
+        {
+          "at": "2026-11-04",
+          "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        },
+        {
+          "at": "2026-11-06",
+          "change": "batch 2 axial pass: no new positives; 0191 raises a RESP-6 wording question"
+        },
+        {
+          "at": "2026-11-07",
+          "change": "batch 3 axial pass: added 0143 (stores not named) and 0193 (did not ask which one the customer meant); 0194 recorded as a close negative"
+        },
+        {
+          "at": "2026-11-08",
+          "change": "Part D: AgentDebug comparison recorded"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: close negatives added from reviewed traces (0192 T1), confirmed by the reviewer"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: settled the product-id question (0191): store plus price is enough under RESP-6"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: confirmed (final taxonomy of 8 modes)"
+        }
+      ],
+      "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): No counterpart: AgentDebug has no communication-quality category."
+    },
+    {
+      "name": "required_action_not_taken",
+      "status": "confirmed",
+      "definition": "Fail if the turn ends without the write that policy requires and the agent had everything the action needs: an eligible refund at or below the threshold (issue_refund), or a case under ESC-1 to ESC-4 (escalate_to_human, or for ESC-1 the queued refund), whatever the caller's role. This covers offering or asking permission to act instead of acting, and deciding not to act. Pass if the agent takes the action in that turn, or asks only for information the action genuinely needs and the caller has not given.",
+      "boundary": "Close negatives 0072 and 0078: the caller stated the amount and the reason, and the agent issued the refund directly. 0243 never gave a reason and issue_refund requires one, so asking for the reason is allowed; asking to confirm the amount is not. In 0158 and 0163 the agent offered to escalate an account change every turn and never opened a ticket, against ESC-2 and the system prompt's \"call escalate_to_human\". Close negative 0252 T1: an account change escalated in the same turn with no confirmation step. Close negative 0248: the customer wanted \"some money back\" without an amount, so asking how much is information the action genuinely needs (the answer key expects it); the order total in the tool result is not the requested amount. Merged 2026-11-08 with required_escalation_not_made: 0175 (support staff relayed a legal threat; the agent declined legal advice only in the narration and opened no ticket; standard set by the 2026-11-07 SPEC.md section 5 clarification). One product change fixes both: an instruction to call the required tool now, for any role, without asking permission, plus a guard that flags ESC cases with no escalate_to_human call. Nearest: reply_omits_decision_basis (the action happened but the reply does not explain it).",
+      "requirement_source": "ESC-1 to ESC-4; SPEC.md section 5 role clarification (2026-11-07); cw-refunds (refunds of $100 or less execute automatically once the order passes the eligibility check); system prompt escalation rule",
       "evaluator_type": "judge",
       "annotation_ids": [
         "ann-707b10781df8",
@@ -375,7 +477,8 @@
         "ann-df30c2db57cc",
         "ann-ec7958276b45",
         "ann-200afa8f0f51",
-        "ann-8672b8491f64"
+        "ann-8672b8491f64",
+        "ann-7429b83a3199"
       ],
       "created_from": [
         "7bbb597094e39581861fe1e8b811a8f3",
@@ -384,7 +487,8 @@
         "22f360e5b003b63674398fdc026b956c",
         "1bb70a6b4c14b56133f2e9e5358f6974",
         "7c32f0f133e3881b673eb671de56ebc0",
-        "93e22132d41ccc884fca8148c3e6d510"
+        "93e22132d41ccc884fca8148c3e6d510",
+        "d4f502be51c13b0f8adf0f188359e620"
       ],
       "example_trace_ids": [
         "7bbb597094e39581861fe1e8b811a8f3",
@@ -393,7 +497,8 @@
         "22f360e5b003b63674398fdc026b956c",
         "1bb70a6b4c14b56133f2e9e5358f6974",
         "7c32f0f133e3881b673eb671de56ebc0",
-        "93e22132d41ccc884fca8148c3e6d510"
+        "93e22132d41ccc884fca8148c3e6d510",
+        "d4f502be51c13b0f8adf0f188359e620"
       ],
       "close_negative_trace_ids": [
         "0f3f20ca9230d6d17700c14c5808466f",
@@ -404,7 +509,7 @@
       "open_questions": [
         "Spec tension: cw-account-security says account changes happen only through account settings, while ESC-2 and cw-escalations send them to a human. Record in review_summary.md.",
         "The batch 2 role split (shoppers asked, merchants and support refunded) follows whether the message stated amount and reason, not the role itself.",
-        "0250 (offers a read-only lookup instead of doing it) is coded under policy_answer_wrong_or_incomplete; does it belong here?"
+        "0206 never queued the $547 refund (ESC-1), a later failure behind its first-coded one. Count it in Part E labels."
       ],
       "history": [
         {
@@ -418,95 +523,132 @@
         {
           "at": "2026-11-07",
           "change": "batch 4 axial pass: added 0180 T2 and 0251 T2 (offered escalation, never escalated); 0248 recorded as a close negative"
+        },
+        {
+          "at": "2026-11-08",
+          "change": "Part D: merged with required_escalation_not_made (0175) and renamed from asks_instead_of_acting; one product change fixes both"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: confirmed (final taxonomy of 8 modes)"
         }
-      ]
+      ],
+      "former_names": [
+        "asks_instead_of_acting"
+      ],
+      "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): Reflection / progress misassessment (ends the turn as if the task were done). Supports the merge: offering to escalate and deciding not to escalate are the same error, stopping before the required step."
     },
     {
-      "name": "reply_omits_decision_basis",
-      "status": "candidate",
-      "definition": "Fail if the reply reports a decision or outcome (a refusal, an escalation, an order status) but leaves out the reason or the material fact behind it that the tool results show: the closed return window, that the order is outside the caller's store, that the record is missing a date, or that a shipped order has not yet been delivered. Pass if the reply states the basis in terms the caller can act on, without revealing inaccessible data.",
-      "boundary": "In 0221 and 0183 the reason appeared only in the narration before a tool call, which the caller never sees; the system prompt requires that narration, so the reply must restate the reason. Nearest: inconsistent_record_not_escalated (0183 did escalate). 0076 is also uncited; its first failure is the missing explanation. Batch 3: 0211 (store's 7-day window not stated) and 0242 T2 (30-day rule not given) state an outcome without the rule; 0206 does not say today is the last eligible day. 0242 T2 also does not ask which item the customer meant. 0206 additionally never queued the $547 refund (ESC-1); see required_escalation_not_made.",
-      "requirement_source": "RESP-5 (explains the relevant decision); RESP-4 (explain refusals and escalations); RESP-3 (state missing or inconsistent information)",
+      "name": "reply_contradicts_tool_result",
+      "status": "confirmed",
+      "definition": "Fail if the reply asserts a fact about an order or product (that it exists or does not, which item or store it is, or a value such as a price, date, or eligibility) that the session's tool results contradict or cannot show. Pass if every such statement is supported by a tool result, or the reply states the tool's limitation instead (0089 T1). A value from the caller's message counts only after a tool confirms it (0077, 0249: the agent must verify any record fact it states).",
+      "boundary": "Nearest: inconsistent_record_not_escalated, where the record itself is damaged; here the record is fine and the agent misreads it. In 0013 and 0046 list_my_orders returned only ids, and the matching order was present. Close negative 0235 T1: the tool results lacked product names, and the agent asked which item rather than guessing; the answer key expects that. 0222 T2 is the weakest positive: the reply never states that no ticket exists, but offers to \"assist in the escalation process\" if the merchant confirms ownership, without mentioning ticket 159. AgentDebug would classify 0013 and 0046 as Reflection / outcome misinterpretation, but 0222 T2 as Memory / retrieval failure (the agent lost its own turn 1 ticket). If the search finds more cross-turn cases, consider a split. Search round 1 (2026-11-09): close negative 0089 T1 states the tool's limitation (no product or store names) instead of asserting absence. Rejected: 0145 and 0100 (the reply agrees with the tool), 0077 (the value came from the caller). Root cause (reviewer, 2026-11-09): most positives are presence, absence, or identity claims made from id-only rows (list_my_orders and find_order return product and store ids, not titles or names). The fix is for the agent to reach for another tool (find_order, get_order) or for the tools to return what the agent needs (titles, store names). Search round 2 (2026-11-09): 0249 is correct but unverifiable and fails (reviewer: \"an agent that fails to verify is not acceptable\"); 0077 joins as a positive under the reviewer's own note after its round 1 suggestion was rejected under the earlier definition. Close negative 0237: picked from id-only rows but every stated fact matches the rows.",
+      "requirement_source": "RESP-3",
       "evaluator_type": "judge",
       "annotation_ids": [
-        "ann-b4abef171823",
-        "ann-8c4bd0064863",
-        "ann-dbce223b54db",
-        "ann-8ff571868696",
-        "ann-3189a74173a8",
-        "ann-adb48dddaebe",
-        "ann-aa245ba68262",
-        "ann-c43a3500cc01"
+        "ann-8206b0e4a9a9",
+        "ann-1c8a89a0bea4",
+        "ann-a23bc5c22a89",
+        "ann-86c147b6f054",
+        "ann-0aac4e05859f",
+        "ann-59409a563829",
+        "ann-6560b41c68b6",
+        "ann-e781a07b160b",
+        "ann-2023d7ef7d4f",
+        "ann-b257e396d5f8",
+        "ann-01668bb71336",
+        "ann-cf4658a06ed0",
+        "ann-cad7c2b6e474",
+        "ann-57af1fc449c7",
+        "ann-053c2651fbe0",
+        "ann-de975a1a6967"
       ],
       "created_from": [
-        "c567a8c9c51b12fc83e3ff9312fd0ffd",
-        "a5bcb8dc086996d94fb976873674d3b3",
-        "c0863f6e91ff8168b1e6f3d149e41ba0",
-        "de2988295031e9bdf4dd48de787d855d",
-        "4f03045a4b3fb2b5111dcfb3caa74e2a",
-        "d6dc508948b5d88b45f5173c26b670c7",
-        "c659f4441292926ad9812ef2060a8ac8",
-        "2ef86815021aa35e393e1c3d8a9857d5"
+        "9694536a168980fe6574e8ca26ee3e4e",
+        "fc33e97b9c1ca69d872b573c497b4ecb",
+        "4634a3e9a4b1e9e62f4b6fc3e6b85056",
+        "f1f19983d43fb8f0c7ce4d2f92bd127a",
+        "264df8bf28bfb4772e8b6b213d5c0c1b",
+        "9fbbbe63f41df06e450c887d4a33b9fd",
+        "ad943d66d1c0a7445bd158ab30d47e94",
+        "1f831835af2ea31ac92c44d837f51e65",
+        "f988cee67b2475a516cfa9914983bd76",
+        "da91b8e55ab7c24c70eefc07646042ed",
+        "3f115f1e29cce9c341c28f2f08c3a0df",
+        "a58e096bb996c089806156b4b054528e",
+        "cbaae47dde7b3c4e853a9d52c279e32a",
+        "ee96e86ebbf002c7cd75cc5605081253",
+        "9cc2221f3cb943c0313cec9ce2babcba",
+        "b298424d1dda5bd227541bbede48488d"
       ],
       "example_trace_ids": [
-        "c567a8c9c51b12fc83e3ff9312fd0ffd",
-        "a5bcb8dc086996d94fb976873674d3b3",
-        "c0863f6e91ff8168b1e6f3d149e41ba0",
-        "de2988295031e9bdf4dd48de787d855d",
-        "4f03045a4b3fb2b5111dcfb3caa74e2a",
-        "d6dc508948b5d88b45f5173c26b670c7",
-        "c659f4441292926ad9812ef2060a8ac8",
-        "2ef86815021aa35e393e1c3d8a9857d5"
+        "9694536a168980fe6574e8ca26ee3e4e",
+        "fc33e97b9c1ca69d872b573c497b4ecb",
+        "4634a3e9a4b1e9e62f4b6fc3e6b85056",
+        "f1f19983d43fb8f0c7ce4d2f92bd127a",
+        "264df8bf28bfb4772e8b6b213d5c0c1b",
+        "9fbbbe63f41df06e450c887d4a33b9fd",
+        "ad943d66d1c0a7445bd158ab30d47e94",
+        "1f831835af2ea31ac92c44d837f51e65",
+        "f988cee67b2475a516cfa9914983bd76",
+        "da91b8e55ab7c24c70eefc07646042ed",
+        "3f115f1e29cce9c341c28f2f08c3a0df",
+        "a58e096bb996c089806156b4b054528e",
+        "cbaae47dde7b3c4e853a9d52c279e32a",
+        "ee96e86ebbf002c7cd75cc5605081253",
+        "9cc2221f3cb943c0313cec9ce2babcba",
+        "b298424d1dda5bd227541bbede48488d"
       ],
-      "close_negative_trace_ids": [],
-      "open_questions": [
-        "0028 omits a status fact (not yet delivered) rather than a decision reason, and the caller asked for a short answer. Does it fit, or is it a separate mode?",
-        "A judge needs the tool results and the narration to see what the reply left out.",
-        "0211 and 0242 T2 omit a policy rule: this mode, or policy_answer_wrong_or_incomplete? Decide in Part D."
+      "close_negative_trace_ids": [
+        "70fe665bffbb408f92d8fc5bca273ba5",
+        "c82b613e2de9ea2ca00b4df0d47e85b0",
+        "fceff16f1f6fc044bede94e04749cf51"
       ],
+      "open_questions": [],
       "history": [
         {
+          "at": "2026-11-04",
+          "change": "drafted from batch 1 axial coding; groups accepted by the reviewer"
+        },
+        {
           "at": "2026-11-06",
-          "change": "drafted from batch 2 axial coding; grouping previewed to and accepted by the reviewer"
+          "change": "batch 2 axial pass: no new positives"
         },
         {
           "at": "2026-11-07",
-          "change": "batch 3 axial pass: added 0179, 0211, 0242 T2, 0206"
-        }
-      ]
-    },
-    {
-      "name": "store_id_passed_as_store_name",
-      "status": "candidate",
-      "definition": "Fail if the agent calls search_products with a store identifier (for example \"14\") in the store argument, which takes a store name, and the reply treats the resulting not_found or empty result as an answer. Pass if the agent passes a store name, or recovers by searching again correctly.",
-      "boundary": "A tool-argument error, so it is code-checkable from the call. 0140's first failure: the customer named the store and the agent passed an id. 0140 also wrongly says \"you have two\" (a later failure, not coded). The system prompt gives merchants only a store id.",
-      "requirement_source": "TOOL-3 search_products contract (store argument; not_found for an unknown store); RESP-3",
-      "evaluator_type": "code",
-      "annotation_ids": [
-        "ann-62cff3429ecc"
-      ],
-      "created_from": [
-        "9d9de066bb043aa4bc0012658c88a427"
-      ],
-      "example_trace_ids": [
-        "9d9de066bb043aa4bc0012658c88a427"
-      ],
-      "close_negative_trace_ids": [],
-      "open_questions": [
-        "Only 1 sampled positive; 0191 T1 and 0199 T1 show the same call but were not sampled turns. Confirm with the Part D search.",
-        "Would make 9-10 candidate modes against the handout's 5-8; keep only if the Part D search finds 3+ positives.",
-        "Fix is likely in the tool or the prompt (give merchants their store name), not the reply."
-      ],
-      "history": [
+          "change": "batch 3 axial pass: no new positives; 0235 T1 added as a close negative"
+        },
         {
           "at": "2026-11-07",
-          "change": "drafted from batch 3 axial coding; grouping previewed to and accepted by the reviewer"
+          "change": "batch 4 axial pass: added 0222 T2 (implies an escalation is still pending after escalate_to_human returned ticket 159 in turn 1); definition widened to tool results from earlier turns of the same session"
+        },
+        {
+          "at": "2026-11-08",
+          "change": "Part D: chosen as the target of the required suggestion search"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "search round 1: 7 suggestions accepted (0001, 0081, 0083, 0090, 0246, 0196 T2, 0197), 4 rejected (0089 T1 as a close negative, 0145, 0077, 0100)"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "definition revised to 'contradict or cannot show' (identity, presence, values); search round 2 run with it"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "search round 2: 5 accepted (0150, 0228, 0235 T2, 0236, 0249), 1 rejected (0237, close negative); 0077 added under the reviewer's note; caller-value clause settled: must verify"
+        },
+        {
+          "at": "2026-11-09",
+          "change": "Part D: confirmed (final taxonomy of 8 modes)"
         }
-      ]
+      ],
+      "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): Reflection / outcome misinterpretation (0013, 0046); Memory / retrieval failure (0222 T2).",
+      "search_target": true
     },
     {
       "name": "required_escalation_not_made",
-      "status": "candidate",
+      "status": "rejected",
       "definition": "Fail if the case falls under ESC-1 to ESC-4 and the session ends without escalate_to_human (or, for ESC-1, without the refund being queued), whatever the caller's role. Pass if the agent escalates, including when it also declines part of the request under SCOPE-2 and says so in the reply.",
       "boundary": "Nearest: asks_instead_of_acting (offers or asks to escalate, never does). Here the agent decided not to escalate. 0175: support staff relayed a legal threat; the agent declined legal advice only in the narration and opened no ticket. Standard set by the 2026-11-07 SPEC.md section 5 clarification (escalation applies to every role).",
       "requirement_source": "ESC-3; SPEC.md section 5 role clarification; SCOPE-2; RESP-4",
@@ -530,12 +672,52 @@
         {
           "at": "2026-11-07",
           "change": "drafted from batch 3 axial coding; grouping previewed to and accepted by the reviewer"
+        },
+        {
+          "at": "2026-11-08",
+          "change": "Part D: merged into required_action_not_taken (same product change); kept here, rejected, for traceability"
         }
-      ]
+      ],
+      "merged_into": "required_action_not_taken"
+    },
+    {
+      "name": "store_id_passed_as_store_name",
+      "status": "rejected",
+      "definition": "Fail if the agent calls search_products with a store identifier (for example \"14\") in the store argument, which takes a store name, and the reply treats the resulting not_found or empty result as an answer. Pass if the agent passes a store name, or recovers by searching again correctly.",
+      "boundary": "A tool-argument error, so it is code-checkable from the call. 0140's first failure: the customer named the store and the agent passed an id. 0140 also wrongly says \"you have two\" (a later failure, not coded). The system prompt gives merchants only a store id.",
+      "requirement_source": "TOOL-3 search_products contract (store argument; not_found for an unknown store); RESP-3",
+      "evaluator_type": "code",
+      "annotation_ids": [
+        "ann-62cff3429ecc"
+      ],
+      "created_from": [
+        "9d9de066bb043aa4bc0012658c88a427"
+      ],
+      "example_trace_ids": [
+        "9d9de066bb043aa4bc0012658c88a427"
+      ],
+      "close_negative_trace_ids": [],
+      "open_questions": [
+        "Only 1 sampled positive; 0191 T1 and 0199 T1 show the same call but were not sampled turns. Confirm with the Part D search.",
+        "Would make 9-10 candidate modes against the handout's 5-8; keep only if the Part D search finds 3+ positives.",
+        "Fix is likely in the tool or the prompt (give merchants their store name), not the reply."
+      ],
+      "history": [
+        {
+          "at": "2026-11-07",
+          "change": "drafted from batch 3 axial coding; grouping previewed to and accepted by the reviewer"
+        },
+        {
+          "at": "2026-11-08",
+          "change": "Part D: rejected as a mode (see rejection_reason); kept as a documented observation"
+        }
+      ],
+      "rejection_reason": "Part D: 1 reviewed positive (0140 T1). The AgentDebug comparison flagged it as a possible omission (Action / parameter error), and a deterministic check finds exactly 3 instances in the 356 traces (0140 T1, 0191 T1, 0199 T1: every search_products not_found). Not added: it would make 9 modes, 0191 T1 and 0199 T1 are not reviewer-annotated, and its fix is in the setup (give merchants their store name, or let the tool accept ids), not in reply behavior. Recorded as a defect for HW8.",
+      "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): Action / parameter error."
     },
     {
       "name": "unrequested_refund_status_volunteered",
-      "status": "candidate",
+      "status": "rejected",
       "definition": "Fail if the caller did not ask about refunds or returns and the reply volunteers the order's refund eligibility (for example \"it is not eligible for a refund at this time\"). Pass if the reply answers only what was asked, or the caller asked about refunds or returns.",
       "boundary": "Order-status questions (0026, 0229 T1, 0229 T2): the reply repeats get_order's or find_order's refund_eligible flag. On a shipped order (0229 T2) the line can mislead, since the return window has not started. Nearest: policy_answer_wrong_or_incomplete (a wrong answer to a question that was asked).",
       "requirement_source": "RESP-5 (direct language that explains the relevant decision); reviewer's mapping, 2026-11-07",
@@ -565,8 +747,14 @@
         {
           "at": "2026-11-07",
           "change": "drafted from batch 4 coding (0229 T1, 0229 T2, 0026); reviewer chose RESP-5 and candidate status"
+        },
+        {
+          "at": "2026-11-08",
+          "change": "Part D: rejected as a mode (see rejection_reason); kept as a documented observation"
         }
-      ]
+      ],
+      "rejection_reason": "Part D: the 8-mode cap forced a cut and this is the least consequential mode; its RESP-5 mapping is loose. Only 0229 T2 (a shipped order, where the line can mislead) has a plausible customer impact. Kept as a documented observation in review_summary.md.",
+      "agentdebug": "AgentDebug (Zhu et al. 2025, arXiv 2509.25370, Table 2): no counterpart (no communication-quality category)."
     }
   ]
 }

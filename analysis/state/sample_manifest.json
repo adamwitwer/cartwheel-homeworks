@@ -561,6 +561,83 @@
           "reason": "uniform random pick (stability check)"
         }
       ]
+    },
+    {
+      "id": "d-search",
+      "part": "D",
+      "batch": "d-search",
+      "method": "search for additional instances of reply_contradicts_tool_result; retrieval signal only, every returned trace reviewed by the reviewer",
+      "created": "2026-11-08T23:32:52+00:00",
+      "traces": [
+        {
+          "trace_id": "f1f19983d43fb8f0c7ce4d2f92bd127a",
+          "reason": "search round 1 suggestion (high confidence)"
+        },
+        {
+          "trace_id": "264df8bf28bfb4772e8b6b213d5c0c1b",
+          "reason": "search round 1 suggestion (high confidence)"
+        },
+        {
+          "trace_id": "9fbbbe63f41df06e450c887d4a33b9fd",
+          "reason": "search round 1 suggestion (high confidence)"
+        },
+        {
+          "trace_id": "ad943d66d1c0a7445bd158ab30d47e94",
+          "reason": "search round 1 suggestion (high confidence)"
+        },
+        {
+          "trace_id": "1f831835af2ea31ac92c44d837f51e65",
+          "reason": "search round 1 suggestion (medium confidence)"
+        },
+        {
+          "trace_id": "f988cee67b2475a516cfa9914983bd76",
+          "reason": "search round 1 suggestion (medium confidence)"
+        },
+        {
+          "trace_id": "da91b8e55ab7c24c70eefc07646042ed",
+          "reason": "search round 1 suggestion (medium confidence)"
+        },
+        {
+          "trace_id": "c82b613e2de9ea2ca00b4df0d47e85b0",
+          "reason": "search round 1 suggestion (low confidence)"
+        },
+        {
+          "trace_id": "076227b91503d7e17342f671f321c3f3",
+          "reason": "search round 1 suggestion (low confidence)"
+        },
+        {
+          "trace_id": "b298424d1dda5bd227541bbede48488d",
+          "reason": "search round 1 suggestion (low confidence)"
+        },
+        {
+          "trace_id": "52133c69eb2e0b4694485e2fc0a81d68",
+          "reason": "search round 1 suggestion (low confidence)"
+        },
+        {
+          "trace_id": "3f115f1e29cce9c341c28f2f08c3a0df",
+          "reason": "search round 2 suggestion (high confidence)"
+        },
+        {
+          "trace_id": "a58e096bb996c089806156b4b054528e",
+          "reason": "search round 2 suggestion (high confidence)"
+        },
+        {
+          "trace_id": "cbaae47dde7b3c4e853a9d52c279e32a",
+          "reason": "search round 2 suggestion (high confidence)"
+        },
+        {
+          "trace_id": "ee96e86ebbf002c7cd75cc5605081253",
+          "reason": "search round 2 suggestion (high confidence)"
+        },
+        {
+          "trace_id": "9cc2221f3cb943c0313cec9ce2babcba",
+          "reason": "search round 2 suggestion (medium confidence)"
+        },
+        {
+          "trace_id": "fceff16f1f6fc044bede94e04749cf51",
+          "reason": "search round 2 suggestion (low confidence)"
+        }
+      ]
     }
   ]
 }
