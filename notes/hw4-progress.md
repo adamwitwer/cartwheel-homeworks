@@ -303,8 +303,9 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
   score first, then `labels/<mode>.jsonl`; each note carries its origin and reason). Verified:
   117 scores and 117 file rows per mode, 936 scores in Langfuse, 0 mismatches against the
   accepted set. The course demo file `labels/unsupported_policy_claim.jsonl` is untouched.
-- **Next step:** commit; then `analysis/report/review_summary.md` and
-  `analysis/report/interface_comparison.md`; then the video (mine).
+- **Labels and reports committed and pushed (2026-11-09):** 2ff199b (Part E labels), 56bc3f3
+  (`review_summary.md`, `interface_comparison.md`, with my copyedits).
+- **Next step:** record the video (mine), using the **Video checklist** below.
 - Restart the app after pulling code changes:
   `uv run python -m analysis.review_app.server` (port 8030).
 - **Still to write later:** `analysis/report/interface_comparison.md` (candidates: kept
@@ -342,6 +343,57 @@ Final traces only (pilot excluded). Copied verbatim from my notes:
 > 0040 - In the first turn, I struggled to find how the agent determined the item is not eligible to be returned.
 >
 > 0192 - Seems straightforward. Easy to see what the agent got as a response from the tool call, which is always helpful.
+
+## Video checklist (5 minutes or less, one continuous recording)
+
+Before recording: Docker Desktop running and the Langfuse stack up
+(`docker compose -f observability/docker-compose.yml up -d`; never `down -v`); in a second
+terminal `uv run python -m analysis.review_app.server` → http://localhost:8030. Tabs ready:
+the trace links below, `SPEC.md` at RESP-6, `analysis/report/review_summary.md` at "Stability".
+**Don't click label, accept, or reject buttons while recording** (they write Langfuse scores
+and label rows).
+
+Same order as the handout's Video section (the Workshop item is skipped; I skipped Part C).
+
+1. **One interface decision made after inspecting the traces (~40s).** 0013:
+   http://localhost:8030/#164cafb77c2149548c12d62208c76efd. Point at `store_id: 8` in the
+   `list_my_orders` result and the reviewer lookup "Paper Lantern Press" beside it; open the
+   drawer (Answer key, collapsed until clicked; Policies). Why: in Langfuse I left the trace
+   three times on 0101 and couldn't map ids to names on 0013, 0046, 0186. The lookups are styled
+   as something the agent never saw, and that blindness turned out to be the root cause of the
+   contradiction mode (the agent can't tell which order is the customer's).
+2. **Two failure modes and one supporting trace each (~80s).**
+   - `reply_contradicts_tool_result`, 0228: http://localhost:8030/#db69e4ddda074fd9872c36ce04a52fff.
+     `issue_refund` ran on order 4962 ($272.25, a Compact Atlas per the lookup); the reply says
+     "your Slim Pencil Set order". In the Taxonomy view, show the definition ("contradict or
+     cannot show").
+   - `inconsistent_record_not_escalated`, 0196 T1: http://localhost:8030/#b7ec8c2c3efa4ee0adb757bb14c61a6f.
+     `search_products` returns the Rustic Pitcher at `price_usd: -5`; the reply says "priced at
+     $5.00", presenting a damaged record as a valid price instead of flagging it and escalating
+     (ESC-4, RESP-3). Optional line: it also drops the minus sign, so it counts as a
+     contradiction too (rule R3), and turn 2 repeats the $5.00.
+3. **One taxonomy revision (~45s).** Taxonomy view → `required_action_not_taken`: merged
+   `asks_instead_of_acting` + `required_escalation_not_made` by the product-change test (one fix:
+   call the required tool now, for any role, without asking). Offering instead of acting: 0158 T2
+   "Would you like me to proceed with that?" (http://localhost:8030/#27fe560774db4220b00646b2b75601c9).
+   Deciding not to act: 0206 never queued the $547 refund
+   (http://localhost:8030/#605dddbf54e74b2d9c329aedf8539d6b). Optional 10s: first argued from 0175,
+   which turned out to have escalated (ticket 154).
+4. **One rejected search suggestion and the boundary excluding it (~40s).** The app shows only
+   pending suggestions (decided ones appear as a count on the Progress view), so show the record
+   in the editor: `analysis/state/suggestions.json`, search `0145` → `status: rejected`,
+   `reviewer_note`. Then the trace: http://localhost:8030/#d01e2716a53348978decdbd980edb3a5.
+   The agent searched "dry bags", got 0 results, said none were available. The reply agrees with
+   its tool result, and the mode compares the reply with tool results, so it's outside the
+   boundary; the defect is the query (3 catalog matches under "dry bag").
+5. **One relationship between a mode and SPEC.md (~35s).** `same_title_listing_not_distinguished`
+   ↔ RESP-6, which I wrote after 0239: http://localhost:8030/#de14b3ef8d5745ea907fc7ce3bd9497b
+   (turn 2 gives "$10.75" as the cheapest without the store; the same title is $218.50
+   elsewhere). Show RESP-6 in `SPEC.md`. Follow-on decision: when all listings are from one
+   store, store plus price is enough.
+6. **New modes in the final 15 traces (~25s).** `review_summary.md` "Stability" (or the
+   b4-uniform batch in the rail): 0 new consequential modes; 0026 and 0229 T2 formed one minor
+   pattern, which I dropped; 0222 T2 only widened an existing mode.
 
 ## Deliverables checklist
 
