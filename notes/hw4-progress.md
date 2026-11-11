@@ -305,7 +305,7 @@ Rules from the walkthrough prompt, `AGENTS.md`, and the handout that apply throu
   accepted set. The course demo file `labels/unsupported_policy_claim.jsonl` is untouched.
 - **Labels and reports committed and pushed (2026-11-09):** 2ff199b (Part E labels), 56bc3f3
   (`review_summary.md`, `interface_comparison.md`, with my copyedits).
-- **Next step:** record the video (mine), using the **Video checklist** below.
+- **HW4 submitted (2026-11-10):** video recorded and posted with the repo link (by me). HW4 is done; HW5 continues in `notes/hw5-progress.md`.
 - Restart the app after pulling code changes:
   `uv run python -m analysis.review_app.server` (port 8030).
 - **Still to write later:** `analysis/report/interface_comparison.md` (candidates: kept
@@ -398,28 +398,28 @@ Same order as the handout's Video section (the Workshop item is skipped; I skipp
 ## Deliverables checklist
 
 Part A, review interface
-- [ ] 5-10 traces reviewed in the standard Langfuse view; friction recorded (me)
-- [ ] Claude inspects 5-10 traces, describes the fields, proposes a visual organization;
+- [x] 5-10 traces reviewed in the standard Langfuse view; friction recorded (me)
+- [x] Claude inspects 5-10 traces, describes the fields, proposes a visual organization;
   approved by me before any code
-- [ ] Interface built under `analysis/review_app/`, with:
-  - [ ] conversations grouped by `cartwheel.session_id`, turns in order, with retrieval
+- [x] Interface built under `analysis/review_app/`, with:
+  - [x] conversations grouped by `cartwheel.session_id`, turns in order, with retrieval
     results, tool calls, and tool results
-  - [ ] free-form annotations beside the trace content
-  - [ ] taxonomy view with supporting annotations
-  - [ ] structured labeling view (present/absent per trace and final mode)
-  - [ ] progress view (reviewed traces, incomplete judgments)
-  - [ ] AI suggestions shown separately, with accept/reject
-  - [ ] accepted judgments saved as Langfuse scores and under `analysis/state/`
-- [ ] `analysis/report/interface_comparison.md`: one design kept from the reference, one
+  - [x] free-form annotations beside the trace content
+  - [x] taxonomy view with supporting annotations
+  - [x] structured labeling view (present/absent per trace and final mode)
+  - [x] progress view (reviewed traces, incomplete judgments)
+  - [x] AI suggestions shown separately, with accept/reject
+  - [x] accepted judgments saved as Langfuse scores and under `analysis/state/`
+- [x] `analysis/report/interface_comparison.md`: one design kept from the reference, one
   changed after inspecting traces, one remaining limitation
 
 Part B, review at least 100 distinct traces (no trace in two batches)
-- [ ] Batch 1: 15 uniform random + 15 cluster representatives
-- [ ] Batch 2: one product dimension chosen before looking at outcomes; 30 traces across
+- [x] Batch 1: 15 uniform random + 15 cluster representatives
+- [x] Batch 2: one product dimension chosen before looking at outcomes; 30 traces across
   its values
-- [ ] Batch 3: 25 traces from depth searches for candidate modes and close negatives
-- [ ] Batch 4 (after drafting the taxonomy): 15 more uniform random
-- [ ] Axial coding after each batch; original open codes kept in the history
+- [x] Batch 3: 25 traces from depth searches for candidate modes and close negatives
+- [x] Batch 4 (after drafting the taxonomy): 15 more uniform random
+- [x] Axial coding after each batch; original open codes kept in the history
 
 Part C, Raindrop Workshop (optional)
 - [x] Decide whether to do it: skipped (2026-11-07)
@@ -427,40 +427,40 @@ Part C, Raindrop Workshop (optional)
   candidate failures, one uncertain case; accept/revise/reject for each suggestion used~~
 
 Part D, taxonomy
-- [ ] 5-8 binary modes, each with: snake_case name, binary definition, 3+ positives,
+- [x] 5-8 binary modes, each with: snake_case name, binary definition, 3+ positives,
   3+ close negatives (when the data permits), originating annotations, boundary vs the
   nearest mode, evaluator type (code check or LLM judge), requirement source
   (SPEC.md id or a recorded SPEC revision)
-- [ ] Compared with the AgentDebug taxonomy (arXiv 2509.25370)
-- [ ] Search for more instances of one mode; every result reviewed by me;
+- [x] Compared with the AgentDebug taxonomy (arXiv 2509.25370)
+- [x] Search for more instances of one mode; every result reviewed by me;
   accept/reject recorded; repeated after revising the definition; at least one rejected
   suggestion saved
-- [ ] One taxonomy revision documented
+- [x] One taxonomy revision documented
 
 Part E, apply the taxonomy
-- [ ] Every reviewed trace judged present/absent for every final mode
-- [ ] Judgments written to Langfuse as scores, matching `analysis/state/labels/<mode>`
-- [ ] Count and sample fraction per mode (sample fractions, not prevalence)
-- [ ] New consequential modes in the final 15 traces counted (another batch if several)
-- [ ] Note which modes have fewer than 30 Pass or 30 Fail labels (HW5 needs both)
+- [x] Every reviewed trace judged present/absent for every final mode
+- [x] Judgments written to Langfuse as scores, matching `analysis/state/labels/<mode>`
+- [x] Count and sample fraction per mode (sample fractions, not prevalence)
+- [x] New consequential modes in the final 15 traces counted (another batch if several)
+- [x] Note which modes have fewer than 30 Pass or 30 Fail labels (HW5 needs both)
 
 Files to commit
-- [ ] Review interface code (`analysis/review_app/`)
-- [ ] `analysis/state/sample_manifest.json`
-- [ ] `analysis/state/annotations.json`
-- [ ] `analysis/state/patterns.json`
-- [ ] `analysis/state/suggestions.json`
-- [ ] One label file per final mode under `analysis/state/labels/`
-- [ ] `analysis/report/review_summary.md`: sample size and composition, new modes in the
+- [x] Review interface code (`analysis/review_app/`)
+- [x] `analysis/state/sample_manifest.json`
+- [x] `analysis/state/annotations.json`
+- [x] `analysis/state/patterns.json`
+- [x] `analysis/state/suggestions.json`
+- [x] One label file per final mode under `analysis/state/labels/`
+- [x] `analysis/report/review_summary.md`: sample size and composition, new modes in the
   final 15, one taxonomy revision, the annotation behind any SPEC.md revision
 - [x] ~~`analysis/report/workshop_notes.md`~~ (not needed: Part C skipped)
-- [ ] `analysis/report/interface_comparison.md`
-- [ ] Any `SPEC.md` revision
+- [x] `analysis/report/interface_comparison.md`
+- [x] Any `SPEC.md` revision
 
 Submission
-- [ ] All files committed and pushed
-- [ ] Video (5 min or less), done by me
-- [ ] Posted to the course Discord submissions channel, done by me
+- [x] All files committed and pushed
+- [x] Video (5 min or less), done by me
+- [x] Posted to the course Discord submissions channel, done by me
 
 ## Langfuse migration (Mac mini → MacBook Air, 2026-11-03)
 
