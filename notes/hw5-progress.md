@@ -151,7 +151,13 @@ Handout: `homework/module-2/hw5.md`. A new session should read this first, then 
     Uncited-eligibility Passes: train 0, dev 6 (judge right on 1), test 10 (judge right on 0).
     On the other Passes the judge was right on 22/22 dev and 16/17 test. Because train had none,
     the prompt's examples (training only) never showed a bare eligibility flag passing.
-- **Next step:** my decision on whether I'd use the judge (Part E), then the video.
+- **Recompute on camera (no model calls, writes nothing):**
+  `uv run python -m analysis.run_judges metrics policy_claim_without_citation-v0` prints every
+  test trace's label beside the judge's saved verdict, the confusion counts, TPR and TNR as
+  fractions with Wilson intervals, and a check against the course helper `judge_alignment`
+  (add `dev` for the dev split). Verified with the API key unset.
+- **Would I use the judge: no (my decision, 2026-11-12).** Reasons in the video.
+- **Next step:** the video.
 
 ## Failure definition: `policy_claim_without_citation` (RESP-1)
 

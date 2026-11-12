@@ -11,6 +11,7 @@ Usage, from the repository root:
     uv run python -m analysis.run_judges split        # write splits.json for the mode (run once)
     uv run python -m analysis.run_judges dev analysis/prompts/<mode>-v0.txt   # paid: dev split
     uv run python -m analysis.run_judges test <judge_id>                    # paid: freeze + test
+    uv run python -m analysis.run_judges metrics <judge_id> [dev|test]      # free: recompute from saved predictions
 
 Set ``CARTWHEEL_JUDGE_TRACE_SOURCE`` to the saved inputs before running dev or
 test, so every prompt version sees exactly the same records:
@@ -149,6 +150,57 @@ def run_test(judge_id: str) -> dict[str, Any]:
     return out
 
 
+def _wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
+    """95% Wilson score interval for k successes out of n."""
+    p = k / n
+    center = (p + z * z / (2 * n)) / (1 + z * z / n)
+    half = z * (p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5 / (1 + z * z / n)
+    return round(center - half, 4), round(center + half, 4)
+
+
+def recompute_metrics(judge_id: str, split: str = "test", mode: str = MODE) -> dict[str, Any]:
+    """Recalculate TPR and TNR from saved predictions only (no model calls, writes nothing).
+
+    Reads the split's trace ids from ``splits.json``, my labels from the HW5 labels
+    file, and the judge's cached verdicts from its record. Pass (1) is the positive
+    class: TPR is agreement on my Passes, TNR on my Fails.
+    """
+    judge = json.loads((STATE / "judges" / f"{judge_id}.json").read_text())
+    if split == "test" and judge.get("status") != "frozen":
+        raise SystemExit(f"{judge_id} is not frozen; test metrics are only available after freezing")
+    ids = json.loads((STATE / "splits.json").read_text())[mode][split]
+    labels = _eligible_labels(mode)
+    preds = judge["predictions"][judge["prompt_hash"]]
+
+    print(f"{judge_id} ({judge['status']}, {judge['model']}), {split} split, {len(ids)} traces")
+    print(f"{'trace':<14}{'human':<7}{'judge':<7}")
+    tp = fn = tn = fp = 0
+    for tid in sorted(ids, key=lambda t: (labels[t]["scenario_id"], labels[t].get("turn", 0))):
+        human, verdict = int(labels[tid]["label"]), int(preds[tid])
+        tp += human == 1 and verdict == 1
+        fn += human == 1 and verdict == 0
+        tn += human == 0 and verdict == 0
+        fp += human == 0 and verdict == 1
+        name = f"{labels[tid]['scenario_id'].removeprefix('support-')} T{labels[tid].get('turn', 1)}"
+        flag = "" if human == verdict else "  <- disagree"
+        print(f"{name:<14}{'Pass' if human else 'Fail':<7}{'Pass' if verdict else 'Fail':<7}{flag}")
+
+    tpr, tnr = tp / (tp + fn), tn / (tn + fp)
+    tpr_ci, tnr_ci = _wilson(tp, tp + fn), _wilson(tn, tn + fp)
+    print(f"\nTP {tp}  FN {fn}  TN {tn}  FP {fp}")
+    print(f"TPR = TP / (TP + FN) = {tp}/{tp + fn} = {tpr:.4f}   95% Wilson {tpr_ci[0]:.4f} to {tpr_ci[1]:.4f}")
+    print(f"TNR = TN / (TN + FP) = {tn}/{tn + fp} = {tnr:.4f}   95% Wilson {tnr_ci[0]:.4f} to {tnr_ci[1]:.4f}")
+
+    sys.path.insert(0, str(ROOT))
+    from analysis.helpers import judge_alignment
+
+    helper = judge_alignment(judge_id, split=split)
+    ours = {"tp": tp, "fn": fn, "tn": tn, "fp": fp, "tpr_interval": list(tpr_ci), "tnr_interval": list(tnr_ci)}
+    agree = all(helper[k] == v for k, v in ours.items())
+    print(f"Matches the course helper judge_alignment: {agree}")
+    return {**ours, "tpr": round(tpr, 4), "tnr": round(tnr, 4), "matches_helper": agree}
+
+
 def _live_env() -> None:
     """Load model keys from .env (values never printed) and pin the saved inputs."""
     import os
@@ -174,6 +226,8 @@ def main(argv: list[str]) -> None:
         print(json.dumps(run_development(MODE, argv[1]), indent=2, default=str))
     elif cmd == "test" and len(argv) == 2:
         print(json.dumps(run_test(argv[1]), indent=2, default=str))
+    elif cmd == "metrics" and len(argv) in (2, 3):
+        recompute_metrics(argv[1], argv[2] if len(argv) == 3 else "test")
     else:
         raise SystemExit(__doc__)
 
