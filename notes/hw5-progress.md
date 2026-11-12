@@ -106,8 +106,20 @@ Handout: `homework/module-2/hw5.md`. A new session should read this first, then 
   to the conversation. Test predictions are hidden until a judge is frozen (enforced in the
   server). Nothing in it writes labels or scores. Smoke-tested on a spare port: renders, no
   console errors. Restart the app to pick up the new route.
-- **Next step:** inspect the 7 in the Judge tab, decide each one (judge wrong / label wrong /
-  definition unclear), then revision v1 (at most two revisions).
+- **v0 disagreements decided (2026-11-12):** all 7 judge errors (I agreed after inspecting them;
+  the judge kept asking for an id on order-status and eligibility statements). No label changes.
+- **Revision 1 → v1 (2026-11-12):** stronger R1 list ("eligible", "you can still return it" are
+  not claims unless the rule is stated); a claim counts as cited only if the id string is in the
+  final reply's own text (quote it); Example 6 from training (0222 T2, a cw-roles refusal, Fail);
+  output checks (name the rule before Fail, quote the id before Pass).
+- **Dev run, v1 (2026-11-12, approved):** TPR 0.893 (25/28, 0.728 to 0.963), TNR 0.750 (12/16,
+  0.505 to 0.898); 7 disagreements. Fixed from v0: 0046, 0215 (R1), 0048 (hallucinated citation),
+  0158 T2 (refusal). Still wrong: 0034, 0248, 0249 (the judge infers an unstated return rule from
+  "eligible"). New false Passes: 0089 T2 and 0044 T2 (citations hallucinated from tool results or
+  earlier turns despite the quote rule), 0093 (accepted the invalid id `cw-orders`), 0118 (vague
+  escalation rules passed as "no specific rule"; v1's "fail only for a specific rule" wording
+  pulled against the sharpened line).
+- **Next step:** decide the v1 disagreements; then revision 2 (the last), or stop at v0/v1.
 
 ## Failure definition: `policy_claim_without_citation` (RESP-1)
 
