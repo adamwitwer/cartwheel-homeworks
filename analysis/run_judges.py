@@ -149,8 +149,23 @@ def run_test(judge_id: str) -> dict[str, Any]:
     return out
 
 
+def _live_env() -> None:
+    """Load model keys from .env (values never printed) and pin the saved inputs."""
+    import os
+
+    sys.path.insert(0, str(ROOT))
+    from analysis.review_app import data
+
+    data.load_env()
+    os.environ.setdefault("CARTWHEEL_JUDGE_TRACE_SOURCE", str(INPUTS))
+    if Path(os.environ["CARTWHEEL_JUDGE_TRACE_SOURCE"]).resolve() != INPUTS.resolve():
+        raise SystemExit("CARTWHEEL_JUDGE_TRACE_SOURCE must point at analysis/state/hw5_trace_inputs.json")
+
+
 def main(argv: list[str]) -> None:
     cmd = argv[0] if argv else ""
+    if cmd in ("dev", "test"):
+        _live_env()
     if cmd == "prepare":
         print(len(prepare_inputs()), "inputs written to", INPUTS.relative_to(ROOT))
     elif cmd == "split":

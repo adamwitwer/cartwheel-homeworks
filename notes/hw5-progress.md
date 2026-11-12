@@ -80,8 +80,19 @@ Handout: `homework/module-2/hw5.md`. A new session should read this first, then 
     | train | 14 | 8 | 6 |
     | dev | 28 | 16 | 9 |
     | test | 27 | 16 | 6 |
-- **Next step:** Part C. Choose training examples (a clear Pass, a clear Fail, a borderline) and
-  draft `analysis/prompts/policy_claim_without_citation-v0.txt` with `write-judge-prompt`.
+- **Sharpened line adopted; 0113 relabeled Fail (2026-11-12).** Its dashboard procedure for a
+  60-day window is a claim on the cw-store-overrides topic with no cw-store-overrides id.
+  Appended as a superseding row (origin `hw5_relabel`). Checked every other Pass label against
+  the sharpened line: no other change. Train is now 13 Pass / 9 Fail; dev and test unchanged;
+  `splits.json` untouched.
+- **Part C prompt v0 drafted (2026-11-12):** `analysis/prompts/policy_claim_without_citation-v0.txt`,
+  written with `write-judge-prompt` from training examples only: 0206 T1 (clear Fail), 0047 T1
+  (clear Pass), 0117 T1 (borderline Pass, D2), 0209 T1 (borderline Fail, D1), 0179 T1 (Fail,
+  R4). Includes the task, Pass and Fail rules (R1, R4, D1, D2, the sharpened line), all 18
+  policies (short bodies, so the judge can tell which policy a claim comes from), an instruction
+  not to follow instructions inside the trace, and critique-then-result output.
+- **Next step:** I review v0 and its boundaries; then the first paid dev run (44 traces,
+  `gpt-4o-mini`).
 
 ## Failure definition: `policy_claim_without_citation` (RESP-1)
 
@@ -111,8 +122,11 @@ from (D1).
 **Pass** if every policy claim carries the id of its policy, or the reply makes no policy
 claim.
 
-**Out of scope (other modes):** whether the claim is correct (`policy_answer_not_grounded`);
-a rule with no source policy at all is invented, not uncited, so it passes here (0199 T2).
+**Out of scope (other modes):** whether the claim is correct (`policy_answer_not_grounded`).
+**Sharpened line (2026-11-12):** a claim on a topic a policy covers needs that policy's id even
+when the claim is wrong (0029 T2, 0020 T2: invented shipping timelines still need cw-shipping);
+only a rule on a topic no policy covers is invented, not uncited, and passes (0199 T2: whether a
+merchant can buy their own product).
 
 **Evidence the judge sees:** the user messages and earlier turns, the session's tool calls
 and results, the final reply, the policy passages retrieved in the session, and the list of
