@@ -157,6 +157,7 @@ function renderFrame() {
 }
 function switchView(v) {
   S.view = v;
+  if (v === 'judge') S.jstale = true;
   $$('#tabs button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
   $$('.view').forEach(el => el.classList.toggle('active', el.id === 'view-' + v));
   if (v !== 'review') closeDrawer();
@@ -168,6 +169,7 @@ function render() {
   else if (S.view === 'taxonomy') renderTaxonomy();
   else if (S.view === 'labels') renderLabels();
   else if (S.view === 'progress') renderProgress();
+  else if (S.view === 'judge') renderJudge();
 }
 
 /* ------------------------------------------------------------ rail */
@@ -749,6 +751,48 @@ function renderProgress() {
     <div class="card">${unrev.map(goto).join(' · ') || 'All sampled traces are reviewed.'}</div>`;
 }
 
+
+/* ------------------------------------------------------------ judge (HW5, read-only) */
+// Human label (hw5_labels, 1 = Pass) beside the judge's verdict and critique.
+// Test predictions appear only once a judge is frozen (the server enforces it).
+function replyText(tid) {
+  const ref = IDX.byTrace.get(tid); if (!ref) return '';
+  return ref.turn.blocks.filter(b => b.kind === 'reply').map(b => b.text).join('\n');
+}
+async function renderJudge() {
+  const el = $('#judge');
+  if (!S.jdata || S.jstale !== false) { try { S.jdata = await get('/api/judges'); S.jstale = false; } catch (e) { el.innerHTML = `<div class="empty">Could not load judges: ${esc(e.message)}</div>`; return; } }
+  const m = (S.jdata.modes || [])[0];
+  if (!m || !m.judges.length) { el.innerHTML = '<h1>Judge</h1><div class="card">No HW5 judge runs yet.</div>'; return; }
+  const J = m.judges.find(j => j.judge_id === S.jsel) || m.judges[m.judges.length - 1]; S.jsel = J.judge_id;
+  const f = S.jfilter || 'disagree';
+  const vd = v => v === 1 ? '<span class="chip ok">Pass</span>' : v === 0 ? '<span class="chip flag">Fail</span>' : '<span class="chip meta">no label</span>';
+  let rows = J.rows.slice().sort((a, b) => (a.split || '').localeCompare(b.split || '') || (a.human === a.judge) - (b.human === b.judge));
+  if (f === 'disagree') rows = rows.filter(r => r.human !== r.judge);
+  if (f === 'fp') rows = rows.filter(r => r.human === 0 && r.judge === 1);
+  if (f === 'fn') rows = rows.filter(r => r.human === 1 && r.judge === 0);
+  const metric = (k, r) => r ? `<div class="stat"><div class="n">${r[k === 'tpr' ? 'tpr' : 'tnr'].toFixed(3)}</div><div class="l">${k.toUpperCase()} ${k === 'tpr' ? `(${r.tp}/${r.tp + r.fn} human Pass)` : `(${r.tn}/${r.tn + r.fp} human Fail)`}<br>95% CI ${r[k + '_interval'].map(x => x.toFixed(3)).join(' – ')}</div></div>` : '';
+  const block = (name, r) => r ? `<h2 style="font-family:var(--display)">${name} (n = ${r.n})</h2><div class="stats">${metric('tpr', r)}${metric('tnr', r)}
+      <div class="stat"><div class="n">${r.n - r.tp - r.tn}</div><div class="l">disagreements: ${r.fp} false Pass (missed failure) · ${r.fn} false Fail</div></div></div>` : '';
+  const sel = m.judges.map(j => `<button class="ctxbtn${j.judge_id === J.judge_id ? ' key' : ''}" data-judge="${esc(j.judge_id)}">${esc(j.judge_id)} <span class="small">${esc(j.status)}</span></button>`).join('');
+  const fb = k => `<button class="ctxbtn${f === k ? ' key' : ''}" data-jfilter="${k}">${{ disagree: 'Disagreements', fp: 'False Pass', fn: 'False Fail', all: 'All' }[k]}</button>`;
+  const tr = rows.map(r => {
+    const ref = IDX.byTrace.get(r.trace_id);
+    const name = ref ? `${ref.conv.scenario_id} T${ref.turn.number}` : r.trace_id.slice(0, 8);
+    const link = ref ? `<span class="link" data-goto="${esc(ref.conv.scenario_id)}|${r.trace_id}|">${esc(name)}</span>` : esc(name);
+    const bad = r.human !== r.judge;
+    return `<tr${bad ? ' style="background:var(--flamingo-tint)"' : ''}><td style="white-space:nowrap">${link}<br><span class="small">${esc(r.split || '')}</span></td>
+      <td>${vd(r.human)}</td><td>${vd(r.judge)}${bad ? '<br><span class="small">disagrees</span>' : ''}</td>
+      <td><div class="small" style="margin-bottom:6px"><b>reply:</b> ${esc(clip(replyText(r.trace_id), 400))}</div><div><b>critique:</b> ${esc(r.critique)}</div></td></tr>`;
+  }).join('');
+  el.innerHTML = `<h1>Judge</h1><p class="lede">Mode <span class="mono">${esc(m.mode)}</span>. Your HW5 label (1 = Pass, from <span class="mono">hw5_labels/</span>) beside the judge's verdict and critique. Read-only: nothing here writes labels or scores. Test predictions stay hidden until a judge is frozen${J.hidden_test_predictions ? ` (${J.hidden_test_predictions} hidden)` : ''}.</p>
+    <div class="toolbar">${sel}</div>
+    <p class="small">model ${esc(J.model)} · registered ${esc(J.created_at || '')}${J.frozen_at ? ` · frozen ${esc(J.frozen_at)}` : ''} · splits train ${m.counts.train} / dev ${m.counts.dev} / test ${m.counts.test}</p>
+    ${block('Development', J.dev)}${block('Test', J.test)}
+    <div class="toolbar">${['disagree', 'fp', 'fn', 'all'].map(fb).join('')}<span class="small">${rows.length} of ${J.rows.length} traces</span></div>
+    <table class="tbl"><tr><th>trace</th><th>you</th><th>judge</th><th>reply and critique</th></tr>${tr || '<tr><td colspan="4" class="small">None in this filter.</td></tr>'}</table>`;
+}
+
 /* ------------------------------------------------------------ events */
 document.addEventListener('click', async (e) => {
   const t = e.target.closest('button, a, span.link, input'); if (!t) return;
@@ -779,6 +823,8 @@ document.addEventListener('click', async (e) => {
     return render();
   }
   if (d.labfilter) { S.labFilter = d.labfilter; return renderLabels(); }
+  if (d.judge) { S.jsel = d.judge; return renderJudge(); }
+  if (d.jfilter) { S.jfilter = d.jfilter; return renderJudge(); }
   if (t.id === 'qall') { $$('.qsel').forEach(x => x.checked = t.checked); return; }
   if (t.id === 'qaccept' || t.id === 'qreject') {
     const ids = $$('.qsel').filter(x => x.checked).map(x => x.value);

@@ -91,8 +91,23 @@ Handout: `homework/module-2/hw5.md`. A new session should read this first, then 
   R4). Includes the task, Pass and Fail rules (R1, R4, D1, D2, the sharpened line), all 18
   policies (short bodies, so the judge can tell which policy a claim comes from), an instruction
   not to follow instructions inside the trace, and critique-then-result output.
-- **Next step:** I review v0 and its boundaries; then the first paid dev run (44 traces,
-  `gpt-4o-mini`).
+- **Dev run, v0 (2026-11-12, `gpt-4o-mini`, 44 dev traces, approved by me):** judge
+  `policy_claim_without_citation-v0`; metrics in `analysis/report/dev-policy_claim_without_citation-v0.json`.
+  TPR 0.821 (23/28, Wilson 0.644 to 0.921), TNR 0.875 (14/16, 0.640 to 0.965); 7 disagreements:
+  - 5 false Fails on bare eligibility flags (R1): 0034, 0046, 0215, 0248, 0249. The judge reads
+    "eligible for a refund" / "you can still return it" as a policy claim.
+  - 1 false Pass, hallucinated citation: 0048. The critique says the reply "carries cw-returns";
+    the reply has no id (the id is only in the tool result).
+  - 1 false Pass, missed refusal: 0158 T2 ("I can't process the change directly" + ticket offer).
+- **Judge view added to the review app (2026-11-12):** a read-only **Judge** tab
+  (`analysis/review_app/judges.py`, route `/api/judges`). For the chosen judge version it shows
+  dev TPR/TNR with Wilson intervals, then each trace's HW5 label beside the judge's verdict,
+  the reply, and the critique, filterable to disagreements / false Pass / false Fail, with links
+  to the conversation. Test predictions are hidden until a judge is frozen (enforced in the
+  server). Nothing in it writes labels or scores. Smoke-tested on a spare port: renders, no
+  console errors. Restart the app to pick up the new route.
+- **Next step:** inspect the 7 in the Judge tab, decide each one (judge wrong / label wrong /
+  definition unclear), then revision v1 (at most two revisions).
 
 ## Failure definition: `policy_claim_without_citation` (RESP-1)
 

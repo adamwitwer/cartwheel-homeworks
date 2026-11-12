@@ -32,7 +32,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 
-from analysis.review_app import data, store
+from analysis.review_app import data, judges, store
 
 STATIC = Path(__file__).resolve().parent / "static"
 CONTENT_TYPES = {".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css"}
@@ -113,6 +113,8 @@ class Handler(BaseHTTPRequestHandler):
             self._json(store.read_doc("patterns.json"))
         elif path == "/api/samples":
             self._json(store.read_doc("sample_manifest.json"))
+        elif path == "/api/judges":
+            self._json(judges.judge_view())
         elif path == "/api/labels":
             modes = [m.get("name") for m in store.read_doc("patterns.json")["modes"] if m.get("name")]
             self._json(store.all_live_labels(modes))
