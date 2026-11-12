@@ -1,0 +1,40 @@
+{
+  "judge_id": "policy_claim_without_citation-v0",
+  "split": "test",
+  "tpr": 0.5926,
+  "tnr": 0.5625,
+  "tpr_interval": [
+    0.4073,
+    0.7549
+  ],
+  "tnr_interval": [
+    0.3318,
+    0.769
+  ],
+  "agreement": 0.5814,
+  "tp": 16,
+  "fn": 11,
+  "tn": 9,
+  "fp": 7,
+  "n": 43,
+  "disagreements": [
+    "19fffb711c9fcbfcedddbf7824031071",
+    "1ebe6703c7a3e6c3894e7e201764a83f",
+    "1f831835af2ea31ac92c44d837f51e65",
+    "207f3c708edc826469f68abc9e0fd092",
+    "22f360e5b003b63674398fdc026b956c",
+    "37fb0812ca7f4e2675a9be812d1ce452",
+    "3f115f1e29cce9c341c28f2f08c3a0df",
+    "45597f1899099966d101de1bf6058d7a",
+    "52133c69eb2e0b4694485e2fc0a81d68",
+    "57fae14882812b8ed1c5a85465126af0",
+    "8959b008bd935394309428a97ff7b250",
+    "93e22132d41ccc884fca8148c3e6d510",
+    "ad943d66d1c0a7445bd158ab30d47e94",
+    "c3e31d5aa35971dbffc12cb8328cc41e",
+    "c659f4441292926ad9812ef2060a8ac8",
+    "d6dc508948b5d88b45f5173c26b670c7",
+    "ed0722a1a7cebb453438d9ce1420435e",
+    "fceff16f1f6fc044bede94e04749cf51"
+  ]
+}

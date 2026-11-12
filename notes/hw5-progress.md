@@ -133,8 +133,25 @@ Handout: `homework/module-2/hw5.md`. A new session should read this first, then 
   id literally appears in the reply, which is the code-checkable half of this mode, and (2) not
   reading an implied return rule into "eligible". Stopped revising at the handout's limit of two;
   more prompt edits were trading one error for another rather than removing them.
-- **Next step:** I choose the final version from v0, v1, v2 on the dev results; freeze it; run the
-  test split once (paid, 43 traces).
+- **Final version: v0 (my choice, 2026-11-12):** best worse-of-two rate on dev (TPR 0.821, TNR
+  0.875) and the most real failures caught.
+- **Test run, v0 (2026-11-12, `gpt-4o-mini`, 43 test traces, run once):** frozen at
+  2026-11-12T18:04Z, then run on test; metrics in
+  `analysis/report/test-policy_claim_without_citation-v0.json`. 27 Pass / 16 Fail.
+  TPR 0.593 (16/27, Wilson 0.407 to 0.755), TNR 0.563 (9/16, 0.332 to 0.769); TP 16, FN 11,
+  TN 9, FP 7; agreement 25/43. Far below dev; the dev and test intervals barely overlap.
+  - 10 of the 11 false Fails are bare eligibility flags (R1): 0026, 0229, 0246, 0150, 0100, 0024,
+    0243, 0242, 0211, 0237. The 11th, 0042, puts the 30-day deadline in one paragraph and
+    cw-returns in the next; the judge applied D2 (same sentence or paragraph). Possibly a label
+    issue (my HW4 "close negative"); left unchanged, since relabeling test after seeing the
+    judge's verdicts would bias the estimate.
+  - 7 false Passes: hallucinated or earlier-turn citations (0054, 0035 T2, 0036 T2: the reply has
+    no id), missed policy-based refusals (0163, 0251 T2, 0090), and one borderline D2 miss (0106).
+  - Why test is worse than dev: the split put more of the judge's weakest case into test.
+    Uncited-eligibility Passes: train 0, dev 6 (judge right on 1), test 10 (judge right on 0).
+    On the other Passes the judge was right on 22/22 dev and 16/17 test. Because train had none,
+    the prompt's examples (training only) never showed a bare eligibility flag passing.
+- **Next step:** my decision on whether I'd use the judge (Part E), then the video.
 
 ## Failure definition: `policy_claim_without_citation` (RESP-1)
 
@@ -187,15 +204,15 @@ and results, the final reply, the policy passages retrieved in the session, and 
 
 ## Deliverables checklist
 
-- [ ] HW5 labels and evidence: `analysis/state/hw5_labels/policy_claim_without_citation.jsonl`
-- [ ] Split and inputs: `analysis/state/splits.json`, `analysis/state/hw5_trace_inputs.json`
-- [ ] Every evaluated prompt: `analysis/prompts/`
-- [ ] Judge versions, predictions, critiques: my mode's files in `analysis/state/judges/`
-- [ ] Code: `analysis/run_judges.py` (`prepare_inputs`, `split_data`, `run_development`, `run_test`)
-- [ ] Metrics: `analysis/report/dev-<judge_id>.json`, `analysis/report/test-<judge_id>.json`
-- [ ] Judge verdict and critique shown beside my label in the HW4 interface; every
+- [x] HW5 labels and evidence: `analysis/state/hw5_labels/policy_claim_without_citation.jsonl`
+- [x] Split and inputs: `analysis/state/splits.json`, `analysis/state/hw5_trace_inputs.json`
+- [x] Every evaluated prompt: `analysis/prompts/`
+- [x] Judge versions, predictions, critiques: my mode's files in `analysis/state/judges/`
+- [x] Code: `analysis/run_judges.py` (`prepare_inputs`, `split_data`, `run_development`, `run_test`)
+- [x] Metrics: `analysis/report/dev-<judge_id>.json`, `analysis/report/test-<judge_id>.json`
+- [x] Judge verdict and critique shown beside my label in the HW4 interface; every
       development disagreement inspected
-- [ ] At most two prompt revisions, with the reason I stopped
+- [x] At most two prompt revisions, with the reason I stopped
 - [ ] Video (5 minutes or less; mine): failure mode, one development disagreement and my
       response, test TPR/TNR with intervals (recalculated live from saved predictions), and
       whether I'd use the judge
