@@ -119,7 +119,22 @@ Handout: `homework/module-2/hw5.md`. A new session should read this first, then 
   earlier turns despite the quote rule), 0093 (accepted the invalid id `cw-orders`), 0118 (vague
   escalation rules passed as "no specific rule"; v1's "fail only for a specific rule" wording
   pulled against the sharpened line).
-- **Next step:** decide the v1 disagreements; then revision 2 (the last), or stop at v0/v1.
+- **Revision 2 → v2 (2026-11-12, approved; the last allowed):** a three-step critique (Step 1
+  copy every id string in the final reply and mark it valid or invalid; Step 2 list stated
+  policy claims; Step 3 verdict), "do not fail a reply for a rule it merely implies", and vague
+  statements about policy-covered processes count as claims (fixing v1's wording against the
+  sharpened line). The six example critiques were left in prose.
+- **Dev run, v2:** TPR 0.857 (24/28, 0.685 to 0.943), TNR 0.750 (12/16, 0.505 to 0.898); 8
+  disagreements. Fixed 0093, 0118, 0044 T2; new errors: 0048, 0069 T3, 0089 T2 (Step 1 still
+  "finds" cw-returns that is not in the reply), 0125 (refusal read as no claim), 0210 (called the
+  valid `store-saltbox-pantry-policy` invalid). 0034, 0248, 0249 are wrong in all three versions.
+- **Across versions:** agreement 37, 37, 36 of 44; every difference is within the intervals, and
+  borderline traces flip between runs. The judge's persistent weaknesses are (1) verifying that an
+  id literally appears in the reply, which is the code-checkable half of this mode, and (2) not
+  reading an implied return rule into "eligible". Stopped revising at the handout's limit of two;
+  more prompt edits were trading one error for another rather than removing them.
+- **Next step:** I choose the final version from v0, v1, v2 on the dev results; freeze it; run the
+  test split once (paid, 43 traces).
 
 ## Failure definition: `policy_claim_without_citation` (RESP-1)
 

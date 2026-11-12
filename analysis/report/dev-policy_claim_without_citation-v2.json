@@ -1,0 +1,31 @@
+{
+  "judge_id": "policy_claim_without_citation-v2",
+  "prompt_path": "analysis/prompts/policy_claim_without_citation-v2.txt",
+  "split": "dev",
+  "tpr": 0.8571,
+  "tnr": 0.75,
+  "tpr_interval": [
+    0.6851,
+    0.943
+  ],
+  "tnr_interval": [
+    0.505,
+    0.8982
+  ],
+  "agreement": 0.8182,
+  "tp": 24,
+  "fn": 4,
+  "tn": 12,
+  "fp": 4,
+  "n": 44,
+  "disagreements": [
+    "074e2a3e8e4257887c517f7cd92c56ad",
+    "159a626ca923e1a2a7f107e772e45876",
+    "3ad8eaa00c6aa47b0a101954faca4549",
+    "43c50cfec59bea06c63f44a635b130e4",
+    "4edcd6c7e7a9b0e055762f0cf7c846f3",
+    "9cc2221f3cb943c0313cec9ce2babcba",
+    "9f9ecaae60be6f9ba9c7d176cf3aaafe",
+    "c98cd17975e8fbca3ebfff4aa03f278d"
+  ]
+}
