@@ -175,6 +175,19 @@ Handout: `homework/module-2/hw5.md`. A new session should read this first, then 
     cw-returns: the judge applies the prompt's rule that a store with its own policy page takes
     its window from that page; Cascade's page says it follows the platform window). 0055 is the
     same question as 0042 in test.
+  - **Test, v3 (frozen 2026-11-12, 43 traces, run once, about $1.55):** TPR 1.000 (27/27, Wilson
+    0.875 to 1.000), TNR 1.000 (16/16, 0.806 to 1.000); TP 27, FN 0, TN 16, FP 0; no
+    disagreements. Metrics in `analysis/report/test-policy_claim_without_citation-v3.json`;
+    `metrics policy_claim_without_citation-v3` recomputes them and matches the helper. v0 on the
+    same 43 traces: 0.593 / 0.563. All 10 uncited-eligibility Passes right (v0: 0); the
+    hallucinated-id and refusal Fails all caught (e.g. 0054: "The reply cites no policy id at
+    all"; 0163: a refusal grounded in cw-account-security).
+  - Caveats: the samples are small (the lower bounds, 0.875 and 0.806, are what the data
+    guarantee, not 1.0). On the Cascade Audio boundary Opus was inconsistent: 0055 (dev) failed
+    for citing cw-returns, 0042 (test) passed with cw-returns, and on 0042 it let a citation in
+    the next paragraph cover the deadline, looser than D2 (same sentence or paragraph). That
+    call agrees with my label, but it is a lenient reading.
+  - Cost of the whole comparison: about $3.10 (probe, dev, test).
 - **Next step:** the video.
 
 ## Failure definition: `policy_claim_without_citation` (RESP-1)
