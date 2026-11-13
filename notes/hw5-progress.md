@@ -239,6 +239,67 @@ and results, the final reply, the policy passages retrieved in the session, and 
   group; report the Pass composition (cites a valid id / eligibility flag only / no policy
   content) with the results.
 
+## Video checklist (5 minutes or less, one continuous recording)
+
+Before recording:
+- The review app: `uv run python -m analysis.review_app.server` → http://localhost:8030 (it was
+  already running the current code on 2026-11-12). Docker and Langfuse are not needed:
+  conversations load from the local cache and the Judge tab reads local files. **Don't click
+  label, accept, or reject buttons while recording.**
+- A terminal at the repo root with a large font. Both `metrics` commands are free, make no model
+  calls, and write nothing, so rehearse them as often as you like.
+- Editor tab: `analysis/prompts/policy_claim_without_citation-v0.txt` at "## Definitions".
+
+Same order as the handout's Video section, plus the optional model comparison at the end.
+
+1. **The failure mode (~45s).** `policy_claim_without_citation` (RESP-1: "Cite the policy
+   identifier for every claim derived from a policy document"; the agent's own system prompt asks
+   for it). Show the prompt's Definitions: Fail if any policy claim in the final reply lacks the
+   valid id of its policy. Not claims: order facts and a bare eligibility flag (R1). Claims:
+   "within 24 hours" and policy-based refusals (R4); a valid id for the wrong policy fails (D1).
+   Why a judge and not code: whether an id is present is code-checkable, but deciding which
+   statements are policy claims needs judgment. Data: 109 conversations (68 Pass / 41 Fail),
+   split 20/40/40 → train 22, dev 44, test 43.
+2. **One development disagreement and my response (~70s).** Judge tab → v0 → False Fail →
+   0034 (dev): http://localhost:8030/#5b4a549b46c94b4f809c3a0ca686dd91. Reply: "You can still
+   return the Compact Notebook since it is eligible for a refund." My label: Pass (R1, a bare
+   flag). v0's critique: the claim "implies the existence of a return window" with no id.
+   - My decision: the judge was wrong (not my label, not the definition).
+   - Response: v1 listed "eligible" / "you can still return it" as not claims; v2 added "do not
+     fail a reply for a rule it merely implies". Still wrong in all three versions, and each
+     edit traded one error for another (v1's TNR fell to 0.75). Stopped at the two-revision
+     limit; chose v0 for the best worse-of-two dev rate (0.821 / 0.875).
+   - Optional 10s: even Opus 4.7 failed 0034 ("still" read as a return window), so it may be a
+     genuinely borderline label.
+3. **Test results, recalculated live (~60s).** v0 was frozen before test and run once. In the
+   terminal:
+   `uv run python -m analysis.run_judges metrics policy_claim_without_citation-v0`
+   Point at the per-trace rows (`<- disagree`), the counts (TP 16, FN 11, TN 9, FP 7), and the
+   formulas: TPR 16/27 = 0.593 (Wilson 0.407 to 0.755), TNR 9/16 = 0.563 (0.332 to 0.769), and
+   "Matches the course helper judge_alignment: True". Code to show if asked: `recompute_metrics`
+   and `_wilson` in `analysis/run_judges.py`.
+   Why test is worse than dev (0.821 / 0.875): test held 10 uncited-eligibility Passes (judge
+   right on 0) against dev's 6; train had none, so no prompt example showed one passing; and
+   choosing the best of three versions on dev flatters dev.
+4. **Would I use the judge? No (~45s).** Even the upper bounds (0.755, 0.769) are below the
+   book's example of >90%. It misses about 44% of real failures and wrongly flags about 41% of
+   good replies. TPR + TNR - 1 is about 0.16, so a prevalence correction would be unusable. The
+   errors are systematic: bare eligibility flags, ids it reports that aren't in the reply (0054:
+   "the return window closed on June 4", no id), and refusals (0163). A code check for the id
+   could replace half of the judge's job.
+5. **Optional: a more capable model (~50s).** The book's first remedy for a weak judge. Same
+   frozen v0 prompt on `claude-opus-4-7`, registered as v3 (a model swap, not a third revision;
+   Opus 5.5 couldn't run, because DocETL forces a tool call that Opus 5.5 rejects). Dev
+   0.893 / 1.000, then frozen and run once on test:
+   `uv run python -m analysis.run_judges metrics policy_claim_without_citation-v3`
+   → 27/27 and 16/16, Wilson lower bounds 0.875 and 0.806. Same prompt, about 0.6 → 1.0, so the
+   model, not the prompt, was the bottleneck. Caveats: small samples; one lenient call (0042, an
+   id in the next paragraph); inconsistent on the Cascade Audio boundary (0055 dev vs 0042 test);
+   about $0.035 a trace against about $0.0007 (roughly 50×). Say whether this changes your answer
+   for a monitoring judge.
+
+Total about 4.5 minutes.
+
 ## Deliverables checklist
 
 - [x] HW5 labels and evidence: `analysis/state/hw5_labels/policy_claim_without_citation.jsonl`
