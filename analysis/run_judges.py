@@ -9,7 +9,7 @@ Usage, from the repository root:
 
     uv run python -m analysis.run_judges prepare      # write hw5_trace_inputs.json (no model calls)
     uv run python -m analysis.run_judges split        # write splits.json for the mode (run once)
-    uv run python -m analysis.run_judges dev analysis/prompts/<mode>-v0.txt   # paid: dev split
+    uv run python -m analysis.run_judges dev analysis/prompts/<mode>-v0.txt [model]  # paid: dev split
     uv run python -m analysis.run_judges test <judge_id>                    # paid: freeze + test
     uv run python -m analysis.run_judges metrics <judge_id> [dev|test]      # free: recompute from saved predictions
 
@@ -121,16 +121,20 @@ def split_data(mode: str = MODE) -> dict[str, list[str]]:
     )
 
 
-def run_development(mode: str, prompt_path: str | Path) -> dict[str, Any]:
-    """Register a prompt version, run it on the dev split, and save its metrics. Paid."""
+def run_development(mode: str, prompt_path: str | Path, judge_model: str = "gpt-4o-mini") -> dict[str, Any]:
+    """Register a prompt version, run it on the dev split, and save its metrics. Paid.
+
+    ``judge_model`` defaults to the handout's ``gpt-4o-mini``; another model is an
+    optional comparison only (v3: the frozen v0 prompt on ``claude-opus-4-7``).
+    """
     sys.path.insert(0, str(ROOT))
     from analysis.helpers import judge_alignment, register_judge, run_judge
 
-    record = register_judge(mode=mode, prompt_text=Path(prompt_path).read_text(), judge_model="gpt-4o-mini")
+    record = register_judge(mode=mode, prompt_text=Path(prompt_path).read_text(), judge_model=judge_model)
     judge_id = record["judge_id"]
     run_judge(judge_id, split="dev", batch_size=10)
     development = judge_alignment(judge_id, split="dev")
-    out = {"judge_id": judge_id, "prompt_path": str(prompt_path), "split": "dev", **development}
+    out = {"judge_id": judge_id, "prompt_path": str(prompt_path), "model": judge_model, "split": "dev", **development}
     REPORT.mkdir(parents=True, exist_ok=True)
     (REPORT / f"dev-{judge_id}.json").write_text(json.dumps(out, indent=2, default=str) + "\n")
     return out
@@ -222,8 +226,8 @@ def main(argv: list[str]) -> None:
         print(len(prepare_inputs()), "inputs written to", INPUTS.relative_to(ROOT))
     elif cmd == "split":
         print({k: len(v) for k, v in split_data().items()})
-    elif cmd == "dev" and len(argv) == 2:
-        print(json.dumps(run_development(MODE, argv[1]), indent=2, default=str))
+    elif cmd == "dev" and len(argv) in (2, 3):
+        print(json.dumps(run_development(MODE, *argv[1:]), indent=2, default=str))
     elif cmd == "test" and len(argv) == 2:
         print(json.dumps(run_test(argv[1]), indent=2, default=str))
     elif cmd == "metrics" and len(argv) in (2, 3):

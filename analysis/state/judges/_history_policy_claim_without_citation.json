@@ -11,6 +11,10 @@
     {
       "judge_id": "policy_claim_without_citation-v2",
       "prompt_hash": "79b2ee5b2a7a"
+    },
+    {
+      "judge_id": "policy_claim_without_citation-v3",
+      "prompt_hash": "13b52255824f"
     }
   ]
 }

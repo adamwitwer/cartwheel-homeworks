@@ -157,6 +157,24 @@ Handout: `homework/module-2/hw5.md`. A new session should read this first, then 
   fractions with Wilson intervals, and a check against the course helper `judge_alignment`
   (add `dev` for the dev split). Verified with the API key unset.
 - **Would I use the judge: no (my decision, 2026-11-12).** Reasons in the video.
+- **Optional: a more capable model (2026-11-12, my idea, following the book's "use a more capable
+  LLM" strategy).** Same frozen v0 prompt, model swapped; registered as
+  `policy_claim_without_citation-v3`. **v3 is a model swap, not a third prompt revision.** The
+  graded judge stays v0 on `gpt-4o-mini`.
+  - Opus 5.5 was tried first and could not run through the course pipeline: DocETL forces its
+    `send_output` tool call, and Opus 5.5 rejects forced `tool_choice` (400). Switched to
+    `claude-opus-4-7`, which runs through the unchanged DocETL path (without extended thinking).
+    Probe on one training trace (0230 T1): correct, $0.03.
+  - **Dev, v3 (`claude-opus-4-7`, 44 traces, about $1.50):** TPR 0.893 (25/28, 0.728 to 0.963),
+    TNR 1.000 (16/16, 0.806 to 1.000); 3 disagreements. Against v0 on the same dev traces it fixed
+    0248, 0215, 0046 (eligibility flags), 0048 (hallucinated id), and 0158 T2 (refusal).
+    Uncited-eligibility Passes: 4 of 6 right (v0: 1 of 6).
+  - v3 misses: 0034 and 0249 ("you can still return ... eligible for a refund": the judge reads
+    "still" as a return-window claim; wrong in every version, and v0's prompt lists only "not
+    eligible for a refund" as a bare flag), and 0055 (Cascade Audio's 30-day window cited to
+    cw-returns: the judge applies the prompt's rule that a store with its own policy page takes
+    its window from that page; Cascade's page says it follows the platform window). 0055 is the
+    same question as 0042 in test.
 - **Next step:** the video.
 
 ## Failure definition: `policy_claim_without_citation` (RESP-1)
