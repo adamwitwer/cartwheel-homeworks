@@ -188,7 +188,10 @@ Handout: `homework/module-2/hw5.md`. A new session should read this first, then 
     the next paragraph cover the deadline, looser than D2 (same sentence or paragraph). That
     call agrees with my label, but it is a lenient reading.
   - Cost of the whole comparison: about $3.10 (probe, dev, test).
-- **Next step:** the video.
+- **HW5 submitted (2026-11-15):** video recorded (Loom,
+  https://www.loom.com/share/6922edf24b3344348ac5643a5ca7d9d7) and posted with the repo link
+  in the course Discord submissions channel (by me).
+- **Next step:** none for HW5.
 
 ## Failure definition: `policy_claim_without_citation` (RESP-1)
 
@@ -311,6 +314,7 @@ Total about 4.5 minutes.
 - [x] Judge verdict and critique shown beside my label in the HW4 interface; every
       development disagreement inspected
 - [x] At most two prompt revisions, with the reason I stopped
-- [ ] Video (5 minutes or less; mine): failure mode, one development disagreement and my
+- [x] Video (5 minutes or less; mine): failure mode, one development disagreement and my
       response, test TPR/TNR with intervals (recalculated live from saved predictions), and
       whether I'd use the judge
+- [x] Posted to the course Discord submissions channel, done by me (2026-11-15)
