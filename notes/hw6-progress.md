@@ -119,16 +119,22 @@ reporting in the course Discord.
 
   The supplied summary (`summarize_harbor_job.py --classify`) reports e-005 as regression and
   the other 11 as capability, with `baseline_pass_rate` equal to the observed fraction.
+- **Classified (my decision, 2026-11-16):** as reported. e-005 is the only regression; the other
+  11 are capability. Recorded in `cases.jsonl`; the final export accepts all 12. Offline suite
+  unchanged (the 12 new skips are the opt-in live tests in `tests/eval/test_e2e.py`).
+  - Four of the five HW4 Pass sources (e-006, e-007, e-011, e-012) failed at least once in five
+    runs; one HW4 label is weak evidence of reliability.
+  - With one regression case, the CI gate is e-005's five runs: per-run reliability p gives
+    p^5 of passing.
 
 ## Next step
 
-My classifications from the five-run baselines, then record `kind` and `baseline_pass_rate`
-in `cases.jsonl`. Then Part B.
+Part B: `pass_at_k`, `pass_hat_k`, `case_passes` in `tests/eval/passk.py`.
 
 ## Deliverables checklist
 
-- [ ] `eval_cases/cases.jsonl`: 10+ cases, 2+ HW4 modes, each classified from five baseline runs
-- [ ] At least one regression and one capability case
+- [x] `eval_cases/cases.jsonl`: 12 cases, 2 HW4 modes, each classified from five baseline runs
+- [x] At least one regression and one capability case (e-005 regression; 11 capability)
 - [ ] `tests/eval/passk.py`: `pass_at_k`, `pass_hat_k`, `case_passes` (3 focused tests pass)
 - [ ] `.github/workflows/evals.yml`: Harbor job, summary and artifact with `if: always()`
 - [ ] `ci-runs.json`: two runs from one pull request (regression, then revert)
