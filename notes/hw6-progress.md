@@ -48,7 +48,8 @@ Handout: `homework/module-3/hw6.md`. A new session should read this first, then 
     `test_m2_failure_report_matches_artifact_l_schema` (demo-mode check since HW4 Part D).
     Order-dependent: `test_m2_run_judge_persists_store_predictions_for_prevalence` passes alone
     and in `tests/test_hw_holes.py` alone, but fails in the full suite (397 store traces, my
-    local Langfuse export, instead of 500). Not HW6; watch whether it fails in CI.
+    local Langfuse export, instead of 500). Not HW6. In CI (run 43991490539, push of b462289)
+    it passes; only the demo-mode test fails there, so the order-dependent failure is local.
 - **Watch:**
   - Judge input: the Harbor verifier formats the trace with `replay.rollout.judge_trace_text`:
     `tool_call: {args}` and `tool_result: {result}` without the tool name. My HW5 inputs kept the
@@ -127,15 +128,35 @@ reporting in the course Discord.
   - With one regression case, the CI gate is e-005's five runs: per-run reliability p gives
     p^5 of passing.
 
+## Part B
+
+- **Done (2026-11-16, no model calls; implemented by Claude at my request):**
+  `tests/eval/passk.py`. A shared check raises `ValueError` for `n < 1`, `c` outside `[0, n]`,
+  or `k` outside `[1, n]`. `pass_at_k = 1 - C(n-c, k) / C(n, k)` (1.0 when `n - c < k`);
+  `pass_hat_k = C(c, k) / C(n, k)` (0.0 when `c < k`). `case_passes` blocks a regression case on
+  any failed run and never blocks a capability case; the reason names the counts ("regression
+  case failed 1 of 5 runs"; "capability case passed 3 of 5, baseline 0.6, not blocking").
+- Focused tests: `pytest --runxfail tests/test_hw_holes.py -k "hw6_pass or hw6_case"` → 3 passed.
+  Offline suite unchanged apart from the three HW6 hole tests now passing.
+- On my baselines (n = 5):
+
+  | Case | c | pass@1 | pass@3 | pass^3 | pass^5 |
+  |---|---|---|---|---|---|
+  | e-005 | 5 | 1.0 | 1.0 | 1.0 | 1.0 |
+  | e-006 | 4 | 0.8 | 1.0 | 0.4 | 0.0 |
+  | e-011 | 3 | 0.6 | 1.0 | 0.1 | 0.0 |
+  | e-004 | 2 | 0.4 | 0.9 | 0.0 | 0.0 |
+
 ## Next step
 
-Part B: `pass_at_k`, `pass_hat_k`, `case_passes` in `tests/eval/passk.py`.
+Part C: complete `.github/workflows/evals.yml`; add the `CARTWHEEL_MODEL` variable and the
+`OPENAI_API_KEY` and `ANTHROPIC_API_KEY` secrets on GitHub (by me, never in chat).
 
 ## Deliverables checklist
 
 - [x] `eval_cases/cases.jsonl`: 12 cases, 2 HW4 modes, each classified from five baseline runs
 - [x] At least one regression and one capability case (e-005 regression; 11 capability)
-- [ ] `tests/eval/passk.py`: `pass_at_k`, `pass_hat_k`, `case_passes` (3 focused tests pass)
+- [x] `tests/eval/passk.py`: `pass_at_k`, `pass_hat_k`, `case_passes` (3 focused tests pass)
 - [ ] `.github/workflows/evals.yml`: Harbor job, summary and artifact with `if: always()`
 - [ ] `ci-runs.json`: two runs from one pull request (regression, then revert)
 - [ ] `eval_results/<case-id>-15.json`: one capability case, 15 runs
