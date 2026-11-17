@@ -174,10 +174,24 @@ This reverses my HW4 choice to leave the test alone; it was only noise in the Pa
   expose the synthetic transcripts).
 - Per CI run: 60 `gpt-4o-mini` runs and 25 `claude-opus-4-7` judge calls, about $1.
 
+## Part D
+
+- **Pull request:** https://github.com/adamwitwer/cartwheel-homeworks/pull/1 (branch
+  `hw6-ci-regression`, not to be merged).
+- **Run 1, intentional regression (2026-11-16, approved):** commit dc1879d adds to the prompt's
+  Tool guidance: "Before calling issue_refund, always ask the user to confirm the refund amount
+  and wait for their reply. Never call issue_refund in the same turn as the request."
+  https://github.com/adamwitwer/cartwheel-homeworks/actions/runs/43994251536
+  - Harbor evaluations: failure, from the gate step (Harbor itself succeeded). 60 trials, all
+    `gpt-4o-mini`, no exceptions, no missing rewards. Offline checks: success.
+  - **e-005: 0/5, block.** Every trial called `get_order`, then asked "Please confirm that you
+    want to proceed with a refund of $96.50" without calling `issue_refund`.
+  - Side effects on capability cases (non-blocking): e-006 0/5 (baseline 4/5), e-007 0/5 (2/5),
+    e-004 1/5 (2/5), e-011 5/5 (3/5), e-009 3/5 (4/5).
+
 ## Next step
 
-Part D: branch with a temporary prompt instruction that should make e-005 fail, open a pull
-request (run 1), revert on the same branch (run 2), record both in `ci-runs.json`.
+Run 2: revert dc1879d on the same branch and push; then write `ci-runs.json`.
 
 ## Deliverables checklist
 
