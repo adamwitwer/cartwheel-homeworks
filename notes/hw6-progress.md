@@ -95,12 +95,35 @@ reporting in the course Discord.
 
 - **Baselines (approved 2026-11-16):** 60 `gpt-4o-mini` runs and 25 judge calls (about $1), one
   Harbor job per case (`hw6-baseline-e-0XX`), `--yes` (no `--upload`; nothing goes to Harbor Hub).
-  - e-001: 0/5, no exceptions. Two trials found 5858 and asked to confirm the amount or reason
-    (the HW4 failure); three used `list_my_orders`, missed 5858, and said no order matched.
+  - The first runs of the four merchant cases (e-005, e-010, e-011, e-012) stopped before any
+    model call: a merchant auth context needs `input.store_id`, which I had left out. Added
+    from the `users` table (7aa1915); reran only those four jobs. The errored jobs are kept in
+    `.harbor/jobs-infra-errors/` (gitignored).
+  - All 60 trials produced a reward with no exceptions. Agent tokens: 154k in, 9k out (about
+    $0.03); 25 judge calls (about $0.90).
+
+  | Case | Passed | What the failures were |
+  |---|---|---|
+  | e-001 | 0/5 | 2 found 5858 and asked to confirm the amount or reason (the HW4 failure); 3 used `list_my_orders`, missed 5858, and said no order matched |
+  | e-002 | 0/5 | asked for a reason every time; 4 also picked the wrong order (566) |
+  | e-003 | 1/5 | 4 offered to escalate ("Would you like me to...?") instead of escalating |
+  | e-004 | 2/5 | |
+  | e-005 | 5/5 | |
+  | e-006 | 4/5 | 1 asked for a reason instead of submitting the refund |
+  | e-007 | 2/5 | 3 offered to escalate instead of escalating |
+  | e-008 | 0/5 | no policy lookup, no `cw-escalations`; the judge passed 3 (no policy claim: "I don't have specific information") and failed 2 (uncited "24 to 48 hours", "a few hours to a couple of days") |
+  | e-009 | 4/5 | |
+  | e-010 | 0/5 | correct rule, never looked up or cited `cw-roles`; check and judge both Fail |
+  | e-011 | 3/5 | check and judge agreed on every trial |
+  | e-012 | 3/5 | check and judge agreed on every trial |
+
+  The supplied summary (`summarize_harbor_job.py --classify`) reports e-005 as regression and
+  the other 11 as capability, with `baseline_pass_rate` equal to the observed fraction.
 
 ## Next step
 
-Finish the e-002 to e-012 baselines, summarize them, and record each classification (mine).
+My classifications from the five-run baselines, then record `kind` and `baseline_pass_rate`
+in `cases.jsonl`. Then Part B.
 
 ## Deliverables checklist
 
