@@ -55,10 +55,52 @@ Handout: `homework/module-3/hw6.md`. A new session should read this first, then 
     tool name inside each tool message. Same prompt, model, wrapper, and parser; the trace text
     differs slightly. The citation check concerns ids in the final reply, so the effect should
     be small. Kept as supplied (the handout says to use the supplied adapter).
+  - Narration: in the Harbor transcript a turn's `reply` (and `final_reply`) is all of the
+    agent's text in that turn, including pre-tool narration ("Let me look up your orders..."),
+    so both `reply_contains` and the judge see it. My HW5 inputs left narration out (D3).
+
+## Fix to the supplied adapter (2026-11-16)
+
+Harbor 0.23.0 writes the job-level `result.json` without `trial_results` (it always passes
+`exclude_trial_results=True`, `harbor/job.py:1103`), but `harbor_adapter/summary.py` and
+`harbor_adapter/analysis.py` read only that list. The summary found no trials ("no baseline
+trials matched a case"), and the Part E analyzer would have refused to run; the supplied tests
+passed only because they write a `result.json` that includes the list. Fix: a shared
+`load_trial_results` in `summary.py` uses `trial_results` when present (old behavior
+unchanged) and otherwise reads each trial directory's `result.json`, ordered by `started_at`
+then trial name; the Part E file records that order in `trial_order`. Two offline tests cover
+the Harbor 0.23.0 layout. Checks, rewards, and classification rules are unchanged. Worth
+reporting in the course Discord.
+
+## Part A
+
+- **Cases approved and committed (2026-11-16, 853f4c8):** 12 cases, none classified yet. The
+  reseeded Harbor world is byte-identical to `data/cartwheel.db` (same dump hash), and the agent
+  prompt version is unchanged since HW3 (`482b8f0da5c2`).
+
+  | id | Mode | HW4 source | Check(s) |
+  |---|---|---|---|
+  | e-001 | required_action_not_taken | 0056 (Fail; follow-up dropped) | refund 5858 `auto_approved` |
+  | e-002 | required_action_not_taken | 0243 T2 (Fail) | refund 1980 `auto_approved` |
+  | e-003 | required_action_not_taken | 0156 (Fail) | `escalate_to_human` called |
+  | e-004 | required_action_not_taken | 0180 (Fail) | `escalate_to_human`; no refund row 8001 |
+  | e-005 | required_action_not_taken | 0072 (Pass) | refund 246 `auto_approved` |
+  | e-006 | required_action_not_taken | 0079 (Pass) | refund 296 `queued_for_approval` |
+  | e-007 | required_action_not_taken | 0252 (Pass) | `escalate_to_human` called |
+  | e-008 | policy_claim_without_citation | 0121 (Fail) | reply contains `cw-escalations`; v3 judge Pass |
+  | e-009 | policy_claim_without_citation | 0101 (Fail) | reply contains `cw-cancellations`; v3 judge Pass |
+  | e-010 | policy_claim_without_citation | 0115 (Fail) | reply contains `cw-roles`; v3 judge Pass |
+  | e-011 | policy_claim_without_citation | 0111 (Pass) | reply contains `cw-payouts`; v3 judge Pass |
+  | e-012 | policy_claim_without_citation | 0117 (Pass) | reply contains `cw-cancellations`; v3 judge Pass |
+
+- **Baselines (approved 2026-11-16):** 60 `gpt-4o-mini` runs and 25 judge calls (about $1), one
+  Harbor job per case (`hw6-baseline-e-0XX`), `--yes` (no `--upload`; nothing goes to Harbor Hub).
+  - e-001: 0/5, no exceptions. Two trials found 5858 and asked to confirm the amount or reason
+    (the HW4 failure); three used `list_my_orders`, missed 5858, and said no order matched.
 
 ## Next step
 
-Part A: draft 10 or more cases from HW4 traces I labeled in the two modes, for my review.
+Finish the e-002 to e-012 baselines, summarize them, and record each classification (mine).
 
 ## Deliverables checklist
 

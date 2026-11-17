@@ -326,3 +326,79 @@ def test_capability_analysis_uses_5_10_and_15_observed_runs(
         "10",
         "15",
     }
+
+
+def _write_trial_dirs(job: Path, trials: list[dict]) -> None:
+    """Lay out a job the way Harbor 0.23.0 writes it: the job result.json
+    has no trial_results, and each trial directory holds its own result."""
+    job.mkdir()
+    (job / "result.json").write_text(
+        json.dumps({"n_total_trials": len(trials), "stats": {}})
+    )
+    for trial in trials:
+        trial_dir = job / trial["trial_name"]
+        trial_dir.mkdir()
+        (trial_dir / "result.json").write_text(json.dumps(trial))
+
+
+def test_baseline_summary_reads_harbor_trial_directories(tmp_path: Path) -> None:
+    cases_path = tmp_path / "cases.jsonl"
+    case = {
+        "id": "e-501",
+        "mode": "response_quality",
+        "input": {"role": "shopper", "user_id": 1, "message": "hello"},
+        "initial_state": {"world": "reseed", "fixture": None},
+        "expected": {"checks": [{"check": "reply_asks_question"}]},
+    }
+    _write_cases(cases_path, [case])
+    trials = [
+        {
+            "task_name": "cartwheel/evals__e-501",
+            "trial_name": f"e-501__{attempt}",
+            "started_at": f"2026-11-16T00:00:0{attempt}Z",
+            "verifier_result": {"rewards": {"reward": reward}},
+            "exception_info": None,
+        }
+        for attempt, reward in enumerate([1, 1, 0, 1, 1])
+    ]
+    job = tmp_path / "job"
+    _write_trial_dirs(job, trials)
+
+    markdown, passed = summarize_job(
+        job, cases_path=cases_path, expected_attempts=5, classify=True
+    )
+
+    assert passed is True
+    assert "| `e-501` | 4 | 5 |" in markdown
+    assert '`baseline_pass_rate: 0.8`' in markdown
+
+
+def test_capability_analysis_orders_trial_directories_by_start_time(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setattr(
+        "harbor_adapter.analysis.pass_at_k",
+        lambda n, c, k: (n + c + k) / 100,
+    )
+    trials = []
+    for attempt in range(15):
+        # Directory names sort differently from start times.
+        trials.append(
+            {
+                "task_name": "cartwheel/evals__e-502",
+                "trial_name": f"e-502__{chr(ord('z') - attempt)}",
+                "started_at": f"2026-11-16T00:00:{attempt:02d}Z",
+                "verifier_result": {"rewards": {"reward": 1 if attempt < 3 else 0}},
+                "agent_info": {"model_info": {"provider": None, "name": "gpt-4o-mini"}},
+                "exception_info": None,
+            }
+        )
+    job = tmp_path / "job"
+    _write_trial_dirs(job, trials)
+
+    result = analyze_capability_job(job, "e-502")
+
+    assert result["trial_order"] == "trial directories ordered by started_at"
+    assert result["trials"][0]["trial_name"] == "e-502__z"
+    assert result["rewards"][:4] == [1, 1, 1, 0]
+    assert result["model"] == "gpt-4o-mini"
