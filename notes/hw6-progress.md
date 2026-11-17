@@ -147,17 +147,34 @@ reporting in the course Discord.
   | e-011 | 3 | 0.6 | 1.0 | 0.1 | 0.0 |
   | e-004 | 2 | 0.4 | 0.9 | 0.0 | 0.0 |
 
+## Part C
+
+- **Workflow (2026-11-16):** `.github/workflows/evals.yml`, job `complete-evaluations` (pull
+  requests only): install `harbor==0.23.0` (tool bin dir added to `$GITHUB_PATH`); generate the
+  classified tasks; the handout's `harbor run` (5 attempts, job `hw6-evals`, `--yes`, no
+  `--upload`); `summarize_harbor_job.py --expected-attempts 5` with `if: always()` (the gate:
+  exits 1 when a regression fails a run or a trial has no reward; writes the step summary);
+  upload `.harbor/jobs/hw6-evals` as artifact `hw6-evals` with `if: always()`. Keys come from
+  the job's `env:` block (repository secrets); no `.env` in CI.
+- **GitHub settings (2026-11-16, my OK to use `gh`):** variable `CARTWHEEL_MODEL=gpt-4o-mini`;
+  secrets `OPENAI_API_KEY` and `ANTHROPIC_API_KEY`, piped from `.env` to `gh secret set` on
+  stdin (never printed or written).
+- **Artifact safety:** a scan of the 648 local Harbor job files found none of the `.env` key
+  values, so uploading the job directory from this public repo does not expose a key (it does
+  expose the synthetic transcripts).
+- Per CI run: 60 `gpt-4o-mini` runs and 25 `claude-opus-4-7` judge calls, about $1.
+
 ## Next step
 
-Part C: complete `.github/workflows/evals.yml`; add the `CARTWHEEL_MODEL` variable and the
-`OPENAI_API_KEY` and `ANTHROPIC_API_KEY` secrets on GitHub (by me, never in chat).
+Part D: branch with a temporary prompt instruction that should make e-005 fail, open a pull
+request (run 1), revert on the same branch (run 2), record both in `ci-runs.json`.
 
 ## Deliverables checklist
 
 - [x] `eval_cases/cases.jsonl`: 12 cases, 2 HW4 modes, each classified from five baseline runs
 - [x] At least one regression and one capability case (e-005 regression; 11 capability)
 - [x] `tests/eval/passk.py`: `pass_at_k`, `pass_hat_k`, `case_passes` (3 focused tests pass)
-- [ ] `.github/workflows/evals.yml`: Harbor job, summary and artifact with `if: always()`
+- [x] `.github/workflows/evals.yml`: Harbor job, summary and artifact with `if: always()`
 - [ ] `ci-runs.json`: two runs from one pull request (regression, then revert)
 - [ ] `eval_results/<case-id>-15.json`: one capability case, 15 runs
 - [ ] Video (5 minutes or less; mine)
