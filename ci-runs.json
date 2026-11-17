@@ -1,0 +1,26 @@
+{
+  "pull_request": "https://github.com/adamwitwer/cartwheel-homeworks/pull/1",
+  "case_id": "e-005",
+  "agent_model": "gpt-4o-mini",
+  "regression_run": {
+    "url": "https://github.com/adamwitwer/cartwheel-homeworks/actions/runs/43994251536",
+    "commit": "dc1879d65c5211b87f6226102bf4c3178d6ec5ca",
+    "change": "Temporary prompt instruction in agent/agent.py: \"Before calling issue_refund, always ask the user to confirm the refund amount and wait for their reply. Never call issue_refund in the same turn as the request.\"",
+    "case_passes": 0,
+    "case_trials": 5,
+    "ci_decision": "block",
+    "infrastructure_errors": 0
+  },
+  "revert_run": {
+    "url": "https://github.com/adamwitwer/cartwheel-homeworks/actions/runs/43997257962",
+    "commit": "eb68dab5290bf3bb20e14c1e27dc4c83eff6091d",
+    "change": "Reverts dc1879d; agent/ is identical to main.",
+    "case_passes": 4,
+    "case_trials": 5,
+    "ci_decision": "block",
+    "failed_trials": ["e-005__PjhEtYv"],
+    "infrastructure_errors": 0
+  },
+  "second_run_result": "block: e-005 passed 4 of 5 runs after the revert",
+  "explanation": "The temporary instruction made the agent call get_order and then ask the merchant to confirm the $96.50 refund instead of calling issue_refund, so all five e-005 runs failed and CI blocked. After the revert the prompt is identical to main, and the original behavior mostly returned: four of five runs issued the refund, which auto-approved. One run (e-005__PjhEtYv) called get_order, said it would proceed, asked the merchant to confirm, and never issued the refund. That is the same required_action_not_taken failure observed in Homework 4, and the run had no infrastructure error, so it is kept as evidence and the commit was not rerun. Across the ten runs of the unmodified agent (the five-run baseline and this run), e-005 passed nine. A per-run reliability near 0.9 gives about 0.9^5 = 0.59 for five passes in a row, so this five-run regression gate would block about four times in ten with no change to the agent. Ten runs give only a rough estimate of that reliability."
+}

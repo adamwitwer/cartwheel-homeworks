@@ -189,9 +189,26 @@ This reverses my HW4 choice to leave the test alone; it was only noise in the Pa
   - Side effects on capability cases (non-blocking): e-006 0/5 (baseline 4/5), e-007 0/5 (2/5),
     e-004 1/5 (2/5), e-011 5/5 (3/5), e-009 3/5 (4/5).
 
+- **Run 2, after the revert (2026-11-16, approved):** commit eb68dab reverts dc1879d on the same
+  branch (`agent/` identical to `main`).
+  https://github.com/adamwitwer/cartwheel-homeworks/actions/runs/43997257962
+  - 60 trials, all `gpt-4o-mini`, no exceptions, no missing rewards. Offline checks: success.
+  - **e-005: 4/5, block.** Four trials issued the $96.50 refund (auto-approved). One
+    (`e-005__PjhEtYv`) called `get_order`, said it would proceed, asked the merchant to confirm,
+    and never called `issue_refund`: the HW4 `required_action_not_taken` failure with the
+    original prompt. Kept as evidence; the commit was not rerun (handout).
+  - e-005 across the unmodified agent: 9 of 10 runs (baseline 5/5, run 2 4/5). At p ≈ 0.9,
+    p^5 ≈ 0.59: a five-run regression gate would block about 4 times in 10 with no change.
+  - Other cases moved within run-to-run noise: e-006 5/5 (baseline 4/5), e-011 2/5 (3/5).
+- **`ci-runs.json` written (2026-11-16):** both URLs and commits, case e-005, each run's counts and
+  decision, the failed trial, and an explanation (Claude's draft from the observed results; mine
+  to edit).
+- Job artifacts downloaded for inspection only (scratchpad, not committed).
+
 ## Next step
 
-Run 2: revert dc1879d on the same branch and push; then write `ci-runs.json`.
+Part E: run one capability case 15 times (`hw6-capability-15`), then
+`scripts/analyze_harbor_job.py` → `eval_results/<case-id>-15.json`.
 
 ## Deliverables checklist
 
@@ -199,6 +216,6 @@ Run 2: revert dc1879d on the same branch and push; then write `ci-runs.json`.
 - [x] At least one regression and one capability case (e-005 regression; 11 capability)
 - [x] `tests/eval/passk.py`: `pass_at_k`, `pass_hat_k`, `case_passes` (3 focused tests pass)
 - [x] `.github/workflows/evals.yml`: Harbor job, summary and artifact with `if: always()`
-- [ ] `ci-runs.json`: two runs from one pull request (regression, then revert)
+- [x] `ci-runs.json`: two runs from one pull request (regression, then revert)
 - [ ] `eval_results/<case-id>-15.json`: one capability case, 15 runs
 - [ ] Video (5 minutes or less; mine)
