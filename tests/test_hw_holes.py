@@ -644,6 +644,13 @@ def test_m2_failure_report_matches_artifact_l_schema(analysis_state, tmp_path) -
         assert set(origins) <= human_ann_ids, "origins must be human annotations"
 
     # The judge-backed lead mode carries the corrected Artifact G prevalence.
+    # These numbers belong to the course demo state; a student's own HW4 modes
+    # replace it, so only the schema checks above apply there.
+    if DEMO_MODE not in {mode["name"] for mode in report["modes"]}:
+        pytest.skip(
+            f"demo-state checks need {DEMO_MODE} in patterns.json; "
+            "the schema checks above passed"
+        )
     lead = next(mode for mode in report["modes"] if mode["name"] == DEMO_MODE)
     assert lead["name"] == DEMO_MODE
     assert round(lead["prevalence"]["corrected"], 3) == 0.163

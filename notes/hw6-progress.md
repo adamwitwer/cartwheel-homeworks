@@ -73,6 +73,16 @@ then trial name; the Part E file records that order in `trial_order`. Two offlin
 the Harbor 0.23.0 layout. Checks, rewards, and classification rules are unchanged. Worth
 reporting in the course Discord.
 
+## Fix to the demo-mode test (2026-11-16, my decision)
+
+`test_m2_failure_report_matches_artifact_l_schema` checks the failure report schema, then the
+course demo's numbers for `unsupported_policy_claim` (prevalence 0.163, judge intervals). My
+`patterns.json` holds my HW4 modes, so that lookup raised `StopIteration` and CI's offline job
+was red on every push since HW4 Part D. The demo assertions now skip, with a reason, when the
+demo mode is absent (like the course's empty-state skip in `abf8212`); the schema and
+human-origin checks still run on my 8 modes and pass, and the demo state is checked as before.
+This reverses my HW4 choice to leave the test alone; it was only noise in the Part D runs.
+
 ## Part A
 
 - **Cases approved and committed (2026-11-16, 853f4c8):** 12 cases, none classified yet. The
