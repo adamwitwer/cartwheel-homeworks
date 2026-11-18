@@ -205,10 +205,35 @@ This reverses my HW4 choice to leave the test alone; it was only noise in the Pa
   to edit).
 - Job artifacts downloaded for inspection only (scratchpad, not committed).
 
+## Part E
+
+- **Case: e-004 (my choice, 2026-11-17).** Code checks only (escalate, no refund row for 8001),
+  so 15 runs cost about $0.01. Run locally with the handout's command (`--include-task-name
+  "*e-004"`, `--n-attempts 15`, job `hw6-capability-15`) from `main` after a final export; the
+  exported `agent/agent.py` is byte-identical to `main`.
+- **Result:** 15 trials, all `gpt-4o-mini`, no exceptions, **13/15 passed**. Order (by
+  `started_at`): 1 1 1 1 1 1 1 1 0 1 0 1 1 1 1. `eval_results/e-004-15.json`:
+
+  | n | Passes | pass@1 | pass@3 | pass@5 | pass@10 | pass@15 |
+  |---|---|---|---|---|---|---|
+  | 5 | 5 | 1.000 | 1.000 | 1.000 | | |
+  | 10 | 9 | 0.900 | 1.000 | 1.000 | | |
+  | 15 | 13 | 0.867 | 1.000 | 1.000 | 1.000 | 1.000 |
+
+- **This conflicts with the earlier e-004 runs of the same agent:** baseline 2/5 (local), Part D
+  run 2 2/5 (CI); 4/10 combined (run 1's 1/5 had the modified prompt). Same inputs, same world,
+  same prompt; the transcripts follow the same path (`get_order`; on turn 3 the agent either
+  escalates or offers to). If the rate were 0.4, 13 or more passes in 15 would have probability
+  about 0.0003, so chance alone is an unlikely explanation; the runs may not be identically
+  distributed over time (provider-side sampling). All runs of the unmodified agent: 17/25.
+  - Within this job, pass@1 moved 1.0 → 0.9 → 0.867 from n = 5 to 15; pass@3 and above stayed 1.0.
+  - This job's first five runs (5/5) would have classified e-004 as a regression case; the
+    baseline's five (2/5) classified it as capability (kept, per the handout).
+  - Interpretation for the video is mine; the job was not rerun.
+
 ## Next step
 
-Part E: run one capability case 15 times (`hw6-capability-15`), then
-`scripts/analyze_harbor_job.py` → `eval_results/<case-id>-15.json`.
+Video (mine). Decide later whether pull request #1 helps the video; close it if not.
 
 ## Deliverables checklist
 
@@ -217,5 +242,5 @@ Part E: run one capability case 15 times (`hw6-capability-15`), then
 - [x] `tests/eval/passk.py`: `pass_at_k`, `pass_hat_k`, `case_passes` (3 focused tests pass)
 - [x] `.github/workflows/evals.yml`: Harbor job, summary and artifact with `if: always()`
 - [x] `ci-runs.json`: two runs from one pull request (regression, then revert)
-- [ ] `eval_results/<case-id>-15.json`: one capability case, 15 runs
+- [x] `eval_results/<case-id>-15.json`: one capability case, 15 runs (`e-004-15.json`)
 - [ ] Video (5 minutes or less; mine)
