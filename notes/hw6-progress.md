@@ -233,7 +233,84 @@ This reverses my HW4 choice to leave the test alone; it was only noise in the Pa
 
 ## Next step
 
-Video (mine). Decide later whether pull request #1 helps the video; close it if not.
+Record the video (mine), using the checklist below. Decide afterwards whether pull request #1
+was useful; close it if not.
+
+## Video checklist (5 minutes or less, one continuous recording)
+
+Before recording:
+- A terminal at the repo root with a large font. Every `notes/hw6_video.py` command is free
+  (no model calls, no network) and writes nothing, so rehearse as often as you like. It reads
+  the local Harbor jobs in `.harbor/jobs/` and run 2's downloaded job in `.harbor/ci-run2/`
+  (both gitignored, on the MacBook Air only); don't delete them before recording.
+- Browser tabs:
+  - Pull request #1: https://github.com/adamwitwer/cartwheel-homeworks/pull/1
+  - Run 1: https://github.com/adamwitwer/cartwheel-homeworks/actions/runs/43994251536
+  - Run 2: https://github.com/adamwitwer/cartwheel-homeworks/actions/runs/43997257962
+  - On each run page, the Summary shows the gate's table (pass count, pass@1/3/5, pass^5, CI
+    decision per case); the "Harbor evaluations" job shows the green Harbor step and the red
+    gate step.
+- Editor tabs: `eval_cases/cases.jsonl` (line 5 is e-005, line 8 is e-008), `ci-runs.json`.
+- Docker, Langfuse, and the review app are not needed.
+
+Same order as the handout's Video section.
+
+1. **The cases and the HW4 modes they cover (~45s).**
+   `uv run python notes/hw6_video.py cases`
+   12 cases from 2 HW4 modes, each built from an HW4 trace I labeled (source column):
+   - `required_action_not_taken` (7): code checks only, exact facts in the end state: the refund
+     row's status (`auto_approved` or `queued_for_approval`), `escalate_to_human` called, no refund
+     row.
+   - `policy_claim_without_citation` (5): a code check that the reply contains the policy id,
+     plus my accepted HW5 judge (v3: the frozen v0 prompt on `claude-opus-4-7`, unchanged),
+     because deciding what counts as a policy claim needs judgment. Show e-008 in the editor:
+     `checks` and `judges` side by side; `assertions` is for the reader only.
+   - Sources mix HW4 Fails and Passes, so the set covers behavior that works and behavior that
+     doesn't.
+2. **One regression and one capability case, with five baseline results (~55s).**
+   `uv run python notes/hw6_video.py baseline e-005`
+   → 5 PASS (get_order or check_return_eligibility, then issue_refund): a merchant's $96.50
+   refund under the $100 threshold. Regression.
+   `uv run python notes/hw6_video.py baseline e-004`
+   → 2 PASS, 3 FAIL: a record with shipment after delivery (ESC-4). The failures look up the
+   order, then offer to escalate ("Would you like me to...?") instead of escalating. Capability,
+   baseline_pass_rate 0.4.
+   - Overall 1 regression, 11 capability. Four of the five HW4-Pass sources failed at least once
+     in five runs: one HW4 label is weak evidence of reliability.
+3. **pass@k and pass^k on my results (~45s).**
+   `uv run python notes/hw6_video.py passk`
+   - pass@k = 1 − C(n−c, k) / C(n, k): can the agent get it right at least once in k tries?
+     pass^k = C(c, k) / C(n, k): does it get it right all k times?
+   - e-006 (4/5): pass@3 = 1.00 but pass^3 = 0.40. "It can" is not "it will."
+   - CI uses the reliability view: `case_passes` blocks a regression case on any failed run and
+     never blocks a capability case (the two printed decisions). With r regression cases at
+     per-run reliability p, all five runs of all of them pass with probability p^(5r).
+4. **The two GitHub Actions runs (~75s).** Pull request #1, then each run's Summary.
+   - Run 1 (dc1879d): a temporary prompt line, "Before calling issue_refund, always ask the user
+     to confirm the refund amount and wait for their reply." e-005: 0/5 → block. The Harbor step
+     succeeded; the gate step failed; no infrastructure errors.
+   - Run 2 (eb68dab, the revert; `agent/` identical to `main`): e-005 4/5 → **still block**.
+     `uv run python notes/hw6_video.py trial .harbor/ci-run2/e-005__PjhEtYv`
+     → get_order, then "I will proceed with issuing the refund... Please confirm": the same HW4
+     `required_action_not_taken` failure, with the original prompt. No infrastructure error, so
+     it stays as evidence; the commit was not rerun.
+   - Explain: the behavior mostly returned, but e-005 is 9 of 10 on the unmodified agent. At
+     p ≈ 0.9, p^5 ≈ 0.59: this gate blocks about 4 times in 10 with no change to the agent.
+     Ten runs make that a rough estimate. Say what you'd do about a gate that flaky.
+   - Show `ci-runs.json`: both URLs and commits, the case, each run's counts, the failed trial.
+5. **The capability result after 5, 10, and 15 runs (~60s).**
+   `uv run python notes/hw6_video.py part-e`
+   - e-004, 15 runs: 13 passed. pass@1 1.000 → 0.900 → 0.867 at n = 5, 10, 15; pass@3 and above
+     1.000 throughout. At fixed n, pass@k never falls as k grows.
+   - Within this job the estimate looks settled. Across jobs it doesn't: the same agent, inputs,
+     and world gave 2/5 at baseline and 2/5 in CI run 2 (4/10). If the rate were 0.4, 13 or more
+     of 15 would have probability about 0.0003. This job's first five (5/5) would even have
+     classified e-004 as a regression case.
+   - Say whether 15 runs produced a stable estimate (handout), and what you think explains the
+     shift (runs at different times may not be identically distributed, which pass@k assumes).
+
+Total about 4.7 minutes. If it runs long, trim the editor detour in 1 and the `ci-runs.json`
+glance in 4.
 
 ## Deliverables checklist
 
